@@ -327,6 +327,13 @@ for reward_type in ['sparse', 'dense']:
     )
 
     register(
+        id='CamReach{}-v0'.format(suffix),
+        entry_point='gym.envs.robotics:CamReachEnv',
+        kwargs=kwargs,
+        max_episode_steps=50,
+    )
+
+    register(
         id='FetchPush{}-v1'.format(suffix),
         entry_point='gym.envs.robotics:FetchPushEnv',
         kwargs=kwargs,
