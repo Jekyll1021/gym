@@ -110,9 +110,9 @@ class CamEnv(robot_env.RobotEnv):
         gripper_vel = robot_qvel[-2:] * dt  # change to a scalar if the gripper is made symmetric
 
         if not self.has_object:
-            achieved_goal = grip_pos.copy() - self.sim.data.get_site_xpos("robot0:cam")
+            achieved_goal = grip_pos.copy()# - self.sim.data.get_site_xpos("robot0:cam")
         else:
-            achieved_goal = np.squeeze(object_pos.copy()) - self.sim.data.get_site_xpos("robot0:cam")
+            achieved_goal = np.squeeze(object_pos.copy())# - self.sim.data.get_site_xpos("robot0:cam")
         obs = np.concatenate([
             grip_pos, object_pos.ravel(), object_rel_pos.ravel(), gripper_state, object_rot.ravel(),
             object_velp.ravel(), object_velr.ravel(), grip_velp, gripper_vel,
@@ -168,7 +168,7 @@ class CamEnv(robot_env.RobotEnv):
                 goal[2] += self.np_random.uniform(0, 0.45)
         else:
             goal = self.initial_gripper_xpos[:3] + self.np_random.uniform(-0.15, 0.15, size=3)
-        return goal.copy() - self.sim.data.get_site_xpos("robot0:cam")
+        return goal.copy()# - self.sim.data.get_site_xpos("robot0:cam")
 
     def _is_success(self, achieved_goal, desired_goal):
         d = goal_distance(achieved_goal, desired_goal)
