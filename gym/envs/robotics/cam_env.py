@@ -44,7 +44,7 @@ class CamEnv(robot_env.RobotEnv):
         self.distance_threshold = distance_threshold
         self.reward_type = reward_type
         self.goal_type = goal_type
-        
+
         super(CamEnv, self).__init__(
             model_path=model_path, n_substeps=n_substeps, n_actions=4,
             initial_qpos=initial_qpos)
@@ -89,7 +89,6 @@ class CamEnv(robot_env.RobotEnv):
     def _get_obs(self):
         # images
         img = self.sim.render(width=500, height=500, camera_name="external_camera_1")
-        img = img.flatten()
         # positions
         grip_pos = self.sim.data.get_site_xpos('robot0:grip')
         dt = self.sim.nsubsteps * self.sim.model.opt.timestep
@@ -115,7 +114,7 @@ class CamEnv(robot_env.RobotEnv):
         else:
             achieved_goal = np.squeeze(object_pos.copy()) - self.sim.data.get_site_xpos("robot0:cam")
         obs = np.concatenate([
-            img, grip_pos, object_pos.ravel(), object_rel_pos.ravel(), gripper_state, object_rot.ravel(),
+            grip_pos, object_pos.ravel(), object_rel_pos.ravel(), gripper_state, object_rot.ravel(),
             object_velp.ravel(), object_velr.ravel(), grip_velp, gripper_vel,
         ])
 
@@ -123,6 +122,7 @@ class CamEnv(robot_env.RobotEnv):
             'observation': obs.copy(),
             'achieved_goal': achieved_goal.copy(),
             'desired_goal': self.goal.copy(),
+            'image':(img/255).copy()
         }
 
     def _viewer_setup(self):
@@ -194,4 +194,4 @@ class CamEnv(robot_env.RobotEnv):
             self.height_offset = self.sim.data.get_site_xpos('object0')[2]
 
     def render(self, mode='human', width=500, height=500):
-        return super(FetchEnv, self).render(mode, width, height)
+        return super(CamEnv, self).render(mode, width, height)
