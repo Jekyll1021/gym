@@ -8,7 +8,7 @@ MODEL_XML_PATH = os.path.join('fetch', 'reach.xml')
 
 
 class CamReachEnv(cam_env.CamEnv, utils.EzPickle):
-    def __init__(self, reward_type='sparse', goal_type='fixed'):
+    def __init__(self, reward_type='dense', goal_type='fixed'):
         initial_qpos = {
             'robot0:slide0': 0.4049,
             'robot0:slide1': 0.48,
