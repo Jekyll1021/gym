@@ -1,4 +1,5 @@
 import numpy as np
+import math
 
 from gym import error
 try:
@@ -94,3 +95,22 @@ def reset_mocap2body_xpos(sim):
         assert (mocap_id != -1)
         sim.data.mocap_pos[mocap_id][:] = sim.data.body_xpos[body_idx]
         sim.data.mocap_quat[mocap_id][:] = sim.data.body_xquat[body_idx]
+
+def cam_init_pos(sim, delta_pos, delta_rot):
+    """initialize camera in indicated relative position."""
+    def euler_to_quaternion(rot):
+        X, Y, Z = rot
+        cy = math.cos(Z * 0.5)
+        sy = math.sin(Z * 0.5)
+        cp = math.cos(Y * 0.5)
+        sp = math.sin(Y * 0.5)
+        cr = math.cos(X * 0.5)
+        sr = math.sin(X * 0.5)
+        x = cy * cp * sr - sy * sp * cr
+        y = sy * cp * sr + cy * sp * cr
+        z = sy * cp * cr - cy * sp * sr
+        w = cy * cp * cr + sy * sp * sr
+        return np.array([w, x, y, z])
+
+    sim.model.cam_pos[4] += delta_pos
+    sim.model.cam_quat[4] = euler_to_quaternion(delta_rot + np.array([0, 0, 1.57]))

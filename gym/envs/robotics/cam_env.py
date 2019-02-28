@@ -15,7 +15,7 @@ class CamEnv(robot_env.RobotEnv):
     def __init__(
         self, model_path, n_substeps, gripper_extra_height, block_gripper,
         has_object, target_in_the_air, target_offset, obj_range, target_range,
-        distance_threshold, initial_qpos, reward_type, goal_type
+        distance_threshold, initial_qpos, reward_type, goal_type, cam_type
     ):
         """Initializes a new Fetch environment.
 
@@ -44,6 +44,7 @@ class CamEnv(robot_env.RobotEnv):
         self.distance_threshold = distance_threshold
         self.reward_type = reward_type
         self.goal_type = goal_type
+        self.cam_type = cam_type
 
         super(CamEnv, self).__init__(
             model_path=model_path, n_substeps=n_substeps, n_actions=4,
@@ -178,6 +179,12 @@ class CamEnv(robot_env.RobotEnv):
         for name, value in initial_qpos.items():
             self.sim.data.set_joint_qpos(name, value)
         utils.reset_mocap_welds(self.sim)
+
+        if self.cam_type != "fixed":
+            delta_pos = self.np_random.uniform(-0.1, 0.1, size=3)
+            delta_rot = self.np_random.uniform(-0.1, 0.1, size=3)
+            utils.cam_init_pos(self.sim, delta_pos, delta_rot)
+
         self.sim.forward()
 
         # Move end effector into position.
