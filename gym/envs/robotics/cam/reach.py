@@ -15,7 +15,7 @@ class CamReachEnv(cam_env.CamEnv, utils.EzPickle):
             'robot0:slide2': 0.0,
         }
         cam_env.CamEnv.__init__(
-            self, MODEL_XML_PATH, has_object=False, block_gripper=True, n_substeps=20,
+            self, MODEL_XML_PATH, has_object=False, block_gripper=True, n_substeps=10,
             gripper_extra_height=0.2, target_in_the_air=True, target_offset=0.0,
             obj_range=0.15, target_range=0.15, distance_threshold=0.05,
             initial_qpos=initial_qpos, reward_type=reward_type, goal_type=goal_type, cam_type=cam_type)
