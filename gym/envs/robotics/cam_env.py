@@ -16,7 +16,7 @@ class CamEnv(robot_env.RobotEnv):
         self, model_path, n_substeps, gripper_extra_height, block_gripper,
         has_object, target_in_the_air, target_offset, obj_range, target_range,
         distance_threshold, initial_qpos, reward_type, goal_type, cam_type,
-        gripper_init_type
+        gripper_init_type, noise
     ):
         """Initializes a new Fetch environment.
 
@@ -47,6 +47,7 @@ class CamEnv(robot_env.RobotEnv):
         self.goal_type = goal_type
         self.cam_type = cam_type
         self.gripper_init_type = gripper_init_type
+        self.noise = noise
 
         super(CamEnv, self).__init__(
             model_path=model_path, n_substeps=n_substeps, n_actions=4,
@@ -78,6 +79,7 @@ class CamEnv(robot_env.RobotEnv):
         pos_ctrl, gripper_ctrl = action[:3], action[3]
 
         pos_ctrl *= 0.05  # limit maximum change in position
+        pos_ctrl += self.noise_vector # apply random noise
         rot_ctrl = [1., 0., 1., 0.]  # fixed rotation of the end effector, expressed as a quaternion
         gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
         assert gripper_ctrl.shape == (2,)
@@ -146,6 +148,16 @@ class CamEnv(robot_env.RobotEnv):
 
     def _reset_sim(self):
         self.sim.set_state(self.initial_state)
+
+        if self.noise:
+            noise_vector = self.np_random.uniform(-1.0, 1.0, 3)
+            norm = np.linalg.norm(noise_vector)
+            if norm == 0:
+                self.noise_vector = np.zeros(3)
+            else:
+                self.noise_vector = noise_vector / norm * 0.03
+        else:
+            self.noise_vector = np.zeros(3)
 
         # Randomize start position of object.
         if self.has_object:
