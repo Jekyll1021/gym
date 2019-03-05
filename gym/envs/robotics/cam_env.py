@@ -15,7 +15,8 @@ class CamEnv(robot_env.RobotEnv):
     def __init__(
         self, model_path, n_substeps, gripper_extra_height, block_gripper,
         has_object, target_in_the_air, target_offset, obj_range, target_range,
-        distance_threshold, initial_qpos, reward_type, goal_type, cam_type
+        distance_threshold, initial_qpos, reward_type, goal_type, cam_type,
+        gripper_init_type
     ):
         """Initializes a new Fetch environment.
 
@@ -45,6 +46,7 @@ class CamEnv(robot_env.RobotEnv):
         self.reward_type = reward_type
         self.goal_type = goal_type
         self.cam_type = cam_type
+        self.gripper_init_type = gripper_init_type
 
         super(CamEnv, self).__init__(
             model_path=model_path, n_substeps=n_substeps, n_actions=4,
@@ -188,7 +190,12 @@ class CamEnv(robot_env.RobotEnv):
         self.sim.forward()
 
         # Move end effector into position.
-        gripper_target = np.array([-0.498, 0.005, -0.431 + self.gripper_extra_height]) + self.sim.data.get_site_xpos('robot0:grip')
+        if self.gripper_init_type != "fixed":
+            print("here")
+            init_disturbance = np.array([self.np_random.uniform(-0.15, 0.15), self.np_random.uniform(-0.15, 0.15), self.np_random.uniform(0, 0.15)])
+        else:
+            init_disturbance = np.array([0, 0, 0])
+        gripper_target = np.array([-0.498, 0.005, -0.431 + self.gripper_extra_height]) + init_disturbance + self.sim.data.get_site_xpos('robot0:grip')
         gripper_rotation = np.array([1., 0., 1., 0.])
         self.sim.data.set_mocap_pos('robot0:mocap', gripper_target)
         self.sim.data.set_mocap_quat('robot0:mocap', gripper_rotation)
