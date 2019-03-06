@@ -5,6 +5,9 @@ from gym.envs.robotics.fetch.push import FetchPushEnv
 from gym.envs.robotics.fetch.reach import FetchReachEnv
 
 from gym.envs.robotics.cam_env import CamEnv
+from gym.envs.robotics.cam.slide import CamSlideEnv
+from gym.envs.robotics.cam.pick_and_place import CamPickAndPlaceEnv
+from gym.envs.robotics.cam.push import CamPushEnv
 from gym.envs.robotics.cam.reach import CamReachEnv
 
 from gym.envs.robotics.hand.reach import HandReachEnv
