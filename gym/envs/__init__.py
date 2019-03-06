@@ -313,8 +313,22 @@ for reward_type in ['sparse', 'dense']:
     )
 
     register(
+        id='CamSlide{}-v0'.format(suffix),
+        entry_point='gym.envs.robotics:CamSlideEnv',
+        kwargs=kwargs,
+        max_episode_steps=50,
+    )
+
+    register(
         id='FetchPickAndPlace{}-v1'.format(suffix),
         entry_point='gym.envs.robotics:FetchPickAndPlaceEnv',
+        kwargs=kwargs,
+        max_episode_steps=50,
+    )
+
+    register(
+        id='CamPickAndPlace{}-v0'.format(suffix),
+        entry_point='gym.envs.robotics:CamPickAndPlaceEnv',
         kwargs=kwargs,
         max_episode_steps=50,
     )
@@ -336,6 +350,13 @@ for reward_type in ['sparse', 'dense']:
     register(
         id='FetchPush{}-v1'.format(suffix),
         entry_point='gym.envs.robotics:FetchPushEnv',
+        kwargs=kwargs,
+        max_episode_steps=50,
+    )
+
+    register(
+        id='CamPush{}-v0'.format(suffix),
+        entry_point='gym.envs.robotics:CamPushEnv',
         kwargs=kwargs,
         max_episode_steps=50,
     )
@@ -558,4 +579,3 @@ register(
     entry_point='gym.envs.unittest:MemorizeDigits',
     reward_threshold=20,
     )
-
