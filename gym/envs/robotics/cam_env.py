@@ -196,7 +196,7 @@ class CamEnv(robot_env.RobotEnv):
 
         if self.cam_type != "fixed":
             # delta_pos = self.np_random.uniform(-0.15, 0.15, size=3)
-            delta_pos = np.array([self.np_random.uniform(0, 0.15, size=3), self.np_random.uniform(-0.15, 0.15, size=3), self.np_random.uniform(-0.15, 0.15, size=3)])
+            delta_pos = np.array([self.np_random.uniform(0, 0.15), self.np_random.uniform(-0.15, 0.15), self.np_random.uniform(-0.15, 0.15)])
             delta_rot = self.np_random.uniform(-0.00, 0.00, size=3)
             utils.cam_init_pos(self.sim, delta_pos, delta_rot)
 
