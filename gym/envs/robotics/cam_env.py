@@ -195,7 +195,7 @@ class CamEnv(robot_env.RobotEnv):
         utils.reset_mocap_welds(self.sim)
 
         if self.cam_type != "fixed":
-            delta_pos = self.np_random.uniform(-0.00, 0.00, size=3)
+            delta_pos = self.np_random.uniform(-0.05, 0.05, size=3)
             delta_rot = self.np_random.uniform(-0.00, 0.00, size=3)
             utils.cam_init_pos(self.sim, delta_pos, delta_rot)
 
