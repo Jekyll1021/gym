@@ -113,4 +113,4 @@ def cam_init_pos(sim, delta_pos, delta_rot):
         return np.array([w, x, y, z])
 
     sim.model.cam_pos[4] += delta_pos
-    sim.model.cam_quat[4] = euler_to_quaternion(delta_rot + np.array([0, 0.75, 1.57]))
+    # sim.model.cam_quat[4] = euler_to_quaternion(delta_rot + np.array([0, 0.75, 1.57]))
