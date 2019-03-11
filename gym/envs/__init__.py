@@ -316,7 +316,7 @@ for reward_type in ['sparse', 'dense']:
         id='CamSlide{}-v0'.format(suffix),
         entry_point='gym.envs.robotics:CamSlideEnv',
         kwargs=kwargs,
-        max_episode_steps=50,
+        max_episode_steps=500,
     )
 
     register(
@@ -330,7 +330,7 @@ for reward_type in ['sparse', 'dense']:
         id='CamPickAndPlace{}-v0'.format(suffix),
         entry_point='gym.envs.robotics:CamPickAndPlaceEnv',
         kwargs=kwargs,
-        max_episode_steps=50,
+        max_episode_steps=500,
     )
 
     register(
@@ -344,7 +344,7 @@ for reward_type in ['sparse', 'dense']:
         id='CamReach{}-v0'.format(suffix),
         entry_point='gym.envs.robotics:CamReachEnv',
         kwargs=kwargs,
-        max_episode_steps=50,
+        max_episode_steps=500,
     )
 
     register(
@@ -358,7 +358,7 @@ for reward_type in ['sparse', 'dense']:
         id='CamPush{}-v0'.format(suffix),
         entry_point='gym.envs.robotics:CamPushEnv',
         kwargs=kwargs,
-        max_episode_steps=50,
+        max_episode_steps=500,
     )
 
     # Hand

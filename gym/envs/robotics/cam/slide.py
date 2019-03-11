@@ -10,7 +10,7 @@ MODEL_XML_PATH = os.path.join('fetch', 'slide.xml')
 
 
 class CamSlideEnv(cam_env.CamEnv, utils.EzPickle):
-    def __init__(self, reward_type='dense', goal_type='fixed', cam_type='fixed', gripper_init_type='fixed', noise=False):
+    def __init__(self, reward_type='dense', goal_type='fixed', cam_type='fixed', gripper_init_type='fixed', noise=False, joint_training=False):
         initial_qpos = {
             'robot0:slide0': 0.05,
             'robot0:slide1': 0.48,
@@ -22,5 +22,6 @@ class CamSlideEnv(cam_env.CamEnv, utils.EzPickle):
             gripper_extra_height=-0.02, target_in_the_air=False, target_offset=np.array([0.4, 0.0, 0.0]),
             obj_range=0.1, target_range=0.3, distance_threshold=0.05,
             initial_qpos=initial_qpos, reward_type=reward_type, goal_type=goal_type,
-            cam_type=cam_type, gripper_init_type=gripper_init_type, noise=noise)
+            cam_type=cam_type, gripper_init_type=gripper_init_type, noise=noise,
+            joint_training=joint_training)
         utils.EzPickle.__init__(self)
