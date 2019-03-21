@@ -53,13 +53,15 @@ class CamEnv(robot_env.RobotEnv):
         if self.noise:
             noise_vector = np.random.uniform(-1.0, 1.0, 3)
             norm = np.linalg.norm(noise_vector)
+            noise_vector_other = noise_vector / norm
+            noise_vector = np.minimum(noise_vector, noise_vector_other)
             if norm == 0:
                 self.noise_vector = np.zeros(3)
             else:
                 if self.joint_training:
-                    self.noise_vector = noise_vector / norm * 0.003
+                    self.noise_vector = noise_vector * 0.003
                 else:
-                    self.noise_vector = noise_vector / norm * 0.03
+                    self.noise_vector = noise_vector * 0.03
         else:
             self.noise_vector = np.zeros(3)
 
