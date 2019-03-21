@@ -57,9 +57,9 @@ class CamEnv(robot_env.RobotEnv):
                 self.noise_vector = np.zeros(3)
             else:
                 if self.joint_training:
-                    self.noise_vector = noise_vector / norm * 0.004
+                    self.noise_vector = noise_vector / norm * 0.003
                 else:
-                    self.noise_vector = noise_vector / norm * 0.04
+                    self.noise_vector = noise_vector / norm * 0.03
         else:
             self.noise_vector = np.zeros(3)
 
