@@ -50,6 +50,19 @@ class CamEnv(robot_env.RobotEnv):
         self.noise = noise
         self.joint_training = joint_training
 
+        if self.noise:
+            noise_vector = self.np_random.uniform(-1.0, 1.0, 3)
+            norm = np.linalg.norm(noise_vector)
+            if norm == 0:
+                self.noise_vector = np.zeros(3)
+            else:
+                if self.joint_training:
+                    self.noise_vector = noise_vector / norm * 0.004
+                else:
+                    self.noise_vector = noise_vector / norm * 0.04
+        else:
+            self.noise_vector = np.zeros(3)
+
         super(CamEnv, self).__init__(
             model_path=model_path, n_substeps=n_substeps, n_actions=4,
             initial_qpos=initial_qpos)
@@ -153,19 +166,6 @@ class CamEnv(robot_env.RobotEnv):
 
     def _reset_sim(self):
         self.sim.set_state(self.initial_state)
-
-        if self.noise:
-            noise_vector = self.np_random.uniform(-1.0, 1.0, 3)
-            norm = np.linalg.norm(noise_vector)
-            if norm == 0:
-                self.noise_vector = np.zeros(3)
-            else:
-                if self.joint_training:
-                    self.noise_vector = noise_vector / norm * 0.003
-                else:
-                    self.noise_vector = noise_vector / norm * 0.03
-        else:
-            self.noise_vector = np.zeros(3)
 
         # Randomize start position of object.
         if self.has_object:
