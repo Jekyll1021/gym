@@ -51,7 +51,7 @@ class CamEnv(robot_env.RobotEnv):
         self.joint_training = joint_training
 
         if self.noise:
-            noise_vector = self.np_random.uniform(-1.0, 1.0, 3)
+            noise_vector = np.random.uniform(-1.0, 1.0, 3)
             norm = np.linalg.norm(noise_vector)
             if norm == 0:
                 self.noise_vector = np.zeros(3)
