@@ -100,6 +100,7 @@ class CamEnv(robot_env.RobotEnv):
         img = self.sim.render(width=500, height=500, camera_name="external_camera_1")
         # positions
         grip_pos = self.sim.data.get_site_xpos('robot0:grip')
+        grip_pos -= self.noise_vector
         dt = self.sim.nsubsteps * self.sim.model.opt.timestep
         grip_velp = self.sim.data.get_site_xvelp('robot0:grip') * dt
         robot_qpos, robot_qvel = utils.robot_get_obs(self.sim)
