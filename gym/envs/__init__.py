@@ -320,6 +320,13 @@ for reward_type in ['sparse', 'dense']:
     )
 
     register(
+        id='CamSlideJoint{}-v0'.format(suffix),
+        entry_point='gym.envs.robotics:CamSlideJointEnv',
+        kwargs=kwargs,
+        max_episode_steps=500,
+    )
+
+    register(
         id='FetchPickAndPlace{}-v1'.format(suffix),
         entry_point='gym.envs.robotics:FetchPickAndPlaceEnv',
         kwargs=kwargs,
@@ -331,6 +338,13 @@ for reward_type in ['sparse', 'dense']:
         entry_point='gym.envs.robotics:CamPickAndPlaceEnv',
         kwargs=kwargs,
         max_episode_steps=50,
+    )
+
+    register(
+        id='CamPickAndPlaceJoint{}-v0'.format(suffix),
+        entry_point='gym.envs.robotics:CamPickAndPlaceJointEnv',
+        kwargs=kwargs,
+        max_episode_steps=500,
     )
 
     register(
@@ -348,6 +362,13 @@ for reward_type in ['sparse', 'dense']:
     )
 
     register(
+        id='CamReachJoint{}-v0'.format(suffix),
+        entry_point='gym.envs.robotics:CamReachJointEnv',
+        kwargs=kwargs,
+        max_episode_steps=500,
+    )
+
+    register(
         id='FetchPush{}-v1'.format(suffix),
         entry_point='gym.envs.robotics:FetchPushEnv',
         kwargs=kwargs,
@@ -359,6 +380,13 @@ for reward_type in ['sparse', 'dense']:
         entry_point='gym.envs.robotics:CamPushEnv',
         kwargs=kwargs,
         max_episode_steps=50,
+    )
+
+    register(
+        id='CamPushJoint{}-v0'.format(suffix),
+        entry_point='gym.envs.robotics:CamPushJointEnv',
+        kwargs=kwargs,
+        max_episode_steps=500,
     )
 
     # Hand

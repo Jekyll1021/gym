@@ -9,6 +9,10 @@ from gym.envs.robotics.cam.slide import CamSlideEnv
 from gym.envs.robotics.cam.pick_and_place import CamPickAndPlaceEnv
 from gym.envs.robotics.cam.push import CamPushEnv
 from gym.envs.robotics.cam.reach import CamReachEnv
+from gym.envs.robotics.cam.slide_joint import CamSlideJointEnv
+from gym.envs.robotics.cam.pick_and_place_joint import CamPickAndPlaceJointEnv
+from gym.envs.robotics.cam.push_joint import CamPushJointEnv
+from gym.envs.robotics.cam.reach_joint import CamReachJointEnv
 
 from gym.envs.robotics.hand.reach import HandReachEnv
 from gym.envs.robotics.hand.manipulate import HandBlockEnv
