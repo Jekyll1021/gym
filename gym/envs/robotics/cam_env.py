@@ -16,7 +16,7 @@ class CamEnv(robot_env.RobotEnv):
         self, model_path, n_substeps, gripper_extra_height, block_gripper,
         has_object, target_in_the_air, target_offset, obj_range, target_range,
         distance_threshold, initial_qpos, reward_type, goal_type, cam_type,
-        gripper_init_type, noise, joint_training
+        gripper_init_type, act_noise, obs_noise, joint_training
     ):
         """Initializes a new Fetch environment.
 
@@ -47,23 +47,39 @@ class CamEnv(robot_env.RobotEnv):
         self.goal_type = goal_type
         self.cam_type = cam_type
         self.gripper_init_type = gripper_init_type
-        self.noise = noise
+        self.act_noise = act_noise
+        self.obs_noise = obs_noise
         self.joint_training = joint_training
 
-        if self.noise:
+        if self.act_noise:
             noise_vector = np.random.uniform(-1.0, 1.0, 3)
             norm = np.linalg.norm(noise_vector)
             noise_vector_other = noise_vector / norm
             noise_vector = np.minimum(noise_vector, noise_vector_other)
             if norm == 0:
-                self.noise_vector = np.zeros(3)
+                self.act_noise_vector = np.zeros(3)
             else:
                 if self.joint_training:
-                    self.noise_vector = noise_vector * 0.003
+                    self.act_noise_vector = noise_vector * 0.002
                 else:
-                    self.noise_vector = noise_vector * 0.03
+                    self.act_noise_vector = noise_vector * 0.02
         else:
-            self.noise_vector = np.zeros(3)
+            self.act_noise_vector = np.zeros(3)
+
+        if self.obs_noise:
+            noise_vector = np.random.uniform(-1.0, 1.0, 3)
+            norm = np.linalg.norm(noise_vector)
+            noise_vector_other = noise_vector / norm
+            noise_vector = np.minimum(noise_vector, noise_vector_other)
+            if norm == 0:
+                self.obs_noise_vector = np.zeros(3)
+            else:
+                if self.joint_training:
+                    self.obs_noise_vector = noise_vector * 0.002
+                else:
+                    self.obs_noise_vector = noise_vector * 0.02
+        else:
+            self.obs_noise_vector = np.zeros(3)
 
         super(CamEnv, self).__init__(
             model_path=model_path, n_substeps=n_substeps, n_actions=4,
@@ -98,7 +114,7 @@ class CamEnv(robot_env.RobotEnv):
             pos_ctrl *= 0.005
         else:
             pos_ctrl *= 0.05  # limit maximum change in position
-        pos_ctrl += self.noise_vector # apply random noise
+        pos_ctrl += self.act_noise_vector # apply random noise
         rot_ctrl = [1., 0., 1., 0.]  # fixed rotation of the end effector, expressed as a quaternion
         gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
         assert gripper_ctrl.shape == (2,)
@@ -115,7 +131,7 @@ class CamEnv(robot_env.RobotEnv):
         img = self.sim.render(width=500, height=500, camera_name="external_camera_1")
         # positions
         grip_pos = self.sim.data.get_site_xpos('robot0:grip')
-        grip_pos -= self.noise_vector
+        grip_pos += self.obs_noise_vector
         dt = self.sim.nsubsteps * self.sim.model.opt.timestep
         grip_velp = self.sim.data.get_site_xvelp('robot0:grip') * dt
         robot_qpos, robot_qvel = utils.robot_get_obs(self.sim)
