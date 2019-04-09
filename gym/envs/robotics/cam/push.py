@@ -8,7 +8,7 @@ MODEL_XML_PATH = os.path.join('fetch', 'push.xml')
 
 
 class CamPushEnv(cam_env.CamEnv, utils.EzPickle):
-    def __init__(self, reward_type='dense', goal_type='fixed', cam_type='fixed', gripper_init_type='fixed', act_noise=False, obs_noise=False):
+    def __init__(self, reward_type='dense', goal_type='random', cam_type='fixed', gripper_init_type='random', act_noise=False, obs_noise=False):
         initial_qpos = {
             'robot0:slide0': 0.405,
             'robot0:slide1': 0.48,

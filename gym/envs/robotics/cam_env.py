@@ -210,7 +210,7 @@ class CamEnv(robot_env.RobotEnv):
             goal += self.target_offset
             goal[2] = self.height_offset
             if self.target_in_the_air and self.np_random.uniform() < 0.5:
-                goal[2] += self.np_random.uniform(0, 0.45)
+                goal[2] += self.np_random.uniform(0.1, 0.45)
         else:
             goal = self.initial_gripper_xpos[:3] + self.np_random.uniform(-0.15, 0.15, size=3)
         return goal.copy()# - self.sim.data.get_site_xpos("robot0:cam")
