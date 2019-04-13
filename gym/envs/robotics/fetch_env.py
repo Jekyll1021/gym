@@ -120,6 +120,7 @@ class FetchEnv(robot_env.RobotEnv):
             'achieved_goal': achieved_goal.copy(),
             'desired_goal': self.goal.copy(),
             'image': (img/255).copy(),
+            'gripper_pose': grip_pos.copy()
         }
 
     def _viewer_setup(self):

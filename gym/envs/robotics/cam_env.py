@@ -131,6 +131,7 @@ class CamEnv(robot_env.RobotEnv):
         img = self.sim.render(width=500, height=500, camera_name="external_camera_1")
         # positions
         grip_pos = self.sim.data.get_site_xpos('robot0:grip')
+        holder_pos = grip_pos.copy()
         grip_pos += self.obs_noise_vector
         dt = self.sim.nsubsteps * self.sim.model.opt.timestep
         grip_velp = self.sim.data.get_site_xvelp('robot0:grip') * dt
@@ -167,7 +168,8 @@ class CamEnv(robot_env.RobotEnv):
             'observation': obs.copy(),
             'achieved_goal': achieved_goal.copy(),
             'desired_goal': self.goal.copy(),
-            'image':(img/255).copy()
+            'image':(img/255).copy(),
+            'gripper_pose': holder_pos.copy()
         }
 
     def _viewer_setup(self):
