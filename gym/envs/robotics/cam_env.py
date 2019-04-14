@@ -109,10 +109,7 @@ class CamEnv(robot_env.RobotEnv):
     def _set_action(self, action):
         assert action.shape == (4,)
         action = action.copy()  # ensure that we don't change the action outside of this scope
-        if self.ee_pose:
-            pos_ctrl, gripper_ctrl = np.zeros_like(action[:3]), action[3]
-        else:
-            pos_ctrl, gripper_ctrl = action[:3], action[3]
+        pos_ctrl, gripper_ctrl = action[:3], action[3]
 
         if self.joint_training:
             pos_ctrl *= 0.005
@@ -124,6 +121,9 @@ class CamEnv(robot_env.RobotEnv):
         assert gripper_ctrl.shape == (2,)
         if self.block_gripper:
             gripper_ctrl = np.zeros_like(gripper_ctrl)
+        if self.ee_pose:
+            pos_offset = pos_ctrl.copy()
+            pos_ctrl = np.zeros_like(pos_offset)
         action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
 
         # Apply action to simulation.
@@ -131,8 +131,8 @@ class CamEnv(robot_env.RobotEnv):
         utils.mocap_set_action(self.sim, action)
 
         if self.ee_pose:
-            pos_ctrl *= 0.5
-            self.sim.data.set_mocap_pos('robot0:mocap', self.sim.data.get_site_xpos('robot0:grip') + pos_ctrl)
+            pos_offset *= 0.5
+            self.sim.data.set_mocap_pos('robot0:mocap', self.sim.data.get_site_xpos('robot0:grip') + pos_offset)
             self.sim.data.set_mocap_quat('robot0:mocap', rot_ctrl)
             for _ in range(20):
                 self.sim.step()
