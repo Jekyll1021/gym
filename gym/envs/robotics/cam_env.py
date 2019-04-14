@@ -108,6 +108,7 @@ class CamEnv(robot_env.RobotEnv):
 
     def _set_action(self, action):
         assert action.shape == (4,)
+        gripper_pose = self.sim.data.get_site_xpos('robot0:grip').copy()
         action = action.copy()  # ensure that we don't change the action outside of this scope
         pos_ctrl, gripper_ctrl = action[:3], action[3]
 
@@ -132,7 +133,7 @@ class CamEnv(robot_env.RobotEnv):
 
         if self.ee_pose:
             pos_offset *= 0.5
-            self.sim.data.set_mocap_pos('robot0:mocap', self.sim.data.get_site_xpos('robot0:grip') + pos_offset)
+            self.sim.data.set_mocap_pos('robot0:mocap', gripper_pose + pos_offset)
             self.sim.data.set_mocap_quat('robot0:mocap', rot_ctrl)
             for _ in range(20):
                 self.sim.step()
