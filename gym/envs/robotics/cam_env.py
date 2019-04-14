@@ -94,7 +94,6 @@ class CamEnv(robot_env.RobotEnv):
         if self.reward_type == 'sparse' and info != 'precise':
             return -(d > self.distance_threshold).astype(np.float32)
         else:
-            print(info)
             return -d
 
     # RobotEnv methods
