@@ -92,6 +92,8 @@ class CamEnv(robot_env.RobotEnv):
         # Compute distance between goal and the achieved goal.
         d = goal_distance(achieved_goal, goal)
         if self.reward_type == 'sparse':
+            if info == "precise":
+                return -(d > 0.005).astype(np.float32)
             return -(d > self.distance_threshold).astype(np.float32)
         else:
             return -d
