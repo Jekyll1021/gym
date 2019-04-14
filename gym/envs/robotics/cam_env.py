@@ -132,7 +132,6 @@ class CamEnv(robot_env.RobotEnv):
         utils.mocap_set_action(self.sim, action)
 
         if self.ee_pose:
-            pos_offset *= 0.5
             self.sim.data.set_mocap_pos('robot0:mocap', gripper_pose + pos_offset)
             self.sim.data.set_mocap_quat('robot0:mocap', rot_ctrl)
             for _ in range(20):
