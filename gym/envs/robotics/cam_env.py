@@ -114,6 +114,8 @@ class CamEnv(robot_env.RobotEnv):
 
         if self.joint_training:
             pos_ctrl *= 0.005
+        elif self.ee_pose:
+            pos_ctrl *= 0.1
         else:
             pos_ctrl *= 0.05  # limit maximum change in position
         pos_ctrl += self.act_noise_vector # apply random noise
