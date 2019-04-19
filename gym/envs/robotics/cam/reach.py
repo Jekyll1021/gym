@@ -8,7 +8,7 @@ MODEL_XML_PATH = os.path.join('fetch', 'reach.xml')
 
 
 class CamReachEnv(cam_env.CamEnv, utils.EzPickle):
-    def __init__(self, reward_type='dense', goal_type='fixed', cam_type='fixed', gripper_init_type='fixed', act_noise=False, obs_noise=False, ee_pose=False):
+    def __init__(self, reward_type='dense', goal_type='fixed', cam_type='fixed', gripper_init_type='fixed', act_noise=False, obs_noise=False):
         initial_qpos = {
             'robot0:slide0': 0.4049,
             'robot0:slide1': 0.48,
@@ -20,5 +20,5 @@ class CamReachEnv(cam_env.CamEnv, utils.EzPickle):
             obj_range=0.15, target_range=0.15, distance_threshold=0.05,
             initial_qpos=initial_qpos, reward_type=reward_type, goal_type=goal_type,
             cam_type=cam_type, gripper_init_type=gripper_init_type, act_noise=act_noise, obs_noise=obs_noise,
-            joint_training=False, ee_pose=ee_pose)
+            joint_training=False)
         utils.EzPickle.__init__(self)

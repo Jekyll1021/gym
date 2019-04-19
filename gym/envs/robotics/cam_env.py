@@ -16,7 +16,7 @@ class CamEnv(robot_env.RobotEnv):
         self, model_path, n_substeps, gripper_extra_height, block_gripper,
         has_object, target_in_the_air, target_offset, obj_range, target_range,
         distance_threshold, initial_qpos, reward_type, goal_type, cam_type,
-        gripper_init_type, act_noise, obs_noise, joint_training, ee_pose
+        gripper_init_type, act_noise, obs_noise, joint_training
     ):
         """Initializes a new Fetch environment.
 
@@ -50,7 +50,6 @@ class CamEnv(robot_env.RobotEnv):
         self.act_noise = act_noise
         self.obs_noise = obs_noise
         self.joint_training = joint_training
-        self.ee_pose = ee_pose
 
         if self.act_noise:
             noise_vector = np.random.uniform(-1.0, 1.0, 3)
@@ -110,14 +109,11 @@ class CamEnv(robot_env.RobotEnv):
 
     def _set_action(self, action):
         assert action.shape == (4,)
-        gripper_pose = self.sim.data.get_site_xpos('robot0:grip').copy()
         action = action.copy()  # ensure that we don't change the action outside of this scope
         pos_ctrl, gripper_ctrl = action[:3], action[3]
 
         if self.joint_training:
             pos_ctrl *= 0.005
-        elif self.ee_pose:
-            pos_ctrl *= 0.1
         else:
             pos_ctrl *= 0.05  # limit maximum change in position
         pos_ctrl += self.act_noise_vector # apply random noise
@@ -126,20 +122,13 @@ class CamEnv(robot_env.RobotEnv):
         assert gripper_ctrl.shape == (2,)
         if self.block_gripper:
             gripper_ctrl = np.zeros_like(gripper_ctrl)
-        if self.ee_pose:
-            pos_offset = pos_ctrl.copy()
-            pos_ctrl = np.zeros_like(pos_offset)
         action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
 
         # Apply action to simulation.
         utils.ctrl_set_action(self.sim, action)
         utils.mocap_set_action(self.sim, action)
 
-        if self.ee_pose:
-            self.sim.data.set_mocap_pos('robot0:mocap', gripper_pose + pos_offset)
-            self.sim.data.set_mocap_quat('robot0:mocap', rot_ctrl)
-            for _ in range(20):
-                self.sim.step()
+        # self.sim.step()
 
 
     def _get_obs(self):
