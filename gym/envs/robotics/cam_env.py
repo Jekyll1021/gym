@@ -115,7 +115,7 @@ class CamEnv(robot_env.RobotEnv):
         if self.joint_training:
             pos_ctrl *= 0.005
         else:
-            pos_ctrl *= 0.05  # limit maximum change in position
+            pos_ctrl *= 0.1  # limit maximum change in position
         pos_ctrl += self.act_noise_vector # apply random noise
         rot_ctrl = [1., 0., 1., 0.]  # fixed rotation of the end effector, expressed as a quaternion
         gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
