@@ -91,9 +91,7 @@ class GraspEnv(robot_env.RobotEnv):
     def compute_reward(self, achieved_goal, goal, info):
         # Compute distance between goal and the achieved goal.
         d = goal_distance(achieved_goal, goal)
-        if info == 'precise':
-            return -(d > 0.01).astype(np.float32)
-        elif self.reward_type == 'sparse':
+        if self.reward_type == 'sparse':
             return -(d > self.distance_threshold).astype(np.float32)
         else:
             return -d
@@ -112,8 +110,6 @@ class GraspEnv(robot_env.RobotEnv):
         action = action.copy()  # ensure that we don't change the action outside of this scope
         pos_ctrl, gripper_ctrl = action[:3], action[3]
 
-        pos_ctrl *= 0.05  # limit maximum change in position
-        pos_ctrl += self.act_noise_vector # apply random noise
         rot_ctrl = [1., 0., 1., 0.]  # fixed rotation of the end effector, expressed as a quaternion
         gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
         assert gripper_ctrl.shape == (2,)
@@ -123,14 +119,14 @@ class GraspEnv(robot_env.RobotEnv):
 
         # Apply action to simulation.
         utils.ctrl_set_action(self.sim, action)
-        utils.mocap_set_action(self.sim, action)
+        utils.mocap_set_action_abs(self.sim, action)
 
         # self.sim.step()
 
 
     def _get_obs(self):
         # images
-        img = self.sim.render(width=500, height=500, camera_name="external_camera_1")
+        img = self.sim.render(width=400, height=400, camera_name="external_camera_1")
         # positions
         grip_pos = self.sim.data.get_site_xpos('robot0:grip')
         holder_pos = grip_pos.copy()
@@ -207,9 +203,7 @@ class GraspEnv(robot_env.RobotEnv):
         return True
 
     def _sample_goal(self):
-        if self.goal_type == 'fixed':
-            goal = self.initial_gripper_xpos[:3] + np.array([-0.15, 0.15, 0.15])
-        elif self.has_object:
+        if self.has_object:
             goal = self.sim.data.get_site_xpos('object0').copy()
             goal[2] += 0.1
         else:
