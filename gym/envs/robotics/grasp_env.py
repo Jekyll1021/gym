@@ -181,7 +181,7 @@ class GraspEnv(robot_env.RobotEnv):
         obs = np.concatenate([
             cam_pos, cam_quat
         ])
-        obs += self.noise_vector
+        obs += self.obs_noise_vector
 
         return {
             'observation': obs.copy(),
