@@ -82,7 +82,7 @@ class GraspEnv(robot_env.RobotEnv):
             self.obs_noise_vector = np.zeros(3)
 
         super(GraspEnv, self).__init__(
-            model_path=model_path, n_substeps=n_substeps, n_actions=4,
+            model_path=model_path, n_substeps=n_substeps, n_actions=3, action_max=2.,
             initial_qpos=initial_qpos)
 
     # GoalEnv methods
@@ -106,11 +106,13 @@ class GraspEnv(robot_env.RobotEnv):
             self.sim.forward()
 
     def _set_action(self, action):
-        assert action.shape == (4,)
+        assert action.shape == (3,)
         action = action.copy()  # ensure that we don't change the action outside of this scope
-        pos_ctrl, gripper_ctrl = action[:3], action[3]
-
         rot_ctrl = [1., 0., 1., 0.]  # fixed rotation of the end effector, expressed as a quaternion
+
+        # step 1: go to the command position with gripper open
+        pos_ctrl, gripper_ctrl = action.copy(), 1
+
         gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
         assert gripper_ctrl.shape == (2,)
         if self.block_gripper:
@@ -120,6 +122,20 @@ class GraspEnv(robot_env.RobotEnv):
         # Apply action to simulation.
         utils.ctrl_set_action(self.sim, action)
         utils.mocap_set_action_abs(self.sim, action)
+
+        # step 2: go down and close the gripper to get the object
+        pos_ctrl, gripper_ctrl = action.copy(), 0
+        pos_ctrl[2] = self.height_offset
+
+        gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
+        assert gripper_ctrl.shape == (2,)
+        if self.block_gripper:
+            gripper_ctrl = np.zeros_like(gripper_ctrl)
+        action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
+
+        # Apply action to simulation.
+        utils.mocap_set_action_abs(self.sim, action)
+        utils.ctrl_set_action(self.sim, action)
 
         # self.sim.step()
 
