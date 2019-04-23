@@ -75,6 +75,7 @@ def mocap_set_action_abs(sim, action):
         for _ in range(20):
             offset = pos_abs - sim.data.mocap_pos.copy()
             offset = offset / np.linalg.norm(offset) * 0.05
+            print(pos_abs, sim.data.mocap_pos, offset)
             reset_mocap2body_xpos(sim)
             sim.data.mocap_pos[:] = sim.data.mocap_pos + offset
             sim.data.mocap_quat[:] = quat_abs
