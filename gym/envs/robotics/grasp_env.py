@@ -152,7 +152,7 @@ class GraspEnv(robot_env.RobotEnv):
             self.sim.step()
 
         # step 3: lift up object
-        pos_ctrl, gripper_ctrl = action.copy(), 0
+        pos_ctrl, gripper_ctrl = action.copy(), -1
         pos_ctrl[2] = self.height_offset + 0.1
 
         gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
