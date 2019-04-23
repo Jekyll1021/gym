@@ -137,7 +137,7 @@ class GraspEnv(robot_env.RobotEnv):
         utils.ctrl_set_action(self.sim, a2)
         utils.mocap_set_action_abs(self.sim, a2)
 
-        pos_ctrl, gripper_ctrl = action.copy(), 0
+        pos_ctrl, gripper_ctrl = action.copy(), -1
         pos_ctrl[2] = self.height_offset + 0.02
 
         gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
