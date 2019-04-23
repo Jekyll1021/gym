@@ -130,7 +130,7 @@ def cam_init_pos(sim, delta_pos, delta_rot):
         sp = math.sin(Y * 0.5)
         cr = math.cos(X * 0.5)
         sr = math.sin(X * 0.5)
-        x = cy * cp * sr - sy * sp * cr
+        x = sy * sp * cr - cy * cp * sr
         y = sy * cp * sr + cy * sp * cr
         z = sy * cp * cr - cy * sp * sr
         w = cy * cp * cr + sy * sp * sr
