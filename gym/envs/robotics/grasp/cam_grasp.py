@@ -16,10 +16,9 @@ class CamGraspEnv(grasp_env.GraspEnv, utils.EzPickle):
             'object0:joint': [1.25, 0.53, 0.4, 1., 0., 0., 0.],
         }
         grasp_env.GraspEnv.__init__(
-            self, MODEL_XML_PATH, has_object=True, block_gripper=False, n_substeps=20,
+            self, MODEL_XML_PATH, block_gripper=False, n_substeps=20,
             gripper_extra_height=0.2, target_in_the_air=True, target_offset=0.0,
             obj_range=0.15, target_range=0.15, distance_threshold=0.05,
             initial_qpos=initial_qpos, reward_type=reward_type, goal_type=goal_type,
-            cam_type=cam_type, gripper_init_type=gripper_init_type, act_noise=act_noise, obs_noise=obs_noise,
-            joint_training=False)
+            cam_type=cam_type, gripper_init_type=gripper_init_type, act_noise=act_noise, obs_noise=obs_noise)
         utils.EzPickle.__init__(self)

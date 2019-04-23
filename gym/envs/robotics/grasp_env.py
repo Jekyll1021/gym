@@ -14,9 +14,9 @@ class GraspEnv(robot_env.RobotEnv):
 
     def __init__(
         self, model_path, n_substeps, gripper_extra_height, block_gripper,
-        has_object, target_in_the_air, target_offset, obj_range, target_range,
+        target_in_the_air, target_offset, obj_range, target_range,
         distance_threshold, initial_qpos, reward_type, goal_type, cam_type,
-        gripper_init_type, act_noise, obs_noise, joint_training
+        gripper_init_type, act_noise, obs_noise
     ):
         """Initializes a new Fetch environment.
 
@@ -25,7 +25,6 @@ class GraspEnv(robot_env.RobotEnv):
             n_substeps (int): number of substeps the simulation runs on every call to step
             gripper_extra_height (float): additional height above the table when positioning the gripper
             block_gripper (boolean): whether or not the gripper is blocked (i.e. not movable) or not
-            has_object (boolean): whether or not the environment has an object
             target_in_the_air (boolean): whether or not the target should be in the air above the table or on the table surface
             target_offset (float or array with 3 elements): offset of the target
             obj_range (float): range of a uniform distribution for sampling initial object positions
@@ -37,7 +36,6 @@ class GraspEnv(robot_env.RobotEnv):
         """
         self.gripper_extra_height = gripper_extra_height
         self.block_gripper = block_gripper
-        self.has_object = has_object
         self.target_in_the_air = target_in_the_air
         self.target_offset = target_offset
         self.obj_range = obj_range
@@ -49,7 +47,6 @@ class GraspEnv(robot_env.RobotEnv):
         self.gripper_init_type = gripper_init_type
         self.act_noise = act_noise
         self.obs_noise = obs_noise
-        self.joint_training = joint_training
 
         if self.act_noise:
             noise_vector = np.random.uniform(-1.0, 1.0, 3)
@@ -59,27 +56,21 @@ class GraspEnv(robot_env.RobotEnv):
             if norm == 0:
                 self.act_noise_vector = np.zeros(3)
             else:
-                if self.joint_training:
-                    self.act_noise_vector = noise_vector * 0.002
-                else:
-                    self.act_noise_vector = noise_vector * 0.02
+                self.act_noise_vector = noise_vector * 0.02
         else:
             self.act_noise_vector = np.zeros(3)
 
         if self.obs_noise:
-            noise_vector = np.random.uniform(-1.0, 1.0, 3)
+            noise_vector = np.random.uniform(-1.0, 1.0, 7)
             norm = np.linalg.norm(noise_vector)
             noise_vector_other = noise_vector / norm
             noise_vector = np.minimum(noise_vector, noise_vector_other)
             if norm == 0:
-                self.obs_noise_vector = np.zeros(3)
+                self.obs_noise_vector = np.zeros(7)
             else:
-                if self.joint_training:
-                    self.obs_noise_vector = noise_vector * 0.002
-                else:
-                    self.obs_noise_vector = noise_vector * 0.02
+                self.obs_noise_vector = noise_vector * 0.01
         else:
-            self.obs_noise_vector = np.zeros(3)
+            self.obs_noise_vector = np.zeros(7)
 
         super(GraspEnv, self).__init__(
             model_path=model_path, n_substeps=n_substeps, n_actions=3, action_max=2.,
@@ -171,47 +162,33 @@ class GraspEnv(robot_env.RobotEnv):
     def _get_obs(self):
         # images
         img = self.sim.render(width=400, height=400, camera_name="external_camera_1")
-        # positions
-        grip_pos = self.sim.data.get_site_xpos('robot0:grip')
-        holder_pos = grip_pos.copy()
-        grip_pos += self.obs_noise_vector
-        dt = self.sim.nsubsteps * self.sim.model.opt.timestep
-        grip_velp = self.sim.data.get_site_xvelp('robot0:grip') * dt
-        robot_qpos, robot_qvel = utils.robot_get_obs(self.sim)
-        if self.has_object:
-            object_pos = self.sim.data.get_site_xpos('object0')
-            # rotations
-            object_rot = rotations.mat2euler(self.sim.data.get_site_xmat('object0'))
-            # velocities
-            object_velp = self.sim.data.get_site_xvelp('object0') * dt
-            object_velr = self.sim.data.get_site_xvelr('object0') * dt
-            # gripper state
-            object_rel_pos = object_pos - grip_pos
-            object_velp -= grip_velp
-        else:
-            object_pos = grip_pos
-            object_rot = np.zeros(3)
-            object_velp = grip_velp
-            object_velr = np.zeros(3)
-            object_rel_pos = np.zeros(3)
-        gripper_state = robot_qpos[-2:]
-        gripper_vel = robot_qvel[-2:] * dt  # change to a scalar if the gripper is made symmetric
 
-        if not self.has_object:
-            achieved_goal = grip_pos.copy()# - self.sim.data.get_site_xpos("robot0:cam")
-        else:
-            achieved_goal = np.squeeze(object_pos.copy())# - self.sim.data.get_site_xpos("robot0:cam")
+        grip_pos = self.sim.data.get_site_xpos('robot0:grip')
+
+        # camera position and quaternion
+        cam_pos = self.sim.model.cam_pos[4].copy()
+        cam_quat = self.sim.model.cam_quat[4].copy()
+
+        object_pos = self.sim.data.get_site_xpos('object0')
+
+        # # rotations
+        # object_rot = rotations.mat2euler(self.sim.data.get_site_xmat('object0'))
+        # # velocities
+        # object_velp = self.sim.data.get_site_xvelp('object0') * dt
+        # object_velr = self.sim.data.get_site_xvelr('object0') * dt
+
+        achieved_goal = np.squeeze(object_pos.copy())# - self.sim.data.get_site_xpos("robot0:cam")
         obs = np.concatenate([
-            grip_pos, object_pos.ravel(), object_rel_pos.ravel(), gripper_state, object_rot.ravel(),
-            object_velp.ravel(), object_velr.ravel(), grip_velp, gripper_vel,
+            cam_pos, cam_quat
         ])
+        obs += self.noise_vector
 
         return {
             'observation': obs.copy(),
             'achieved_goal': achieved_goal.copy(),
             'desired_goal': self.goal.copy(),
             'image':(img/255).copy(),
-            'gripper_pose': holder_pos.copy()
+            'gripper_pose': grip_pos.copy()
         }
 
     def _viewer_setup(self):
@@ -234,24 +211,21 @@ class GraspEnv(robot_env.RobotEnv):
         self.sim.set_state(self.initial_state)
 
         # Randomize start position of object.
-        if self.has_object:
-            object_xpos = self.initial_gripper_xpos[:2]
-            while np.linalg.norm(object_xpos - self.initial_gripper_xpos[:2]) < 0.1:
-                object_xpos = self.initial_gripper_xpos[:2] + self.np_random.uniform(-self.obj_range, self.obj_range, size=2)
-            object_qpos = self.sim.data.get_joint_qpos('object0:joint')
-            assert object_qpos.shape == (7,)
-            object_qpos[:2] = object_xpos
-            self.sim.data.set_joint_qpos('object0:joint', object_qpos)
+        object_xpos = self.initial_gripper_xpos[:2]
+        while np.linalg.norm(object_xpos - self.initial_gripper_xpos[:2]) < 0.1:
+            object_xpos = self.initial_gripper_xpos[:2] + self.np_random.uniform(-self.obj_range, self.obj_range, size=2)
+        object_qpos = self.sim.data.get_joint_qpos('object0:joint')
+        assert object_qpos.shape == (7,)
+        object_qpos[:2] = object_xpos
+        self.sim.data.set_joint_qpos('object0:joint', object_qpos)
 
         self.sim.forward()
         return True
 
     def _sample_goal(self):
-        if self.has_object:
-            goal = self.sim.data.get_site_xpos('object0').copy()
-            goal[2] += 0.1
-        else:
-            goal = self.initial_gripper_xpos[:3] + self.np_random.uniform(-0.15, 0.15, size=3)
+        goal = self.sim.data.get_site_xpos('object0').copy()
+        goal[2] += 0.1
+
         return goal.copy()# - self.sim.data.get_site_xpos("robot0:cam")
 
     def _is_success(self, achieved_goal, desired_goal):
@@ -267,7 +241,6 @@ class GraspEnv(robot_env.RobotEnv):
             # delta_pos = self.np_random.uniform(-0.15, 0.15, size=3)
             delta_pos = np.array([self.np_random.uniform(0, 0.15), self.np_random.uniform(-0.1, 0.1), self.np_random.uniform(-0.1, 0.15)])
             delta_rot = self.np_random.uniform(-0.05, 0.05, size=3)
-            print(delta_pos, delta_rot)
             utils.cam_init_pos(self.sim, delta_pos, delta_rot)
 
         self.sim.forward()
@@ -286,8 +259,7 @@ class GraspEnv(robot_env.RobotEnv):
 
         # Extract information for sampling goals.
         self.initial_gripper_xpos = self.sim.data.get_site_xpos('robot0:grip').copy()
-        if self.has_object:
-            self.height_offset = self.sim.data.get_site_xpos('object0')[2]
+        self.height_offset = self.sim.data.get_site_xpos('object0')[2]
 
     def render(self, mode='rgd_array', width=500, height=500):
         return super(GraspEnv, self).render(mode, width, height)
