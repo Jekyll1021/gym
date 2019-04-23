@@ -125,7 +125,7 @@ class GraspEnv(robot_env.RobotEnv):
 
         # step 2: go down and close the gripper to get the object
         pos_ctrl, gripper_ctrl = action.copy(), 0
-        pos_ctrl[2] = self.height_offset + 0.02
+        pos_ctrl[2] = self.height_offset
 
         gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
         assert gripper_ctrl.shape == (2,)
