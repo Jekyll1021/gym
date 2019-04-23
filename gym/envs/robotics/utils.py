@@ -61,7 +61,7 @@ def mocap_set_action_abs(sim, action):
     on the robot (for example the gripper wrist) is controlled with
     mocap bodies. In this case the action is the desired absolute
     position and orientation (quaternion), in world coordinates,
-    of the of the target body. The mocap is positioned relative to
+    of the target body. The mocap is positioned relative to
     the target body according to the delta, and the MuJoCo equality
     constraint optimizer tries to center the welded body on the mocap.
     """
@@ -72,9 +72,13 @@ def mocap_set_action_abs(sim, action):
         pos_abs = action[:, :3]
         quat_abs = action[:, 3:]
 
-        reset_mocap2body_xpos(sim)
-        sim.data.mocap_pos[:] = pos_abs
-        sim.data.mocap_quat[:] = quat_abs
+        for _ in range(20):
+            offset = pos_abs - sim.data.mocap_pos.copy()
+            offset = offset / np.linalg.norm(offset) * 0.05
+            reset_mocap2body_xpos(sim)
+            sim.data.mocap_pos[:] = sim.data.mocap_pos + offset
+            sim.data.mocap_quat[:] = quat_abs
+            sim.step()
 
 
 def reset_mocap_welds(sim):
