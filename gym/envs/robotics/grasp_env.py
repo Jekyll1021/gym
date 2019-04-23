@@ -117,11 +117,11 @@ class GraspEnv(robot_env.RobotEnv):
         assert gripper_ctrl.shape == (2,)
         if self.block_gripper:
             gripper_ctrl = np.zeros_like(gripper_ctrl)
-        action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
+        a1 = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
 
         # Apply action to simulation.
-        utils.ctrl_set_action(self.sim, action)
-        utils.mocap_set_action_abs(self.sim, action)
+        utils.ctrl_set_action(self.sim, a1)
+        utils.mocap_set_action_abs(self.sim, a1)
 
         # step 2: go down and close the gripper to get the object
         pos_ctrl, gripper_ctrl = action.copy(), 0
@@ -131,11 +131,11 @@ class GraspEnv(robot_env.RobotEnv):
         assert gripper_ctrl.shape == (2,)
         if self.block_gripper:
             gripper_ctrl = np.zeros_like(gripper_ctrl)
-        action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
+        a2 = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
 
         # Apply action to simulation.
-        utils.mocap_set_action_abs(self.sim, action)
-        utils.ctrl_set_action(self.sim, action)
+        utils.mocap_set_action_abs(self.sim, a2)
+        utils.ctrl_set_action(self.sim, a2)
 
         # self.sim.step()
 
