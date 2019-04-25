@@ -102,7 +102,7 @@ class GraspEnv(robot_env.RobotEnv):
 
         # Apply action to simulation.
         utils.ctrl_set_action(self.sim, a1)
-        utils.mocap_set_action_abs(self.sim, a1, visual_path="debug_image/to_pose/")
+        utils.mocap_set_action_abs(self.sim, a1)
 
         # step 2: go down and close the gripper to get the object
         pos_ctrl, gripper_ctrl = np.array([action[0], action[1], self.height_offset]), 0
@@ -115,7 +115,7 @@ class GraspEnv(robot_env.RobotEnv):
 
         # Apply action to simulation.
         utils.ctrl_set_action(self.sim, a2)
-        utils.mocap_set_action_abs(self.sim, a2, visual_path="debug_image/down/")
+        utils.mocap_set_action_abs(self.sim, a2)
 
         # close the gripper at the same spot
         pos_ctrl, gripper_ctrl = np.array([action[0], action[1], self.height_offset]), -1
@@ -141,7 +141,7 @@ class GraspEnv(robot_env.RobotEnv):
 
         # Apply action to simulation.
         utils.ctrl_set_action(self.sim, a3)
-        utils.mocap_set_action_abs(self.sim, a3, visual_path="debug_image/up/")
+        utils.mocap_set_action_abs(self.sim, a3)
 
         # self.sim.step()
 

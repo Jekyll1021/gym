@@ -57,7 +57,7 @@ def mocap_set_action(sim, action):
         sim.data.mocap_pos[:] = sim.data.mocap_pos + pos_delta
         sim.data.mocap_quat[:] = sim.data.mocap_quat + quat_delta
 
-def mocap_set_action_abs(sim, action, visual_path=None):
+def mocap_set_action_abs(sim, action):
     """The action controls the robot using mocaps. Specifically, bodies
     on the robot (for example the gripper wrist) is controlled with
     mocap bodies. In this case the action is the desired absolute
@@ -73,7 +73,7 @@ def mocap_set_action_abs(sim, action, visual_path=None):
         pos_abs = action[:, :3]
         quat_abs = action[:, 3:]
 
-        for i in range(50):
+        for _ in range(50):
             offset = pos_abs - sim.data.mocap_pos.copy()
             offset = offset / np.linalg.norm(offset) * min(np.linalg.norm(offset), 0.01)
             reset_mocap2body_xpos(sim)
