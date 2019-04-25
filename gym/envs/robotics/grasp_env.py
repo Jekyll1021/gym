@@ -102,7 +102,7 @@ class GraspEnv(robot_env.RobotEnv):
 
         # Apply action to simulation.
         utils.ctrl_set_action(self.sim, a1)
-        utils.mocap_set_action_abs(self.sim, a1)
+        utils.mocap_set_action_abs(self.sim, a1, visual_path="debug_image/to_pose/")
 
         # step 2: go down and close the gripper to get the object
         pos_ctrl, gripper_ctrl = np.array([action[0], action[1], self.height_offset]), 0
@@ -115,7 +115,7 @@ class GraspEnv(robot_env.RobotEnv):
 
         # Apply action to simulation.
         utils.ctrl_set_action(self.sim, a2)
-        utils.mocap_set_action_abs(self.sim, a2)
+        utils.mocap_set_action_abs(self.sim, a2, visual_path="debug_image/down/")
 
         # close the gripper at the same spot
         pos_ctrl, gripper_ctrl = np.array([action[0], action[1], self.height_offset]), -1
@@ -141,16 +141,34 @@ class GraspEnv(robot_env.RobotEnv):
 
         # Apply action to simulation.
         utils.ctrl_set_action(self.sim, a3)
-        utils.mocap_set_action_abs(self.sim, a3)
+        utils.mocap_set_action_abs(self.sim, a3, visual_path="debug_image/up/")
 
         # self.sim.step()
 
 
     def _get_obs(self):
         # images
+        grip_pos = self.sim.data.get_site_xpos('robot0:grip')
+
+        # rot_ctrl = [1., 0., 1., 0.]
+        # pos_ctrl, gripper_ctrl = np.array([grip_pos[0] - 0.4, grip_pos[1] + 0.4, grip_pos[2]]), 0
+        # gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
+        # a1 = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
+        #
+        # utils.mocap_set_action_abs(self.sim, a1)
+        # for _ in range(10):
+        #     self.sim.step()
+
         img = self.sim.render(width=128, height=128, camera_name="external_camera_1")
 
-        grip_pos = self.sim.data.get_site_xpos('robot0:grip')
+        # rot_ctrl = [1., 0., 1., 0.]
+        # pos_ctrl, gripper_ctrl = np.array([grip_pos[0] - 0.4, grip_pos[1] + 0.4, grip_pos[2]]), 0
+        # gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
+        # a1 = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
+        #
+        # utils.mocap_set_action_abs(self.sim, a1)
+        # for _ in range(10):
+        #     self.sim.step()
 
         # camera position and quaternion
         cam_pos = self.sim.model.cam_pos[4].copy()
@@ -236,8 +254,7 @@ class GraspEnv(robot_env.RobotEnv):
             init_disturbance = np.array([self.np_random.uniform(-0.15, 0.15), self.np_random.uniform(-0.15, 0.15), self.np_random.uniform(0, 0.15)])
         else:
             init_disturbance = np.array([0, 0, 0])
-        # gripper_target = np.array([-0.498, 0.005, -0.431 + self.gripper_extra_height]) + init_disturbance + self.sim.data.get_site_xpos('robot0:grip')
-        gripper_target = self.sim.data.get_site_xpos('robot0:grip')
+        gripper_target = np.array([-0.498, 0.005, -0.431 + self.gripper_extra_height]) + init_disturbance + self.sim.data.get_site_xpos('robot0:grip')
         gripper_rotation = np.array([1., 0., 1., 0.])
         self.sim.data.set_mocap_pos('robot0:mocap', gripper_target)
         self.sim.data.set_mocap_quat('robot0:mocap', gripper_rotation)
