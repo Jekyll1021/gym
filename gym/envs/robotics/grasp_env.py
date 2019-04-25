@@ -92,7 +92,7 @@ class GraspEnv(robot_env.RobotEnv):
         rot_ctrl = [1., 0., 1., 0.]  # fixed rotation of the end effector, expressed as a quaternion
 
         # step 1: go to the command position with gripper open
-        pos_ctrl, gripper_ctrl = np.array(action[0], action[1], self.height_offset + 0.2), 1
+        pos_ctrl, gripper_ctrl = np.array([action[0], action[1], self.height_offset + 0.2]), 1
 
         gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
         assert gripper_ctrl.shape == (2,)
@@ -105,8 +105,7 @@ class GraspEnv(robot_env.RobotEnv):
         utils.mocap_set_action_abs(self.sim, a1)
 
         # step 2: go down and close the gripper to get the object
-        pos_ctrl, gripper_ctrl = action.copy(), 0
-        pos_ctrl[2] = self.height_offset
+        pos_ctrl, gripper_ctrl = np.array([action[0], action[1], self.height_offset]), 0
 
         gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
         assert gripper_ctrl.shape == (2,)
@@ -119,8 +118,7 @@ class GraspEnv(robot_env.RobotEnv):
         utils.mocap_set_action_abs(self.sim, a2)
 
         # close the gripper at the same spot
-        pos_ctrl, gripper_ctrl = action.copy(), -1
-        pos_ctrl[2] = self.height_offset
+        pos_ctrl, gripper_ctrl = np.array([action[0], action[1], self.height_offset]), -1
 
         gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
         assert gripper_ctrl.shape == (2,)
@@ -133,8 +131,7 @@ class GraspEnv(robot_env.RobotEnv):
             self.sim.step()
 
         # step 3: lift up object
-        pos_ctrl, gripper_ctrl = action.copy(), -1
-        pos_ctrl[2] = self.height_offset + 0.2
+        pos_ctrl, gripper_ctrl = np.array([action[0], action[1], self.height_offset + 0.2]), -1
 
         gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
         assert gripper_ctrl.shape == (2,)
