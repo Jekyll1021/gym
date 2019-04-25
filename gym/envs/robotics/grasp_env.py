@@ -67,7 +67,7 @@ class GraspEnv(robot_env.RobotEnv):
             self.obs_noise_vector = np.zeros(7)
 
         super(GraspEnv, self).__init__(
-            model_path=model_path, n_substeps=n_substeps, n_actions=3, action_max=2.,
+            model_path=model_path, n_substeps=n_substeps, n_actions=2, action_max=2.,
             initial_qpos=initial_qpos)
 
     # GoalEnv methods
@@ -87,12 +87,12 @@ class GraspEnv(robot_env.RobotEnv):
             self.sim.forward()
 
     def _set_action(self, action):
-        assert action.shape == (3,)
+        assert action.shape == (2,)
         action = action.copy()  # ensure that we don't change the action outside of this scope
         rot_ctrl = [1., 0., 1., 0.]  # fixed rotation of the end effector, expressed as a quaternion
 
         # step 1: go to the command position with gripper open
-        pos_ctrl, gripper_ctrl = action.copy(), 1
+        pos_ctrl, gripper_ctrl = np.array(action[0], action[1], self.height_offset + 0.2), 1
 
         gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
         assert gripper_ctrl.shape == (2,)
@@ -134,7 +134,7 @@ class GraspEnv(robot_env.RobotEnv):
 
         # step 3: lift up object
         pos_ctrl, gripper_ctrl = action.copy(), -1
-        pos_ctrl[2] = self.height_offset + 0.15
+        pos_ctrl[2] = self.height_offset + 0.2
 
         gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
         assert gripper_ctrl.shape == (2,)
