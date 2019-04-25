@@ -159,7 +159,7 @@ class GraspEnv(robot_env.RobotEnv):
         # for _ in range(10):
         #     self.sim.step()
 
-        img = self.sim.render(width=128, height=128, camera_name="external_camera_1")
+        img = self.sim.render(width=512, height=512, camera_name="external_camera_1")
 
         # rot_ctrl = [1., 0., 1., 0.]
         # pos_ctrl, gripper_ctrl = np.array([grip_pos[0] - 0.4, grip_pos[1] + 0.4, grip_pos[2]]), 0
