@@ -73,11 +73,11 @@ def mocap_set_action_abs(sim, action, visual_path=None):
         pos_abs = action[:, :3]
         quat_abs = action[:, 3:]
 
-        for i in range(20):
+        for i in range(50):
             if visual_path is not None:
                 cv2.imwrite(visual_path+str(i)+".png", sim.render(width=128, height=128, camera_name="external_camera_1"))
             offset = pos_abs - sim.data.mocap_pos.copy()
-            offset = offset / np.linalg.norm(offset) * min(np.linalg.norm(offset), 0.05)
+            offset = offset / np.linalg.norm(offset) * min(np.linalg.norm(offset), 0.01)
             reset_mocap2body_xpos(sim)
             sim.data.mocap_pos[:] = sim.data.mocap_pos + offset
             sim.data.mocap_quat[:] = quat_abs
