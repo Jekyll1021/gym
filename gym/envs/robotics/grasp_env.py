@@ -111,7 +111,15 @@ class GraspEnv(robot_env.RobotEnv):
 
         if self.counter >= 5:
             self.sim.step()
-            pos_ctrl[2] += 0.2
+            pos_ctrl = np.array([0.0, 0.0, 0.0])
+            gripper_ctrl = np.array([-1, -1])
+            action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
+            utils.ctrl_set_action(self.sim, action)
+            utils.mocap_set_action(self.sim, action)
+            for _ in range(10):
+                self.sim.step()
+
+            pos_ctrl = np.array([0.0, 0.0, 0.2])
             gripper_ctrl = np.array([-1, -1])
             action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
             utils.ctrl_set_action(self.sim, action)
@@ -296,7 +304,7 @@ class GraspEnv(robot_env.RobotEnv):
 
         # Move end effector into position.
         if self.gripper_init_type != "fixed":
-            init_disturbance = np.array([self.np_random.uniform(-0.15, 0.15), self.np_random.uniform(-0.15, 0.15), 0.0])
+            init_disturbance = np.array([self.np_random.uniform(-0.15, 0.15), self.np_random.uniform(-0.15, 0.15), 0.01])
         else:
             init_disturbance = np.array([0, 0, 0])
         gripper_target = np.array([-0.498, 0.005, -0.431 + self.gripper_extra_height]) + init_disturbance + self.sim.data.get_site_xpos('robot0:grip')
