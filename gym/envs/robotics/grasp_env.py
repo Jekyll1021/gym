@@ -76,12 +76,12 @@ class GraspEnv(robot_env.RobotEnv):
 
     def compute_reward(self, achieved_goal, goal, info):
         # Compute distance between goal and the achieved goal.
-        d = (np.linalg.norm(achieved_goal - goal, axis=-1) < self.distance_threshold)
+        d = -(np.linalg.norm(achieved_goal - goal, axis=-1) < self.distance_threshold).astype(np.float32)
         if len(achieved_goal.shape) <= 1:
-            h = (achieved_goal[2] < self.distance_threshold + self.height_offset)
+            h = -(achieved_goal[2] < self.distance_threshold + self.height_offset).astype(np.float32)
         else:
-            h = (achieved_goal[:,2] < self.distance_threshold + self.height_offset)
-        return -np.logical_or(d, h).astype(np.float32)
+            h = -(achieved_goal[:,2] < self.distance_threshold + self.height_offset).astype(np.float32)
+        return np.clip(0.5*d + h, -1, 0)
 
     # RobotEnv methods
     # ----------------------------
