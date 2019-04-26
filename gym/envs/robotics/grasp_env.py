@@ -76,12 +76,10 @@ class GraspEnv(robot_env.RobotEnv):
 
     def compute_reward(self, achieved_goal, goal, info):
         # Compute distance between goal and the achieved goal.
-        d = -(np.linalg.norm(achieved_goal - goal, axis=-1) < self.distance_threshold).astype(np.float32)
         if len(achieved_goal.shape) <= 1:
-            h = -(achieved_goal[2] < self.distance_threshold + self.height_offset).astype(np.float32)
+            return -(achieved_goal[2] < self.distance_threshold + self.height_offset).astype(np.float32)
         else:
-            h = -(achieved_goal[:,2] < self.distance_threshold + self.height_offset).astype(np.float32)
-        return np.clip(0.5*d + h, -1, 0)
+            return -(achieved_goal[: ,2] < self.distance_threshold + self.height_offset).astype(np.float32)
 
     # RobotEnv methods
     # ----------------------------
@@ -283,8 +281,7 @@ class GraspEnv(robot_env.RobotEnv):
 
     def _sample_goal(self):
         goal = self.sim.data.get_site_xpos('object0').copy()
-        goal[2] += self.distance_threshold
-        goal[2] -= 0.01
+        goal[2] += 0.1
 
         return goal.copy()# - self.sim.data.get_site_xpos("robot0:cam")
 
