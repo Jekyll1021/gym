@@ -94,7 +94,6 @@ class GraspEnv(robot_env.RobotEnv):
         pos_ctrl, gripper_ctrl = action[:3], action[3]
 
         pos_ctrl *= 0.03  # limit maximum change in position
-        pos_ctrl += self.act_noise_vector # apply random noise
         rot_ctrl = [1., 0., 1., 0.]  # fixed rotation of the end effector, expressed as a quaternion
         gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
         assert gripper_ctrl.shape == (2,)
@@ -209,7 +208,6 @@ class GraspEnv(robot_env.RobotEnv):
         # positions
         grip_pos = self.sim.data.get_site_xpos('robot0:grip')
         holder_pos = grip_pos.copy()
-        grip_pos += self.obs_noise_vector
         dt = self.sim.nsubsteps * self.sim.model.opt.timestep
         grip_velp = self.sim.data.get_site_xvelp('robot0:grip') * dt
         robot_qpos, robot_qvel = utils.robot_get_obs(self.sim)
