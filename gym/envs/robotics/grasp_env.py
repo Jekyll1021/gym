@@ -283,7 +283,7 @@ class GraspEnv(robot_env.RobotEnv):
 
     def _sample_goal(self):
         goal = self.sim.data.get_site_xpos('object0').copy()
-        goal[2] += 0.1
+        goal[2] += self.distance_threshold
 
         return goal.copy()# - self.sim.data.get_site_xpos("robot0:cam")
 
