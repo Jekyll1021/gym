@@ -41,6 +41,7 @@ class GraspEnv(robot_env.RobotEnv):
         self.gripper_init_type = gripper_init_type
         self.act_noise = act_noise
         self.obs_noise = obs_noise
+        self.counter = 0
 
         if self.act_noise:
             noise_vector = np.random.uniform(-1.0, 1.0, 3)
@@ -67,7 +68,7 @@ class GraspEnv(robot_env.RobotEnv):
             self.obs_noise_vector = np.zeros(7)
 
         super(GraspEnv, self).__init__(
-            model_path=model_path, n_substeps=n_substeps, n_actions=2, action_max=2.,
+            model_path=model_path, n_substeps=n_substeps, n_actions=4, action_max=1.,
             initial_qpos=initial_qpos)
 
     # GoalEnv methods
@@ -87,113 +88,168 @@ class GraspEnv(robot_env.RobotEnv):
             self.sim.forward()
 
     def _set_action(self, action):
-        assert action.shape == (2,)
+        assert action.shape == (4,)
+        self.counter += 1
         action = action.copy()  # ensure that we don't change the action outside of this scope
+        pos_ctrl, gripper_ctrl = action[:3], action[3]
+
+        if self.joint_training:
+            pos_ctrl *= 0.005
+        else:
+            pos_ctrl *= 0.05  # limit maximum change in position
+        pos_ctrl += self.act_noise_vector # apply random noise
         rot_ctrl = [1., 0., 1., 0.]  # fixed rotation of the end effector, expressed as a quaternion
-
-        # step 1: go to the command position with gripper open
-        pos_ctrl, gripper_ctrl = np.array([action[0], action[1], self.height_offset + 0.2]), 1
-
         gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
         assert gripper_ctrl.shape == (2,)
         if self.block_gripper:
             gripper_ctrl = np.zeros_like(gripper_ctrl)
-        a1 = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
+        action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
 
         # Apply action to simulation.
-        utils.ctrl_set_action(self.sim, a1)
-        utils.mocap_set_action_abs(self.sim, a1)
+        utils.ctrl_set_action(self.sim, action)
+        utils.mocap_set_action(self.sim, action)
 
-        # step 2: go down and close the gripper to get the object
-        pos_ctrl, gripper_ctrl = np.array([action[0], action[1], self.height_offset]), 0
-
-        gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
-        assert gripper_ctrl.shape == (2,)
-        if self.block_gripper:
-            gripper_ctrl = np.zeros_like(gripper_ctrl)
-        a2 = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
-
-        # Apply action to simulation.
-        utils.ctrl_set_action(self.sim, a2)
-        utils.mocap_set_action_abs(self.sim, a2)
-
-        # close the gripper at the same spot
-        pos_ctrl, gripper_ctrl = np.array([action[0], action[1], self.height_offset]), -1
-
-        gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
-        assert gripper_ctrl.shape == (2,)
-        if self.block_gripper:
-            gripper_ctrl = np.zeros_like(gripper_ctrl)
-        a2_2 = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
-        utils.ctrl_set_action(self.sim, a2_2)
-
-        for _ in range(20):
+        if self.counter >= 5:
             self.sim.step()
+            pos_ctrl[2] += 0.2
+            gripper_ctrl = np.array([-1, -1])
+            action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
+            utils.ctrl_set_action(self.sim, action)
+            utils.mocap_set_action(self.sim, action)
 
-        # step 3: lift up object
-        pos_ctrl, gripper_ctrl = np.array([action[0], action[1], self.height_offset + 0.2]), -1
-
-        gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
-        assert gripper_ctrl.shape == (2,)
-        if self.block_gripper:
-            gripper_ctrl = np.zeros_like(gripper_ctrl)
-        a3 = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
-
-        # Apply action to simulation.
-        utils.ctrl_set_action(self.sim, a3)
-        utils.mocap_set_action_abs(self.sim, a3)
+        # assert action.shape == (2,)
+        # action = action.copy()  # ensure that we don't change the action outside of this scope
+        # rot_ctrl = [1., 0., 1., 0.]  # fixed rotation of the end effector, expressed as a quaternion
+        #
+        # # step 1: go to the command position with gripper open
+        # pos_ctrl, gripper_ctrl = np.array([action[0], action[1], self.height_offset + 0.2]), 1
+        #
+        # gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
+        # assert gripper_ctrl.shape == (2,)
+        # if self.block_gripper:
+        #     gripper_ctrl = np.zeros_like(gripper_ctrl)
+        # a1 = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
+        #
+        # # Apply action to simulation.
+        # utils.ctrl_set_action(self.sim, a1)
+        # utils.mocap_set_action_abs(self.sim, a1)
+        #
+        # # step 2: go down and close the gripper to get the object
+        # pos_ctrl, gripper_ctrl = np.array([action[0], action[1], self.height_offset]), 0
+        #
+        # gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
+        # assert gripper_ctrl.shape == (2,)
+        # if self.block_gripper:
+        #     gripper_ctrl = np.zeros_like(gripper_ctrl)
+        # a2 = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
+        #
+        # # Apply action to simulation.
+        # utils.ctrl_set_action(self.sim, a2)
+        # utils.mocap_set_action_abs(self.sim, a2)
+        #
+        # # close the gripper at the same spot
+        # pos_ctrl, gripper_ctrl = np.array([action[0], action[1], self.height_offset]), -1
+        #
+        # gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
+        # assert gripper_ctrl.shape == (2,)
+        # if self.block_gripper:
+        #     gripper_ctrl = np.zeros_like(gripper_ctrl)
+        # a2_2 = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
+        # utils.ctrl_set_action(self.sim, a2_2)
+        #
+        # for _ in range(20):
+        #     self.sim.step()
+        #
+        # # step 3: lift up object
+        # pos_ctrl, gripper_ctrl = np.array([action[0], action[1], self.height_offset + 0.2]), -1
+        #
+        # gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
+        # assert gripper_ctrl.shape == (2,)
+        # if self.block_gripper:
+        #     gripper_ctrl = np.zeros_like(gripper_ctrl)
+        # a3 = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
+        #
+        # # Apply action to simulation.
+        # utils.ctrl_set_action(self.sim, a3)
+        # utils.mocap_set_action_abs(self.sim, a3)
 
         # self.sim.step()
 
 
     def _get_obs(self):
         # images
+        # grip_pos = self.sim.data.get_site_xpos('robot0:grip')
+        #
+        # img = self.sim.render(width=512, height=512, camera_name="external_camera_1")
+        #
+        # # camera position and quaternion
+        # cam_pos = self.sim.model.cam_pos[4].copy()
+        # cam_quat = self.sim.model.cam_quat[4].copy()
+        #
+        # object_pos = self.sim.data.get_site_xpos('object0')
+        #
+        # # # rotations
+        # # object_rot = rotations.mat2euler(self.sim.data.get_site_xmat('object0'))
+        # # # velocities
+        # # object_velp = self.sim.data.get_site_xvelp('object0') * dt
+        # # object_velr = self.sim.data.get_site_xvelr('object0') * dt
+        #
+        # achieved_goal = np.squeeze(object_pos.copy())# - self.sim.data.get_site_xpos("robot0:cam")
+        # obs = np.concatenate([
+        #     cam_pos, cam_quat
+        # ])
+        # obs += self.obs_noise_vector
+        #
+        # return {
+        #     'observation': obs.copy(),
+        #     'achieved_goal': achieved_goal.copy(),
+        #     'desired_goal': self.goal.copy(),
+        #     'image':(img/255).copy(),
+        #     'gripper_pose': grip_pos.copy()
+        # }
+        # images
+        img = self.sim.render(width=400, height=400, camera_name="external_camera_1")
+        # positions
         grip_pos = self.sim.data.get_site_xpos('robot0:grip')
+        holder_pos = grip_pos.copy()
+        grip_pos += self.obs_noise_vector
+        dt = self.sim.nsubsteps * self.sim.model.opt.timestep
+        grip_velp = self.sim.data.get_site_xvelp('robot0:grip') * dt
+        robot_qpos, robot_qvel = utils.robot_get_obs(self.sim)
+        if self.has_object:
+            object_pos = self.sim.data.get_site_xpos('object0')
+            # rotations
+            object_rot = rotations.mat2euler(self.sim.data.get_site_xmat('object0'))
+            # velocities
+            object_velp = self.sim.data.get_site_xvelp('object0') * dt
+            object_velr = self.sim.data.get_site_xvelr('object0') * dt
+            # gripper state
+            object_rel_pos = object_pos - grip_pos
+            object_velp -= grip_velp
+        else:
+            object_pos = grip_pos
+            object_rot = np.zeros(3)
+            object_velp = grip_velp
+            object_velr = np.zeros(3)
+            object_rel_pos = np.zeros(3)
+        gripper_state = robot_qpos[-2:]
+        gripper_vel = robot_qvel[-2:] * dt  # change to a scalar if the gripper is made symmetric
 
-        # rot_ctrl = [1., 0., 1., 0.]
-        # pos_ctrl, gripper_ctrl = np.array([grip_pos[0] - 0.4, grip_pos[1] + 0.4, grip_pos[2]]), 0
-        # gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
-        # a1 = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
-        #
-        # utils.mocap_set_action_abs(self.sim, a1)
-        # for _ in range(10):
-        #     self.sim.step()
-
-        img = self.sim.render(width=512, height=512, camera_name="external_camera_1")
-
-        # rot_ctrl = [1., 0., 1., 0.]
-        # pos_ctrl, gripper_ctrl = np.array([grip_pos[0] - 0.4, grip_pos[1] + 0.4, grip_pos[2]]), 0
-        # gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
-        # a1 = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
-        #
-        # utils.mocap_set_action_abs(self.sim, a1)
-        # for _ in range(10):
-        #     self.sim.step()
-
-        # camera position and quaternion
-        cam_pos = self.sim.model.cam_pos[4].copy()
-        cam_quat = self.sim.model.cam_quat[4].copy()
-
-        object_pos = self.sim.data.get_site_xpos('object0')
-
-        # # rotations
-        # object_rot = rotations.mat2euler(self.sim.data.get_site_xmat('object0'))
-        # # velocities
-        # object_velp = self.sim.data.get_site_xvelp('object0') * dt
-        # object_velr = self.sim.data.get_site_xvelr('object0') * dt
-
-        achieved_goal = np.squeeze(object_pos.copy())# - self.sim.data.get_site_xpos("robot0:cam")
+        if not self.has_object:
+            achieved_goal = grip_pos.copy()# - self.sim.data.get_site_xpos("robot0:cam")
+        else:
+            achieved_goal = np.squeeze(object_pos.copy())# - self.sim.data.get_site_xpos("robot0:cam")
         obs = np.concatenate([
-            cam_pos, cam_quat
+            grip_pos, object_pos.ravel(), object_rel_pos.ravel(), gripper_state, object_rot.ravel(),
+            object_velp.ravel(), object_velr.ravel(), grip_velp, gripper_vel,
         ])
-        obs += self.obs_noise_vector
 
         return {
             'observation': obs.copy(),
             'achieved_goal': achieved_goal.copy(),
             'desired_goal': self.goal.copy(),
             'image':(img/255).copy(),
-            'gripper_pose': grip_pos.copy()
+            'gripper_pose': holder_pos.copy()
         }
 
     def _viewer_setup(self):
@@ -251,7 +307,7 @@ class GraspEnv(robot_env.RobotEnv):
 
         # Move end effector into position.
         if self.gripper_init_type != "fixed":
-            init_disturbance = np.array([self.np_random.uniform(-0.15, 0.15), self.np_random.uniform(-0.15, 0.15), self.np_random.uniform(0, 0.15)])
+            init_disturbance = np.array([self.np_random.uniform(-0.15, 0.15), self.np_random.uniform(-0.15, 0.15), 0.0])
         else:
             init_disturbance = np.array([0, 0, 0])
         gripper_target = np.array([-0.498, 0.005, -0.431 + self.gripper_extra_height]) + init_disturbance + self.sim.data.get_site_xpos('robot0:grip')
