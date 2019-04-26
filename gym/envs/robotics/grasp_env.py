@@ -43,29 +43,29 @@ class GraspEnv(robot_env.RobotEnv):
         self.obs_noise = obs_noise
         self.counter = 0
 
-        if self.act_noise:
-            noise_vector = np.random.uniform(-1.0, 1.0, 3)
-            norm = np.linalg.norm(noise_vector)
-            noise_vector_other = noise_vector / norm
-            noise_vector = np.minimum(noise_vector, noise_vector_other)
-            if norm == 0:
-                self.act_noise_vector = np.zeros(3)
-            else:
-                self.act_noise_vector = noise_vector * 0.02
-        else:
-            self.act_noise_vector = np.zeros(3)
-
-        if self.obs_noise:
-            noise_vector = np.random.uniform(-1.0, 1.0, 7)
-            norm = np.linalg.norm(noise_vector)
-            noise_vector_other = noise_vector / norm
-            noise_vector = np.minimum(noise_vector, noise_vector_other)
-            if norm == 0:
-                self.obs_noise_vector = np.zeros(7)
-            else:
-                self.obs_noise_vector = noise_vector * 0.01
-        else:
-            self.obs_noise_vector = np.zeros(7)
+        # if self.act_noise:
+        #     noise_vector = np.random.uniform(-1.0, 1.0, 3)
+        #     norm = np.linalg.norm(noise_vector)
+        #     noise_vector_other = noise_vector / norm
+        #     noise_vector = np.minimum(noise_vector, noise_vector_other)
+        #     if norm == 0:
+        #         self.act_noise_vector = np.zeros(3)
+        #     else:
+        #         self.act_noise_vector = noise_vector * 0.02
+        # else:
+        #     self.act_noise_vector = np.zeros(3)
+        #
+        # if self.obs_noise:
+        #     noise_vector = np.random.uniform(-1.0, 1.0, 7)
+        #     norm = np.linalg.norm(noise_vector)
+        #     noise_vector_other = noise_vector / norm
+        #     noise_vector = np.minimum(noise_vector, noise_vector_other)
+        #     if norm == 0:
+        #         self.obs_noise_vector = np.zeros(7)
+        #     else:
+        #         self.obs_noise_vector = noise_vector * 0.01
+        # else:
+        #     self.obs_noise_vector = np.zeros(7)
 
         super(GraspEnv, self).__init__(
             model_path=model_path, n_substeps=n_substeps, n_actions=4, action_max=1.,
