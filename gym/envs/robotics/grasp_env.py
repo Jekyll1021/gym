@@ -81,7 +81,7 @@ class GraspEnv(robot_env.RobotEnv):
             h = (achieved_goal[2] < self.distance_threshold + self.height_offset)
         else:
             h = (achieved_goal[:,2] < self.distance_threshold + self.height_offset)
-        return np.logical_or(d, h).astype(np.float32)
+        return -np.logical_or(d, h).astype(np.float32)
 
     # RobotEnv methods
     # ----------------------------
