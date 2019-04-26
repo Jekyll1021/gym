@@ -305,7 +305,7 @@ class GraspEnv(robot_env.RobotEnv):
 
         # Move end effector into position.
         if self.gripper_init_type != "fixed":
-            init_disturbance = np.array([self.np_random.uniform(-0.15, 0.15), self.np_random.uniform(-0.15, 0.15), -0.05])
+            init_disturbance = np.array([self.np_random.uniform(-0.15, 0.15), self.np_random.uniform(-0.15, 0.15), -0.07])
         else:
             init_disturbance = np.array([0, 0, 0])
         gripper_target = np.array([-0.498, 0.005, -0.431 + self.gripper_extra_height]) + init_disturbance + self.sim.data.get_site_xpos('robot0:grip')
