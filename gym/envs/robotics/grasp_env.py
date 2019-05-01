@@ -105,7 +105,7 @@ class GraspEnv(robot_env.RobotEnv):
         action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
 
         # Apply action to simulation.
-        # utils.ctrl_set_action(self.sim, action)
+        utils.ctrl_set_action(self.sim, action)
         for _ in range(10):
             utils.ctrl_set_action(self.sim, action)
             self.sim.step()
@@ -318,7 +318,7 @@ class GraspEnv(robot_env.RobotEnv):
         if self.gripper_init_type != "fixed":
             init_disturbance = np.array([self.np_random.uniform(-0.15, 0.15), self.np_random.uniform(-0.15, 0.15), -0.07])
         else:
-            init_disturbance = np.array([0, 0, 0])
+            init_disturbance = np.array([0, 0, 0.02])
         gripper_target = np.array([-0.498, 0.005, -0.431 + self.gripper_extra_height]) + init_disturbance + self.sim.data.get_site_xpos('robot0:grip')
         gripper_rotation = np.array([1., 0., 1., 0.])
         self.sim.data.set_mocap_pos('robot0:mocap', gripper_target)
