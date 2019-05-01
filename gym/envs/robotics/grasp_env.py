@@ -111,7 +111,7 @@ class GraspEnv(robot_env.RobotEnv):
             self.sim.step()
         utils.mocap_set_action(self.sim, action)
 
-        if self.counter >= 3:
+        if self.counter >= 2:
             self.sim.step()
             pos_ctrl = np.array([0.0, 0.0, 0.0])
             gripper_ctrl = np.array([-1, -1])

@@ -395,7 +395,7 @@ for reward_type in ['sparse', 'dense']:
         id='Grasp{}-v0'.format(suffix),
         entry_point='gym.envs.robotics:CamGraspEnv',
         kwargs=kwargs,
-        max_episode_steps=3,
+        max_episode_steps=2,
     )
 
     # Hand
