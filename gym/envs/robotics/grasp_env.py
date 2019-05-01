@@ -277,7 +277,7 @@ class GraspEnv(robot_env.RobotEnv):
 
         # Randomize start position of object.
         if self.goal_type == "fixed":
-            offset = np.array([0.03, 0.03])
+            offset = np.array([0.01, 0.01])
         else:
             offset = self.np_random.uniform(-self.obj_range, self.obj_range, size=2)
         object_xpos = self.initial_gripper_xpos[:2] + offset
