@@ -277,8 +277,7 @@ class GraspEnv(robot_env.RobotEnv):
         self.sim.forward()
 
     def _reset_sim(self):
-        # self.sim.set_state(self.initial_state)
-        self._env_setup(self.initial_qpos)
+        self.sim.set_state(self.initial_state)
 
         # Randomize start position of object.
         if self.goal_type == "fixed":
