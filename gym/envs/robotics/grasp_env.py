@@ -42,6 +42,7 @@ class GraspEnv(robot_env.RobotEnv):
         self.act_noise = act_noise
         self.obs_noise = obs_noise
         self.counter = 0
+        self.initial_qpos = initial_qpos
 
         # if self.act_noise:
         #     noise_vector = np.random.uniform(-1.0, 1.0, 3)
@@ -276,7 +277,8 @@ class GraspEnv(robot_env.RobotEnv):
         self.sim.forward()
 
     def _reset_sim(self):
-        self.sim.set_state(self.initial_state)
+        # self.sim.set_state(self.initial_state)
+        self._env_setup(self.initial_qpos)
 
         # Randomize start position of object.
         if self.goal_type == "fixed":
