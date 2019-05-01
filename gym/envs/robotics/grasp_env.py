@@ -105,7 +105,10 @@ class GraspEnv(robot_env.RobotEnv):
         action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
 
         # Apply action to simulation.
-        utils.ctrl_set_action(self.sim, action)
+        # utils.ctrl_set_action(self.sim, action)
+        for _ in range(10):
+            utils.ctrl_set_action(self.sim, action)
+            self.sim.step()
         utils.mocap_set_action(self.sim, action)
 
         if self.counter >= 2:
@@ -277,7 +280,7 @@ class GraspEnv(robot_env.RobotEnv):
 
         # Randomize start position of object.
         if self.goal_type == "fixed":
-            offset = np.array([0.01, 0.01])
+            offset = np.array([0.02, 0.02])
         else:
             offset = self.np_random.uniform(-self.obj_range, self.obj_range, size=2)
         object_xpos = self.initial_gripper_xpos[:2] + offset
