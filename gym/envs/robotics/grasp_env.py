@@ -10,7 +10,7 @@ class GraspEnv(robot_env.RobotEnv):
         self, model_path, n_substeps, gripper_extra_height, block_gripper,
         target_in_the_air, target_offset, obj_range, target_range,
         distance_threshold, initial_qpos, reward_type, goal_type, cam_type,
-        gripper_init_type, act_noise, obs_noise
+        gripper_init_type, act_noise, obs_noise, depth
     ):
         """Initializes a new Fetch environment.
 
@@ -43,6 +43,7 @@ class GraspEnv(robot_env.RobotEnv):
         self.obs_noise = obs_noise
         self.counter = 0
         self.initial_qpos = initial_qpos
+        self.depth = depth
 
         # if self.act_noise:
         #     noise_vector = np.random.uniform(-1.0, 1.0, 3)
@@ -220,7 +221,10 @@ class GraspEnv(robot_env.RobotEnv):
         #     'gripper_pose': grip_pos.copy()
         # }
         # images
-        img = self.sim.render(width=224, height=224, camera_name="external_camera_1")
+        if self.depth:
+            img = self.sim.render(width=224, height=224, camera_name="external_camera_1", depth=True)
+        else:
+            img = self.sim.render(width=224, height=224, camera_name="external_camera_1") / 255
         # positions
         grip_pos = self.sim.data.get_site_xpos('robot0:grip')
         holder_pos = grip_pos.copy()
@@ -256,7 +260,7 @@ class GraspEnv(robot_env.RobotEnv):
             'observation': obs.copy(),
             'achieved_goal': achieved_goal.copy(),
             'desired_goal': self.goal.copy(),
-            'image':(img/255).copy(),
+            'image':img.copy(),
             'gripper_pose': holder_pos.copy()
         }
 
