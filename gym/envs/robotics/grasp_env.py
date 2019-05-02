@@ -225,6 +225,7 @@ class GraspEnv(robot_env.RobotEnv):
             img = self.sim.render(width=224, height=224, camera_name="external_camera_1", depth=True)
         else:
             img = self.sim.render(width=224, height=224, camera_name="external_camera_1") / 255
+        print(img)
         # positions
         grip_pos = self.sim.data.get_site_xpos('robot0:grip')
         holder_pos = grip_pos.copy()
