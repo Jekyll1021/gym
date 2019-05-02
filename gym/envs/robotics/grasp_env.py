@@ -260,7 +260,7 @@ class GraspEnv(robot_env.RobotEnv):
             'observation': obs.copy(),
             'achieved_goal': achieved_goal.copy(),
             'desired_goal': self.goal.copy(),
-            'image':img.copy(),
+            'image':img,
             'gripper_pose': holder_pos.copy()
         }
 
