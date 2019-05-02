@@ -222,10 +222,9 @@ class GraspEnv(robot_env.RobotEnv):
         # }
         # images
         if self.depth:
-            img = self.sim.render(width=224, height=224, camera_name="external_camera_1", depth=True)
+            img = self.sim.render(width=224, height=224, camera_name="external_camera_1", depth=True)[1]
         else:
             img = self.sim.render(width=224, height=224, camera_name="external_camera_1") / 255
-        print(img)
         # positions
         grip_pos = self.sim.data.get_site_xpos('robot0:grip')
         holder_pos = grip_pos.copy()
@@ -261,7 +260,7 @@ class GraspEnv(robot_env.RobotEnv):
             'observation': obs.copy(),
             'achieved_goal': achieved_goal.copy(),
             'desired_goal': self.goal.copy(),
-            'image':img,
+            'image':img.copy(),
             'gripper_pose': holder_pos.copy()
         }
 
