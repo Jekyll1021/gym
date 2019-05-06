@@ -121,9 +121,9 @@ class GraspEnv(robot_env.RobotEnv):
             utils.ctrl_set_action(self.sim, action)
             utils.mocap_set_action(self.sim, action)
             # logging
-            grip_pos = self.sim.data.get_site_xpos('robot0:grip')
-            obs_pos = self.sim.data.get_site_xpos('object0')
-            offset = obs_pos - grip_pos
+            # grip_pos = self.sim.data.get_site_xpos('robot0:grip')
+            # obs_pos = self.sim.data.get_site_xpos('object0')
+            # offset = obs_pos - grip_pos
             # print(offset, np.linalg.norm(offset, axis = -1))
 
             for _ in range(10):
