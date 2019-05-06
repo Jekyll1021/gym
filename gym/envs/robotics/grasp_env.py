@@ -294,6 +294,9 @@ class GraspEnv(robot_env.RobotEnv):
             offset = np.array([0.02, 0.02])
         else:
             offset = self.np_random.uniform(-self.obj_range, self.obj_range, size=2)
+            norm = np.linalg.norm(offset, axis=-1)
+            if norm < 0.03:
+                offset = offset / norm * 0.03
         object_xpos = self.initial_gripper_xpos[:2] + offset
         object_qpos = self.sim.data.get_joint_qpos('object0:joint')
         assert object_qpos.shape == (7,)
