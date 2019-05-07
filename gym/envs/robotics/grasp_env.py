@@ -233,7 +233,7 @@ class GraspEnv(robot_env.RobotEnv):
             # img = self.sim.render(width=224, height=224, camera_name="external_camera_1") / 255
             # normalize by imagenet parameters
             # img = (img - np.array([0.485, 0.456, 0.406]))/np.array([0.229, 0.224, 0.225])
-            img = self.sim.render(width=224, height=224, camera_name="external_camera_2")
+            img = self.sim.render(width=224, height=224, camera_name="external_camera_3")
         # positions
         grip_pos = self.sim.data.get_site_xpos('robot0:grip')
         holder_pos = grip_pos.copy()
