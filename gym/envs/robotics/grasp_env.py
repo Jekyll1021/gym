@@ -10,7 +10,7 @@ class GraspEnv(robot_env.RobotEnv):
         self, model_path, n_substeps, gripper_extra_height, block_gripper,
         target_in_the_air, target_offset, obj_range, target_range,
         distance_threshold, initial_qpos, reward_type, goal_type, cam_type,
-        gripper_init_type, act_noise, obs_noise, depth
+        gripper_init_type, act_noise, obs_noise, depth, two_cam
     ):
         """Initializes a new Fetch environment.
 
@@ -44,6 +44,7 @@ class GraspEnv(robot_env.RobotEnv):
         self.counter = 0
         self.initial_qpos = initial_qpos
         self.depth = depth
+        self.two_cam = two_cam
 
         # if self.act_noise:
         #     noise_vector = np.random.uniform(-1.0, 1.0, 3)
@@ -230,15 +231,19 @@ class GraspEnv(robot_env.RobotEnv):
         if self.depth:
             img = self.sim.render(width=224, height=224, camera_name="external_camera_1", depth=True)[1]
         else:
-            # img = self.sim.render(width=224, height=224, camera_name="external_camera_1") / 255
-            img = self.sim.render(width=224, height=224, camera_name="external_camera_2")
-            # normalize by imagenet parameters
-            img = (img - np.array([0.485, 0.456, 0.406]))/np.array([0.229, 0.224, 0.225])
-            # second image
-            img2 = self.sim.render(width=224, height=224, camera_name="external_camera_3")
-            # normalize by imagenet parameters
-            img2 = (img2 - np.array([0.485, 0.456, 0.406]))/np.array([0.229, 0.224, 0.225])
-            img = np.concatenate([img, img2], axis=-1)
+            if self.two_cam:
+                img = self.sim.render(width=224, height=224, camera_name="external_camera_2")
+                # normalize by imagenet parameters
+                img = (img - np.array([0.485, 0.456, 0.406]))/np.array([0.229, 0.224, 0.225])
+                # second image
+                img2 = self.sim.render(width=224, height=224, camera_name="external_camera_3")
+                # normalize by imagenet parameters
+                img2 = (img2 - np.array([0.485, 0.456, 0.406]))/np.array([0.229, 0.224, 0.225])
+                img = np.concatenate([img, img2], axis=-1)
+            else:
+                img = self.sim.render(width=224, height=224, camera_name="external_camera_1") / 255
+                # normalize by imagenet parameters
+                img = (img - np.array([0.485, 0.456, 0.406]))/np.array([0.229, 0.224, 0.225])
         # positions
         grip_pos = self.sim.data.get_site_xpos('robot0:grip')
         holder_pos = grip_pos.copy()
