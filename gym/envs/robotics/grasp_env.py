@@ -236,9 +236,9 @@ class GraspEnv(robot_env.RobotEnv):
                 # normalize by imagenet parameters
                 img = (img - np.array([0.485, 0.456, 0.406]))/np.array([0.229, 0.224, 0.225])
                 # second image
-                img2 = self.sim.render(width=224, height=224, camera_name="external_camera_3")
+                img2 = self.sim.render(width=224, height=224, camera_name="external_camera_3") / 255
                 # normalize by imagenet parameters
-                img2 = (img2 - np.array([0.485, 0.456, 0.406]))/np.array([0.229, 0.224, 0.225]) / 255
+                img2 = (img2 - np.array([0.485, 0.456, 0.406]))/np.array([0.229, 0.224, 0.225])
                 img = np.concatenate([img, img2], axis=-1)
             else:
                 img = self.sim.render(width=224, height=224, camera_name="external_camera_1") / 255
