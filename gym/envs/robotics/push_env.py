@@ -205,7 +205,7 @@ class PushEnv(robot_env.RobotEnv):
         # }
         # images
         if self.depth:
-            img = self.sim.render(width=224, height=224, camera_name="external_camera_1", depth=True)[1]
+            img = self.sim.render(width=224, height=224, camera_name="push_camera", depth=True)[1]
         else:
             if self.two_cam:
                 img = self.sim.render(width=224, height=224, camera_name="external_camera_2") / 255
@@ -217,7 +217,7 @@ class PushEnv(robot_env.RobotEnv):
                 img2 = (img2 - np.array([0.485, 0.456, 0.406]))/np.array([0.229, 0.224, 0.225])
                 img = np.concatenate([img, img2], axis=-1)
             else:
-                img = self.sim.render(width=224, height=224, camera_name="external_camera_1") / 255
+                img = self.sim.render(width=224, height=224, camera_name="push_camera") / 255
                 # normalize by imagenet parameters
                 img = (img - np.array([0.485, 0.456, 0.406]))/np.array([0.229, 0.224, 0.225])
         # positions
@@ -325,7 +325,6 @@ class PushEnv(robot_env.RobotEnv):
             delta_pos = np.array([self.np_random.uniform(0, 0.15), self.np_random.uniform(-0.1, 0.1), self.np_random.uniform(-0.1, 0.15)])
             delta_rot = self.np_random.uniform(-0.05, 0.05, size=3)
             utils.cam_init_pos(self.sim, delta_pos, delta_rot)
-        self.sim.model.cam_fovy = 50.
 
         self.sim.forward()
 
