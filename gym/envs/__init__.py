@@ -398,6 +398,14 @@ for reward_type in ['sparse', 'dense']:
         max_episode_steps=2,
     )
 
+    # Push
+    register(
+        id='Push{}-v0'.format(suffix),
+        entry_point='gym.envs.robotics:TwoStepPushEnv',
+        kwargs=kwargs,
+        max_episode_steps=2,
+    )
+
     # Hand
     register(
         id='HandReach{}-v0'.format(suffix),
