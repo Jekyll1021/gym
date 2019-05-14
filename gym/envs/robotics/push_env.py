@@ -301,9 +301,9 @@ class PushEnv(robot_env.RobotEnv):
         grip_pos = self.sim.data.get_site_xpos('robot0:grip').copy()
         direction = box_pos - grip_pos
         degree = np.arctan2(direction[1], direction[0])
-        rand_radians = np.radians(np.uniform(degree - 45, degree + 45))
+        rand_radians = np.radians(np.random.uniform(degree - 45, degree + 45))
         vector = np.array([1, np.tan(rand_radians)])
-        rand_mag = np.uniform(1, 1.3)
+        rand_mag = np.random.uniform(1, 1.3)
         norm = np.linalg(vector)
         vector = vector / norm * rand_mag
         goal = box_pos.copy()
