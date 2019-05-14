@@ -303,7 +303,7 @@ class PushEnv(robot_env.RobotEnv):
         degree = np.arctan2(direction[1], direction[0])
         rand_radians = np.radians(np.random.uniform(degree - 45, degree + 45))
         vector = np.array([1, np.tan(rand_radians)])
-        rand_mag = np.random.uniform(1, 1.3)
+        rand_mag = np.random.uniform(0.05, 0.08)
         norm = np.linalg.norm(vector)
         vector = vector / norm * rand_mag
         goal = box_pos.copy()
