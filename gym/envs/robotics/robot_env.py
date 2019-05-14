@@ -37,6 +37,7 @@ class RobotEnv(gym.GoalEnv):
         self.initial_state = copy.deepcopy(self.sim.get_state())
 
         self.goal = self._sample_goal()
+        self._render_callback()
         obs = self._get_obs()
         self.action_space = spaces.Box(-action_max, action_max, shape=(n_actions,), dtype='float32')
         self.observation_space = spaces.Dict(dict(

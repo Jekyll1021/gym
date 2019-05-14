@@ -8,7 +8,7 @@ MODEL_XML_PATH = os.path.join('fetch', 'pick_and_place.xml')
 
 
 class CamGraspEnv(grasp_env.GraspEnv, utils.EzPickle):
-    def __init__(self, reward_type='sparse', goal_type='random', cam_type='fixed', gripper_init_type='random', act_noise=False, obs_noise=False, depth=False, two_cam=False):
+    def __init__(self, reward_type='sparse', goal_type='random', cam_type='fixed', gripper_init_type='fixed', act_noise=False, obs_noise=False, depth=False, two_cam=False):
         initial_qpos = {
             'robot0:slide0': 0.405,
             'robot0:slide1': 0.48,
