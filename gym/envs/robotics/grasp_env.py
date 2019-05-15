@@ -13,7 +13,6 @@ class GraspEnv(robot_env.RobotEnv):
         gripper_init_type, act_noise, obs_noise, depth, two_cam
     ):
         """Initializes a new Fetch environment.
-
         Args:
             model_path (string): path to the environments XML file
             n_substeps (int): number of substeps the simulation runs on every call to step
@@ -271,10 +270,9 @@ class GraspEnv(robot_env.RobotEnv):
         #     grip_pos, object_pos.ravel(), object_rel_pos.ravel(), gripper_state, object_rot.ravel(),
         #     object_velp.ravel(), object_velr.ravel(), grip_velp, gripper_vel, counter
         # ])
-        # obs = np.concatenate([
-        #     grip_pos, gripper_state, grip_velp, gripper_vel, counter
-        # ])
-        obs = counter
+        obs = np.concatenate([
+            grip_pos, gripper_state, grip_velp, gripper_vel, counter
+        ])
 
         return {
             'observation': obs.copy(),

@@ -301,7 +301,7 @@ class PushEnv(robot_env.RobotEnv):
         grip_pos = self.sim.data.get_site_xpos('robot0:grip').copy()
         direction = box_pos - grip_pos
         degree = np.arctan2(direction[1], direction[0])
-        rand_radians = np.radians(np.random.uniform(degree - 45, degree + 45))
+        rand_radians = np.radians(np.random.uniform(degree - 30, degree + 30))
         vector = np.array([1, np.tan(rand_radians)])
         rand_mag = np.random.uniform(0.05, 0.08)
         norm = np.linalg.norm(vector)
@@ -309,7 +309,7 @@ class PushEnv(robot_env.RobotEnv):
         goal = box_pos.copy()
         goal[0] += vector[0]
         goal[1] += vector[1]
-        return goal.copy()# - self.sim.data.get_site_xpos("robot0:cam")
+        return goal.copy()
 
     def _is_success(self, achieved_goal, desired_goal):
         d = np.linalg.norm(achieved_goal - desired_goal, axis=-1)
