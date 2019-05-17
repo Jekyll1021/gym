@@ -146,7 +146,7 @@ class PegInsertEnv(robot_env.RobotEnv):
         # }
         # images
         if self.depth:
-            img = self.sim.render(width=224, height=224, camera_name="external_camera_body_1", depth=True)[1]
+            img = self.sim.render(width=224, height=224, camera_name="external_camera_1", depth=True)[1]
         else:
             if self.two_cam:
                 img = self.sim.render(width=224, height=224, camera_name="external_camera_2") / 255
@@ -158,7 +158,7 @@ class PegInsertEnv(robot_env.RobotEnv):
                 img2 = (img2 - np.array([0.485, 0.456, 0.406]))/np.array([0.229, 0.224, 0.225])
                 img = np.concatenate([img, img2], axis=-1)
             else:
-                img = self.sim.render(width=500, height=500, camera_name="external_camera_body_1") / 255
+                img = self.sim.render(width=500, height=500, camera_name="external_camera_1") / 255
                 # normalize by imagenet parameters
                 # img = (img - np.array([0.485, 0.456, 0.406]))/np.array([0.229, 0.224, 0.225])
         # positions
