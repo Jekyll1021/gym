@@ -250,12 +250,22 @@ class PegInsertEnv(robot_env.RobotEnv):
         for _ in range(10):
             utils.ctrl_set_action(self.sim, action)
             self.sim.step()
-        box_pose = self.sim.data.get_site_xpos('object0').copy()
-        box_pose[2] = box_pose[2]+0.03
-
         rot_ctrl = [1., 0., 1., 0.]  # fixed rotation of the end effector, expressed as a quaternion
         gripper_ctrl = np.array([0, 0])
-        assert gripper_ctrl.shape == (2,)
+        box_pose = self.sim.data.get_site_xpos('object0').copy()
+        pos_ctrl = box_pose.copy()
+        pos_ctrl[2] = box_pose[2]+0.13
+
+        if self.block_gripper:
+            gripper_ctrl = np.zeros_like(gripper_ctrl)
+        action = np.concatenate([box_pose, rot_ctrl, gripper_ctrl])
+
+        utils.mocap_set_action_abs(self.sim, action)
+
+        box_pose = self.sim.data.get_site_xpos('object0').copy()
+        pos_ctrl = box_pose.copy()
+        pos_ctrl[2] = box_pose[2]+0.03
+
         if self.block_gripper:
             gripper_ctrl = np.zeros_like(gripper_ctrl)
         action = np.concatenate([box_pose, rot_ctrl, gripper_ctrl])
