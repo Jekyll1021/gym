@@ -264,7 +264,7 @@ class PegInsertEnv(robot_env.RobotEnv):
 
         box_pose = self.sim.data.get_site_xpos('object0').copy()
         pos_ctrl = box_pose.copy()
-        pos_ctrl[2] = box_pose[2]+0.03
+        pos_ctrl[2] = box_pose[2]+0.05
 
         if self.block_gripper:
             gripper_ctrl = np.zeros_like(gripper_ctrl)
