@@ -160,7 +160,7 @@ class PegInsertEnv(robot_env.RobotEnv):
             else:
                 img = self.sim.render(width=500, height=500, camera_name="external_camera_1") / 255
                 # normalize by imagenet parameters
-                # img = (img - np.array([0.485, 0.456, 0.406]))/np.array([0.229, 0.224, 0.225])
+                img = (img - np.array([0.485, 0.456, 0.406]))/np.array([0.229, 0.224, 0.225])
         # positions
         grip_pos = self.sim.data.get_site_xpos('robot0:grip')
         holder_pos = grip_pos.copy()
