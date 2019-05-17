@@ -263,18 +263,18 @@ class PegInsertEnv(robot_env.RobotEnv):
 
         utils.mocap_set_action_abs(self.sim, action)
 
-        # box_pose = self.sim.data.get_site_xpos('object0').copy()
-        # pos_ctrl = box_pose.copy()
-        # pos_ctrl[2] = box_pose[2]+0.06
-        #
-        # action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
-        #
-        # utils.mocap_set_action_abs(self.sim, action)
-        #
-        # action = np.array([0, 0, 0, 1, 0, 1, 0, -1, -1])
-        # for _ in range(10):
-        #     utils.ctrl_set_action(self.sim, action)
-        #     self.sim.step()
+        box_pose = self.sim.data.get_site_xpos('object0').copy()
+        pos_ctrl = box_pose.copy()
+        pos_ctrl[2] = box_pose[2]+0.05
+
+        action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
+
+        utils.mocap_set_action_abs(self.sim, action)
+
+        action = np.array([0, 0, 0, 1, 0, 1, 0, -1, -1])
+        for _ in range(10):
+            utils.ctrl_set_action(self.sim, action)
+            self.sim.step()
 
         return True
 
