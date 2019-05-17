@@ -2,7 +2,7 @@ import numpy as np
 
 from gym.envs.robotics import rotations, robot_env, utils
 
-class PushEnv(robot_env.RobotEnv):
+class PegInsertEnv(robot_env.RobotEnv):
     """Superclass for all Fetch environments with camera input.
     """
 
@@ -70,7 +70,7 @@ class PushEnv(robot_env.RobotEnv):
         # else:
         #     self.obs_noise_vector = np.zeros(7)
 
-        super(PushEnv, self).__init__(
+        super(PegInsertEnv, self).__init__(
             model_path=model_path, n_substeps=n_substeps, n_actions=4, action_max=1.,
             initial_qpos=initial_qpos)
 
@@ -345,4 +345,4 @@ class PushEnv(robot_env.RobotEnv):
         self.height_offset = self.sim.data.get_site_xpos('object0')[2]
 
     def render(self, mode='rgd_array', width=500, height=500):
-        return super(PushEnv, self).render(mode, width, height)
+        return super(PegInsertEnv, self).render(mode, width, height)

@@ -1,13 +1,13 @@
 import os
 from gym import utils
-from gym.envs.robotics import push_env
+from gym.envs.robotics import peg_insert_env
 
 
 # Ensure we get the path separator correct on windows
 MODEL_XML_PATH = os.path.join('fetch', 'push.xml')
 
 
-class TwoStepPushEnv(push_env.PushEnv, utils.EzPickle):
+class TwoStepPushEnv(peg_insert_env.PegInsertEnv, utils.EzPickle):
     def __init__(self, reward_type='sparse', goal_type='random', cam_type='fixed', gripper_init_type='fixed', act_noise=False, obs_noise=False, depth=False, two_cam=False):
         initial_qpos = {
             'robot0:slide0': 0.405,
