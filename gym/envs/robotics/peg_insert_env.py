@@ -235,7 +235,6 @@ class PegInsertEnv(robot_env.RobotEnv):
         self.sim.data.set_joint_qpos('table_top:joint', hole_qpos)
 
         # Randomize start position of object.
-
         offset = np.array([0.1, 0.1])
 
         object_xpos = self.initial_gripper_xpos[:2] + offset
@@ -246,10 +245,32 @@ class PegInsertEnv(robot_env.RobotEnv):
 
         self.sim.forward()
 
+        # move gripper to grasp box
+        action = np.array([0, 0, 0, 1, 0, 1, 0, 1, 1])
+        for _ in range(10):
+            utils.ctrl_set_action(self.sim, action)
+            self.sim.step()
+        box_pose = self.sim.data.get_site_xpos('object0').copy()
+        box_pose[2] = box_pose[2]+0.03
+
+        rot_ctrl = [1., 0., 1., 0.]  # fixed rotation of the end effector, expressed as a quaternion
+        gripper_ctrl = np.array([0, 0])
+        assert gripper_ctrl.shape == (2,)
+        if self.block_gripper:
+            gripper_ctrl = np.zeros_like(gripper_ctrl)
+        action = np.concatenate([box_pose, rot_ctrl, gripper_ctrl])
+
+        utils.mocap_set_action_abs(self.sim, action)
+
+        action = np.array([0, 0, 0, 1, 0, 1, 0, -1, -1])
+        for _ in range(10):
+            utils.ctrl_set_action(self.sim, action)
+            self.sim.step()
+
         return True
 
     def _sample_goal(self):
-        goal = np.array([0, 0, 0])
+        goal = self.sim.data.get_site_xpos("table_top")
         return goal.copy()
 
     def _is_success(self, achieved_goal, desired_goal):
