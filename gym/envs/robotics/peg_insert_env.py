@@ -235,7 +235,7 @@ class PegInsertEnv(robot_env.RobotEnv):
         self.sim.data.set_joint_qpos('table_top:joint', hole_qpos)
 
         # Randomize start position of object.
-        offset = np.array([0.1, 0.1])
+        offset = np.array([0.05, 0.05])
 
         object_xpos = self.initial_gripper_xpos[:2] + offset
         object_qpos = self.sim.data.get_joint_qpos('object0:joint')
