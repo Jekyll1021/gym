@@ -113,65 +113,6 @@ class PegInsertEnv(robot_env.RobotEnv):
             for _ in range(10):
                 self.sim.step()
 
-        # assert action.shape == (2,)
-        # action = action.copy()  # ensure that we don't change the action outside of this scope
-        # rot_ctrl = [1., 0., 1., 0.]  # fixed rotation of the end effector, expressed as a quaternion
-        #
-        # # step 1: go to the command position with gripper open
-        # pos_ctrl, gripper_ctrl = np.array([action[0], action[1], self.height_offset + 0.2]), 1
-        #
-        # gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
-        # assert gripper_ctrl.shape == (2,)
-        # if self.block_gripper:
-        #     gripper_ctrl = np.zeros_like(gripper_ctrl)
-        # a1 = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
-        #
-        # # Apply action to simulation.
-        # utils.ctrl_set_action(self.sim, a1)
-        # utils.mocap_set_action_abs(self.sim, a1)
-        #
-        # # step 2: go down and close the gripper to get the object
-        # pos_ctrl, gripper_ctrl = np.array([action[0], action[1], self.height_offset]), 0
-        #
-        # gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
-        # assert gripper_ctrl.shape == (2,)
-        # if self.block_gripper:
-        #     gripper_ctrl = np.zeros_like(gripper_ctrl)
-        # a2 = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
-        #
-        # # Apply action to simulation.
-        # utils.ctrl_set_action(self.sim, a2)
-        # utils.mocap_set_action_abs(self.sim, a2)
-        #
-        # # close the gripper at the same spot
-        # pos_ctrl, gripper_ctrl = np.array([action[0], action[1], self.height_offset]), -1
-        #
-        # gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
-        # assert gripper_ctrl.shape == (2,)
-        # if self.block_gripper:
-        #     gripper_ctrl = np.zeros_like(gripper_ctrl)
-        # a2_2 = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
-        # utils.ctrl_set_action(self.sim, a2_2)
-        #
-        # for _ in range(20):
-        #     self.sim.step()
-        #
-        # # step 3: lift up object
-        # pos_ctrl, gripper_ctrl = np.array([action[0], action[1], self.height_offset + 0.2]), -1
-        #
-        # gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
-        # assert gripper_ctrl.shape == (2,)
-        # if self.block_gripper:
-        #     gripper_ctrl = np.zeros_like(gripper_ctrl)
-        # a3 = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
-        #
-        # # Apply action to simulation.
-        # utils.ctrl_set_action(self.sim, a3)
-        # utils.mocap_set_action_abs(self.sim, a3)
-
-        # self.sim.step()
-
-
     def _get_obs(self):
         # images
         # grip_pos = self.sim.data.get_site_xpos('robot0:grip')
@@ -223,22 +164,22 @@ class PegInsertEnv(robot_env.RobotEnv):
         # positions
         grip_pos = self.sim.data.get_site_xpos('robot0:grip')
         holder_pos = grip_pos.copy()
-        dt = self.sim.nsubsteps * self.sim.model.opt.timestep
-        grip_velp = self.sim.data.get_site_xvelp('robot0:grip') * dt
+        # dt = self.sim.nsubsteps * self.sim.model.opt.timestep
+        # grip_velp = self.sim.data.get_site_xvelp('robot0:grip') * dt
         robot_qpos, robot_qvel = utils.robot_get_obs(self.sim)
 
         object_pos = self.sim.data.get_site_xpos('object0')
         # rotations
-        object_rot = rotations.mat2euler(self.sim.data.get_site_xmat('object0'))
-        # velocities
-        object_velp = self.sim.data.get_site_xvelp('object0') * dt
-        object_velr = self.sim.data.get_site_xvelr('object0') * dt
-        # gripper state
-        object_rel_pos = object_pos - grip_pos
-        object_velp -= grip_velp
-
-        gripper_state = robot_qpos[-2:]
-        gripper_vel = robot_qvel[-2:] * dt  # change to a scalar if the gripper is made symmetric
+        # object_rot = rotations.mat2euler(self.sim.data.get_site_xmat('object0'))
+        # # velocities
+        # object_velp = self.sim.data.get_site_xvelp('object0') * dt
+        # object_velr = self.sim.data.get_site_xvelr('object0') * dt
+        # # gripper state
+        # object_rel_pos = object_pos - grip_pos
+        # object_velp -= grip_velp
+        #
+        # gripper_state = robot_qpos[-2:]
+        # gripper_vel = robot_qvel[-2:] * dt  # change to a scalar if the gripper is made symmetric
 
         counter = np.array([self.counter])
 
