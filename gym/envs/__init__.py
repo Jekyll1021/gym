@@ -398,10 +398,10 @@ for reward_type in ['sparse', 'dense']:
         max_episode_steps=2,
     )
 
-    # Push
+    # Peg Insertion
     register(
-        id='Push{}-v0'.format(suffix),
-        entry_point='gym.envs.robotics:TwoStepPushEnv',
+        id='PegInsert{}-v0'.format(suffix),
+        entry_point='gym.envs.robotics:CamPegInsertEnv',
         kwargs=kwargs,
         max_episode_steps=2,
     )
