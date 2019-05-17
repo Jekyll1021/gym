@@ -78,9 +78,10 @@ class PegInsertEnv(robot_env.RobotEnv):
     # ----------------------------
 
     def compute_reward(self, achieved_goal, goal, info):
-        # Compute distance between goal and the achieved goal.
-        d = np.linalg.norm(achieved_goal - goal, axis=-1)
-        return ((self.counter) and (d < self.distance_threshold)).astype(np.float32)
+        if len(achieved_goal.shape) <= 1:
+            return (achieved_goal[2] < self.height_offset).astype(np.float32)
+        else:
+            return (achieved_goal[: ,2] < self.height_offset).astype(np.float32)
 
     # RobotEnv methods
     # ----------------------------
@@ -99,10 +100,8 @@ class PegInsertEnv(robot_env.RobotEnv):
 
         pos_ctrl *= 0.05  # limit maximum change in position
         rot_ctrl = [1., 0., 1., 0.]  # fixed rotation of the end effector, expressed as a quaternion
-        gripper_ctrl = np.array([0, 0])
+        gripper_ctrl = np.array([-1, -1])
         assert gripper_ctrl.shape == (2,)
-        if self.block_gripper:
-            gripper_ctrl = np.zeros_like(gripper_ctrl)
         action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
 
         # Apply action to simulation.
@@ -110,7 +109,9 @@ class PegInsertEnv(robot_env.RobotEnv):
         utils.mocap_set_action(self.sim, action)
 
         if self.counter >= 2:
-            for _ in range(10):
+            action = np.array([0,0,0,1,0,1,0,1,1])
+            for _ in range(5):
+                utils.ctrl_set_action(self.sim, action)
                 self.sim.step()
 
     def _get_obs(self):
@@ -226,8 +227,8 @@ class PegInsertEnv(robot_env.RobotEnv):
         else:
             offset = self.np_random.uniform(-self.obj_range, self.obj_range, size=2)
             norm = np.linalg.norm(offset, axis=-1)
-            if norm < 0.03:
-                offset = offset / norm * 0.03
+            if norm < 0.05:
+                offset = offset / norm * 0.05
         hole_qpos = self.sim.data.get_joint_qpos('table_top:joint')
         assert hole_qpos.shape == (7,)
         hole_qpos[0] = hole_qpos[0] + offset[0]
@@ -285,6 +286,7 @@ class PegInsertEnv(robot_env.RobotEnv):
 
     def _sample_goal(self):
         goal = self.sim.data.get_site_xpos("table_top")
+        goal[2] = 0.45
         return goal.copy()
 
     def _is_success(self, achieved_goal, desired_goal):
