@@ -236,7 +236,7 @@ class PegInsertEnv(robot_env.RobotEnv):
 
         # Randomize start position of object.
 
-        offset = np.array([0.03, 0.03])
+        offset = np.array([0.1, 0.1])
 
         object_xpos = self.initial_gripper_xpos[:2] + offset
         object_qpos = self.sim.data.get_joint_qpos('object0:joint')
