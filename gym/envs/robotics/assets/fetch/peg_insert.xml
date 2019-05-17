@@ -26,7 +26,7 @@
 			<geom pos="0 -0.195 0" size="0.04 0.155 0.03" type="box" mass="2000" material="table_mat"></geom>
 			<geom pos="0 0.195 0" size="0.04 0.155 0.03" type="box" mass="2000" material="table_mat"></geom>
 
-			<site name="table_top" pos="0 0 0" size="0.02 0.02 0.02" rgba="1 0 0 1" type="sphere"></site>
+			<site name="table_top" pos="0 0 0" size="0.02 0.02 0.02" rgba="1 0 0 0" type="sphere"></site>
 		</body>
 
 		<body name="object0" pos="0.025 0.025 0.05">
