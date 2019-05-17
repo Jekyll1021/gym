@@ -248,18 +248,7 @@ class PegInsertEnv(robot_env.RobotEnv):
         return True
 
     def _sample_goal(self):
-        box_pos = self.sim.data.get_site_xpos('object0').copy()
-        grip_pos = self.sim.data.get_site_xpos('robot0:grip').copy()
-        direction = box_pos - grip_pos
-        degree = np.arctan2(direction[1], direction[0])
-        rand_radians = np.radians(np.random.uniform(degree - 30, degree + 30))
-        vector = np.array([1, np.tan(rand_radians)])
-        rand_mag = np.random.uniform(0.05, 0.08)
-        norm = np.linalg.norm(vector)
-        vector = vector / norm * rand_mag
-        goal = box_pos.copy()
-        goal[0] += vector[0]
-        goal[1] += vector[1]
+        goal = np.array([0, 0, 0])
         return goal.copy()
 
     def _is_success(self, achieved_goal, desired_goal):
