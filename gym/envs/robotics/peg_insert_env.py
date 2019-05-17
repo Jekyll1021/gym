@@ -217,9 +217,9 @@ class PegInsertEnv(robot_env.RobotEnv):
                 img2 = (img2 - np.array([0.485, 0.456, 0.406]))/np.array([0.229, 0.224, 0.225])
                 img = np.concatenate([img, img2], axis=-1)
             else:
-                img = self.sim.render(width=224, height=224, camera_name="push_camera") / 255
+                img = self.sim.render(width=500, height=500, camera_name="push_camera") / 255
                 # normalize by imagenet parameters
-                img = (img - np.array([0.485, 0.456, 0.406]))/np.array([0.229, 0.224, 0.225])
+                # img = (img - np.array([0.485, 0.456, 0.406]))/np.array([0.229, 0.224, 0.225])
         # positions
         grip_pos = self.sim.data.get_site_xpos('robot0:grip')
         holder_pos = grip_pos.copy()
@@ -281,7 +281,8 @@ class PegInsertEnv(robot_env.RobotEnv):
 
         # Randomize start position of object.
         if self.goal_type == "fixed":
-            offset = np.array([0.02, 0.02])
+            # offset = np.array([0.02, 0.02])
+            offset = np.array([2, 2])
         else:
             offset = self.np_random.uniform(-self.obj_range, self.obj_range, size=2)
             norm = np.linalg.norm(offset, axis=-1)
