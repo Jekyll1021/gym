@@ -246,7 +246,6 @@ class PegInsertEnv(robot_env.RobotEnv):
 
         self.sim.forward()
 
-        self.height_offset = self.sim.data.get_site_xpos('object0')[2]
         return True
 
     def _sample_goal(self):
