@@ -290,8 +290,7 @@ class PegInsertEnv(robot_env.RobotEnv):
         return goal.copy()
 
     def _is_success(self, achieved_goal, desired_goal):
-        d = np.linalg.norm(achieved_goal - desired_goal, axis=-1)
-        return ((self.counter) and (d < self.distance_threshold)).astype(np.float32)
+        return (achieved_goal[2] < self.height_offset).astype(np.float32)
 
     def _env_setup(self, initial_qpos):
         for name, value in initial_qpos.items():
