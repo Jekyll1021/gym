@@ -10,7 +10,7 @@ class PegInsertEnv(robot_env.RobotEnv):
         self, model_path, n_substeps, gripper_extra_height, block_gripper,
         target_in_the_air, target_offset, obj_range, target_range,
         distance_threshold, initial_qpos, reward_type, goal_type, cam_type,
-        gripper_init_type, act_noise, obs_noise, depth, two_cam
+        gripper_init_type, act_noise, obs_noise, depth, two_cam, use_task_index
     ):
         """Initializes a new Fetch environment.
 
@@ -45,6 +45,7 @@ class PegInsertEnv(robot_env.RobotEnv):
         self.initial_qpos = initial_qpos
         self.depth = depth
         self.two_cam = two_cam
+        self.use_task_index = use_task_index
 
         # if self.act_noise:
         #     noise_vector = np.random.uniform(-1.0, 1.0, 3)
@@ -192,7 +193,12 @@ class PegInsertEnv(robot_env.RobotEnv):
         # obs = np.concatenate([
         #     grip_pos, gripper_state, grip_velp, gripper_vel, counter
         # ])
-        obs = counter
+        if self.use_task_index:
+            obs = np.concatenate([
+                counter, [0, 1]
+            ])
+        else:
+            obs = counter
 
         return {
             'observation': obs.copy(),

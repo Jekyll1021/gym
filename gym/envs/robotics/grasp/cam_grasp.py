@@ -2,13 +2,12 @@ import os
 from gym import utils
 from gym.envs.robotics import grasp_env
 
-
 # Ensure we get the path separator correct on windows
 MODEL_XML_PATH = os.path.join('fetch', 'pick_and_place.xml')
 
 
 class CamGraspEnv(grasp_env.GraspEnv, utils.EzPickle):
-    def __init__(self, reward_type='sparse', goal_type='random', cam_type='fixed', gripper_init_type='fixed', act_noise=False, obs_noise=False, depth=False, two_cam=False):
+    def __init__(self, reward_type='sparse', goal_type='random', cam_type='fixed', gripper_init_type='fixed', act_noise=False, obs_noise=False, depth=False, two_cam=False, use_task_index=True):
         initial_qpos = {
             'robot0:slide0': 0.405,
             'robot0:slide1': 0.48,
@@ -20,5 +19,5 @@ class CamGraspEnv(grasp_env.GraspEnv, utils.EzPickle):
             gripper_extra_height=0.2, target_in_the_air=True, target_offset=0.0,
             obj_range=0.03, target_range=0.15, distance_threshold=0.03,
             initial_qpos=initial_qpos, reward_type=reward_type, goal_type=goal_type,
-            cam_type=cam_type, gripper_init_type=gripper_init_type, act_noise=act_noise, obs_noise=obs_noise, depth=depth, two_cam=two_cam)
+            cam_type=cam_type, gripper_init_type=gripper_init_type, act_noise=act_noise, obs_noise=obs_noise, depth=depth, two_cam=two_cam, use_task_index=use_task_index)
         utils.EzPickle.__init__(self)
