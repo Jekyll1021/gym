@@ -10,7 +10,7 @@ class GraspEnv(robot_env.RobotEnv):
         self, model_path, n_substeps, gripper_extra_height, block_gripper,
         target_in_the_air, target_offset, obj_range, target_range,
         distance_threshold, initial_qpos, reward_type, goal_type, cam_type,
-        gripper_init_type, act_noise, obs_noise, depth, two_cam, use_task_index
+        gripper_init_type, act_noise, obs_noise, depth, two_cam, use_task_index, random_obj
     ):
         """Initializes a new Fetch environment.
         Args:
@@ -45,6 +45,7 @@ class GraspEnv(robot_env.RobotEnv):
         self.depth = depth
         self.two_cam = two_cam
         self.use_task_index = use_task_index
+        self.random_obj = random_obj
 
         # if self.act_noise:
         #     noise_vector = np.random.uniform(-1.0, 1.0, 3)
@@ -304,6 +305,18 @@ class GraspEnv(robot_env.RobotEnv):
 
     def _reset_sim(self):
         self.sim.set_state(self.initial_state)
+
+        if self.random_obj:
+            self.sim.model.geom_type[-1] = np.random.choice(2) + 5
+
+            min_color_diff = 0
+            while min_color_diff < 0.2:
+                rgba = np.random.uniform(size=3)
+                color_diff = np.abs(self.sim.model.geom_rgba.copy()[:-1, :3] - rgba)
+                min_color_diff = min(np.sum(color_diff, axis=1))
+            self.sim.model.geom_rgba[-1][:3] = rgba
+
+            self.sim.model.geom_size[-1] = np.random.uniform(0.03, 0.07, size=3)
 
         # Randomize start position of object.
         if self.goal_type == "fixed":
