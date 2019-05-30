@@ -228,6 +228,18 @@ class PegInsertEnv(robot_env.RobotEnv):
     def _reset_sim(self):
         self.sim.set_state(self.initial_state)
 
+        if self.random_obj:
+            self.sim.model.geom_type[-1] = np.random.choice(2) + 5
+
+            min_color_diff = 0
+            while min_color_diff < 0.2:
+                rgba = np.random.uniform(size=3)
+                color_diff = np.abs(self.sim.model.geom_rgba.copy()[:-1, :3] - rgba)
+                min_color_diff = min(np.sum(color_diff, axis=1))
+            self.sim.model.geom_rgba[-1][:3] = rgba
+
+            self.sim.model.geom_size[-1] = np.random.uniform(0.01, 0.03, size=3)
+
         # Randomize start position of hole.
         if self.goal_type == "fixed":
             offset = np.array([0.02, 0.02])
