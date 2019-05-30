@@ -115,7 +115,7 @@ class GraspEnv(robot_env.RobotEnv):
             self.sim.step()
         utils.mocap_set_action(self.sim, action)
 
-        if self.counter >= 2:
+        if self.counter >= 5:
             self.sim.step()
             pos_ctrl = np.array([0.0, 0.0, 0.0])
             gripper_ctrl = np.array([-1, -1])
@@ -324,8 +324,8 @@ class GraspEnv(robot_env.RobotEnv):
         else:
             offset = self.np_random.uniform(-self.obj_range, self.obj_range, size=2)
             norm = np.linalg.norm(offset, axis=-1)
-            if norm < 0.03:
-                offset = offset / norm * 0.03
+            if norm < 0.05:
+                offset = offset / norm * 0.05
         object_xpos = self.initial_gripper_xpos[:2] + offset
         object_qpos = self.sim.data.get_joint_qpos('object0:joint')
         assert object_qpos.shape == (7,)
