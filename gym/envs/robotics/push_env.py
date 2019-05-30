@@ -76,7 +76,7 @@ class PushEnv(robot_env.RobotEnv):
         # else:
         #     self.obs_noise_vector = np.zeros(7)
 
-        super(PegInsertEnv, self).__init__(
+        super(PushEnv, self).__init__(
             model_path=model_path, n_substeps=n_substeps, n_actions=4, action_max=1.,
             initial_qpos=initial_qpos)
 
