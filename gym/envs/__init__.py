@@ -390,10 +390,17 @@ for reward_type in ['sparse', 'dense']:
     )
 
     # grasp
-
     register(
         id='Grasp{}-v0'.format(suffix),
         entry_point='gym.envs.robotics:CamGraspEnv',
+        kwargs=kwargs,
+        max_episode_steps=5,
+    )
+
+    # push
+    register(
+        id='Push{}-v0'.format(suffix),
+        entry_point='gym.envs.robotics:CamPushEnv',
         kwargs=kwargs,
         max_episode_steps=5,
     )

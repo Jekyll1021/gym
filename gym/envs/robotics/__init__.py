@@ -21,6 +21,8 @@ from gym.envs.robotics.hand.manipulate import HandPenEnv
 
 from gym.envs.robotics.grasp.cam_grasp import CamGraspEnv
 
+from gym.envs.robotics.push.cam_push import CamPushEnv
+
 from gym.envs.robotics.peg_insert.peg_insert import CamPegInsertEnv
 
 from gym.envs.robotics.hand.manipulate_touch_sensors import HandBlockTouchSensorsEnv
