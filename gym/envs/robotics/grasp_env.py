@@ -317,7 +317,7 @@ class GraspEnv(robot_env.RobotEnv):
                 min_color_diff = min(np.sum(color_diff, axis=1))
             self.sim.model.geom_rgba[-1][:3] = rgba
 
-            self.sim.model.geom_size[-1] = np.random.uniform(0.01, 0.03, size=3)
+            self.sim.model.geom_size[-1] = np.random.uniform(0.02, 0.03, size=3)
 
         # Randomize start position of object.
         if self.goal_type == "fixed":
