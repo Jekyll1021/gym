@@ -217,8 +217,10 @@ class PushEnv(robot_env.RobotEnv):
     def _render_callback(self):
         # Visualize target.
         sites_offset = (self.sim.data.site_xpos - self.sim.model.site_pos).copy()
+        visual_goal = self.goal.copy()
+        visual_goal[2] += 0.05
         site_id = self.sim.model.site_name2id('target0')
-        self.sim.model.site_pos[site_id] = self.goal - sites_offset[0]
+        self.sim.model.site_pos[site_id] = visual_goal - sites_offset[0]
         self.sim.forward()
 
     def _reset_sim(self):
