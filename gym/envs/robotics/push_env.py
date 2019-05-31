@@ -84,7 +84,7 @@ class PushEnv(robot_env.RobotEnv):
     # ----------------------------
 
     def compute_reward(self, achieved_goal, goal, info):
-        d = goal_distance(achieved_goal, desired_goal)
+        d = goal_distance(achieved_goal, goal)
         return (d < self.distance_threshold).astype(np.float32)
 
     # RobotEnv methods
