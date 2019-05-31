@@ -102,7 +102,7 @@ class GraspEnv(robot_env.RobotEnv):
 
         pos_ctrl *= 0.05  # limit maximum change in position
         rot_ctrl = [1., 0., 1., 0.]  # fixed rotation of the end effector, expressed as a quaternion
-        gripper_ctrl = np.array([1, 1])
+        gripper_ctrl = np.array([0, 0])
         assert gripper_ctrl.shape == (2,)
         if self.block_gripper:
             gripper_ctrl = np.zeros_like(gripper_ctrl)
@@ -110,9 +110,10 @@ class GraspEnv(robot_env.RobotEnv):
 
         # Apply action to simulation.
         utils.ctrl_set_action(self.sim, action)
-        for _ in range(10):
-            utils.ctrl_set_action(self.sim, action)
-            self.sim.step()
+        if self.counter == 1:
+            for _ in range(10):
+                utils.ctrl_set_action(self.sim, action)
+                self.sim.step()
         utils.mocap_set_action(self.sim, action)
 
         if self.counter >= 5:
@@ -128,7 +129,7 @@ class GraspEnv(robot_env.RobotEnv):
             # offset = obs_pos - grip_pos
             # print(offset, np.linalg.norm(offset, axis = -1))
 
-            for _ in range(10):
+            for _ in range(20):
                 utils.ctrl_set_action(self.sim, action)
                 self.sim.step()
 
