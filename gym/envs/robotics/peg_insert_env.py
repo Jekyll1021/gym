@@ -278,7 +278,7 @@ class PegInsertEnv(robot_env.RobotEnv):
 
         box_pose = self.sim.data.get_site_xpos('object0').copy()
         pos_ctrl = box_pose.copy()
-        pos_ctrl[2] = box_pose[2]+0.13
+        pos_ctrl[2] = box_pose[2]+0.2
 
         action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
 
@@ -286,7 +286,7 @@ class PegInsertEnv(robot_env.RobotEnv):
 
         box_pose = self.sim.data.get_site_xpos('object0').copy()
         pos_ctrl = box_pose.copy()
-        pos_ctrl[2] = box_pose[2]+0.05
+        pos_ctrl[2] = box_pose[2]
 
         action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
 
