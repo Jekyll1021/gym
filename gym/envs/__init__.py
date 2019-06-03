@@ -394,7 +394,7 @@ for reward_type in ['sparse', 'dense']:
         id='Grasp{}-v0'.format(suffix),
         entry_point='gym.envs.robotics:CamGraspEnv',
         kwargs=kwargs,
-        max_episode_steps=2,
+        max_episode_steps=5,
     )
 
     # push
@@ -410,7 +410,7 @@ for reward_type in ['sparse', 'dense']:
         id='PegInsert{}-v0'.format(suffix),
         entry_point='gym.envs.robotics:CamPegInsertEnv',
         kwargs=kwargs,
-        max_episode_steps=2,
+        max_episode_steps=5,
     )
 
     # Hand
