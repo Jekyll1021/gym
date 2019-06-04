@@ -315,7 +315,6 @@ class DoorOpenEnv(robot_env.RobotEnv):
 
     def _sample_goal(self):
         # goal = self.sim.data.get_site_xpos('object0').copy()
-        goal[2] += 0.1
 
         return np.array([0, 0, 0])# - self.sim.data.get_site_xpos("robot0:cam")
 
