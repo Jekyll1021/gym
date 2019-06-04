@@ -413,6 +413,14 @@ for reward_type in ['sparse', 'dense']:
         max_episode_steps=5,
     )
 
+    # Door Open
+    register(
+        id='DoorOpen{}-v0'.format(suffix),
+        entry_point='gym.envs.robotics:CamDoorOpenEnv',
+        kwargs=kwargs,
+        max_episode_steps=5,
+    )
+
     # Hand
     register(
         id='HandReach{}-v0'.format(suffix),

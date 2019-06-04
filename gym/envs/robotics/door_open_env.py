@@ -253,22 +253,11 @@ class DoorOpenEnv(robot_env.RobotEnv):
         grip_velp = self.sim.data.get_site_xvelp('robot0:grip') * dt
         robot_qpos, robot_qvel = utils.robot_get_obs(self.sim)
 
-        object_pos = self.sim.data.get_site_xpos('object0')
-        # rotations
-        object_rot = rotations.mat2euler(self.sim.data.get_site_xmat('object0'))
-        # velocities
-        object_velp = self.sim.data.get_site_xvelp('object0') * dt
-        object_velr = self.sim.data.get_site_xvelr('object0') * dt
-        # gripper state
-        object_rel_pos = object_pos - grip_pos
-        object_velp -= grip_velp
-
         gripper_state = robot_qpos[-2:]
         gripper_vel = robot_qvel[-2:] * dt  # change to a scalar if the gripper is made symmetric
 
         counter = np.array([self.counter])
 
-        achieved_goal = np.squeeze(object_pos.copy())# - self.sim.data.get_site_xpos("robot0:cam")
         # obs = np.concatenate([
         #     grip_pos, object_pos.ravel(), object_rel_pos.ravel(), gripper_state, object_rot.ravel(),
         #     object_velp.ravel(), object_velr.ravel(), grip_velp, gripper_vel, counter
@@ -282,7 +271,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
 
         return {
             'observation': obs.copy(),
-            'achieved_goal': achieved_goal.copy(),
+            'achieved_goal': holder_pos.copy(),
             'desired_goal': self.goal.copy(),
             'image':img.copy(),
             'gripper_pose': holder_pos.copy()
@@ -307,40 +296,28 @@ class DoorOpenEnv(robot_env.RobotEnv):
     def _reset_sim(self):
         self.sim.set_state(self.initial_state)
 
-        if self.random_obj:
-            self.sim.model.geom_type[-1] = np.random.choice(2) + 5
-
-            min_color_diff = 0
-            while min_color_diff < 0.2:
-                rgba = np.random.uniform(size=3)
-                color_diff = np.abs(self.sim.model.geom_rgba.copy()[:-1, :3] - rgba)
-                min_color_diff = min(np.sum(color_diff, axis=1))
-            self.sim.model.geom_rgba[-1][:3] = rgba
-
-            self.sim.model.geom_size[-1] = np.random.uniform(0.02, 0.03, size=3)
-
         # Randomize start position of object.
-        if self.goal_type == "fixed":
-            offset = np.array([0.02, 0.02])
-        else:
-            offset = self.np_random.uniform(-self.obj_range, self.obj_range, size=2)
-            norm = np.linalg.norm(offset, axis=-1)
-            if norm < 0.05:
-                offset = offset / norm * 0.05
-        object_xpos = self.initial_gripper_xpos[:2] + offset
-        object_qpos = self.sim.data.get_joint_qpos('object0:joint')
-        assert object_qpos.shape == (7,)
-        object_qpos[:2] = object_xpos
-        self.sim.data.set_joint_qpos('object0:joint', object_qpos)
+        # if self.goal_type == "fixed":
+        #     offset = np.array([0.02, 0.02])
+        # else:
+        #     offset = self.np_random.uniform(-self.obj_range, self.obj_range, size=2)
+        #     norm = np.linalg.norm(offset, axis=-1)
+        #     if norm < 0.05:
+        #         offset = offset / norm * 0.05
+        # object_xpos = self.initial_gripper_xpos[:2] + offset
+        # object_qpos = self.sim.data.get_joint_qpos('object0:joint')
+        # assert object_qpos.shape == (7,)
+        # object_qpos[:2] = object_xpos
+        # self.sim.data.set_joint_qpos('object0:joint', object_qpos)
 
         self.sim.forward()
         return True
 
     def _sample_goal(self):
-        goal = self.sim.data.get_site_xpos('object0').copy()
+        # goal = self.sim.data.get_site_xpos('object0').copy()
         goal[2] += 0.1
 
-        return goal.copy()# - self.sim.data.get_site_xpos("robot0:cam")
+        return np.array([0, 0, 0])# - self.sim.data.get_site_xpos("robot0:cam")
 
     def _is_success(self, achieved_goal, desired_goal):
         return (achieved_goal[2] > self.distance_threshold + self.height_offset).astype(np.float32)
@@ -372,7 +349,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
 
         # Extract information for sampling goals.
         self.initial_gripper_xpos = self.sim.data.get_site_xpos('robot0:grip').copy()
-        self.height_offset = self.sim.data.get_site_xpos('object0')[2]
+        # self.height_offset = self.sim.data.get_site_xpos('object0')[2]
 
     def render(self, mode='rgd_array', width=500, height=500):
-        return super(GraspEnv, self).render(mode, width, height)
+        return super(DoorOpenEnv, self).render(mode, width, height)
