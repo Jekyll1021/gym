@@ -110,7 +110,7 @@ class PegInsertEnv(robot_env.RobotEnv):
         utils.ctrl_set_action(self.sim, action)
         utils.mocap_set_action(self.sim, action)
 
-        if self.counter >= 5:
+        if self.counter >= 5:# or np.linalg.norm(pos_ctrl, aix=-1) < 0.005:
             action = np.array([0,0,-0.05,1,0,1,0,1,1])
             utils.mocap_set_action(self.sim, action)
             for _ in range(5):
@@ -201,6 +201,7 @@ class PegInsertEnv(robot_env.RobotEnv):
             ])
         else:
             obs = counter
+            # obs = np.empty(0)
 
         return {
             'observation': obs.copy(),

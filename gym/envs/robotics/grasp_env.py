@@ -110,13 +110,10 @@ class GraspEnv(robot_env.RobotEnv):
 
         # Apply action to simulation.
         # utils.ctrl_set_action(self.sim, action)
-        if self.counter == 1:
-            for _ in range(10):
-                utils.ctrl_set_action(self.sim, action)
-                self.sim.step()
+
         utils.mocap_set_action(self.sim, action)
 
-        if self.counter >= 5:
+        if self.counter >= 5:# or np.linalg.norm(pos_ctrl, aix=-1) < 0.005:
             self.sim.step()
             pos_ctrl = np.array([0.0, 0.0, 0.0])
             gripper_ctrl = np.array([-1, -1])
@@ -279,6 +276,7 @@ class GraspEnv(robot_env.RobotEnv):
             ])
         else:
             obs = counter
+            # obs = np.empty(0)
 
         return {
             'observation': obs.copy(),
@@ -334,6 +332,10 @@ class GraspEnv(robot_env.RobotEnv):
         self.sim.data.set_joint_qpos('object0:joint', object_qpos)
 
         self.sim.forward()
+        action = np.array([0,0,0,1,0,1,0,1,1])
+        for _ in range(10):
+            utils.ctrl_set_action(self.sim, action)
+            self.sim.step()
         return True
 
     def _sample_goal(self):
