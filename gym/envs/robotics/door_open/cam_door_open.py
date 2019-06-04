@@ -4,7 +4,7 @@ from gym.envs.robotics import door_open_env
 
 
 # Ensure we get the path separator correct on windows
-MODEL_XML_PATH = os.path.join('fetch', 'peg_insert.xml')
+MODEL_XML_PATH = os.path.join('fetch', 'door_open.xml')
 
 
 class CamDoorOpenEnv(door_open_env.DoorOpenEnv, utils.EzPickle):
