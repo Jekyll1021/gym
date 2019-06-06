@@ -318,6 +318,9 @@ class DoorOpenEnv(robot_env.RobotEnv):
 
         return np.array([0, 0, 0])# - self.sim.data.get_site_xpos("robot0:cam")
 
+    def _is_done(self):
+        return False
+
     def _is_success(self, achieved_goal, desired_goal):
         return (achieved_goal[2] > self.distance_threshold + self.height_offset).astype(np.float32)
 

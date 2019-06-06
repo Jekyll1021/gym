@@ -48,6 +48,8 @@ class PegInsertEnv(robot_env.RobotEnv):
         self.use_task_index = use_task_index
         self.random_obj = random_obj
 
+        self.is_done = False
+
         # if self.act_noise:
         #     noise_vector = np.random.uniform(-1.0, 1.0, 3)
         #     norm = np.linalg.norm(noise_vector)
@@ -110,7 +112,8 @@ class PegInsertEnv(robot_env.RobotEnv):
         utils.ctrl_set_action(self.sim, action)
         utils.mocap_set_action(self.sim, action)
 
-        if self.counter >= 5:# or np.linalg.norm(pos_ctrl, aix=-1) < 0.005:
+        if self.counter >= 5 or np.linalg.norm(pos_ctrl, aix=-1) < 0.005:
+            self.is_done = True
             action = np.array([0,0,-0.05,1,0,1,0,1,1])
             utils.mocap_set_action(self.sim, action)
             for _ in range(5):
@@ -308,6 +311,9 @@ class PegInsertEnv(robot_env.RobotEnv):
         goal = self.sim.data.get_site_xpos("table_top")
         goal[2] = 0.45
         return goal.copy()
+
+    def _is_done(self):
+        return self.is_done
 
     def _is_success(self, achieved_goal, desired_goal):
         return (achieved_goal[2] < self.height_offset).astype(np.float32)

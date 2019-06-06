@@ -66,7 +66,7 @@ class RobotEnv(gym.GoalEnv):
         self._step_callback()
         obs = self._get_obs()
 
-        done = False
+        done = self._is_done()
         info = {
             'is_success': self._is_success(obs['achieved_goal'], self.goal),
         }
@@ -114,6 +114,12 @@ class RobotEnv(gym.GoalEnv):
             self._viewer_setup()
             self._viewers[mode] = self.viewer
         return self.viewer
+
+    # Customized Methods
+    def _is_done(self):
+        """Indicates whether or not the achieved goal successfully achieved the desired goal.
+        """
+        raise NotImplementedError()
 
     # Extension methods
     # ----------------------------

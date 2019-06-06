@@ -166,6 +166,9 @@ class FetchEnv(robot_env.RobotEnv):
             goal = self.initial_gripper_xpos[:3] + self.np_random.uniform(-0.15, 0.15, size=3)
         return goal.copy()
 
+    def _is_done(self):
+        return False
+
     def _is_success(self, achieved_goal, desired_goal):
         d = goal_distance(achieved_goal, desired_goal)
         return (d < self.distance_threshold).astype(np.float32)

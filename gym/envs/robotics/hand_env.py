@@ -39,6 +39,9 @@ class HandEnv(robot_env.RobotEnv):
         self.sim.data.ctrl[:] = actuation_center + action * actuation_range
         self.sim.data.ctrl[:] = np.clip(self.sim.data.ctrl, ctrlrange[:, 0], ctrlrange[:, 1])
 
+    def _is_done(self):
+        return False
+
     def _viewer_setup(self):
         body_id = self.sim.model.body_name2id('robot0:palm')
         lookat = self.sim.data.body_xpos[body_id]

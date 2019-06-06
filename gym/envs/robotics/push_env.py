@@ -263,6 +263,9 @@ class PushEnv(robot_env.RobotEnv):
         goal[2] = self.height_offset
         return goal.copy()
 
+    def _is_done(self):
+        return False
+
     def _is_success(self, achieved_goal, desired_goal):
         d = goal_distance(achieved_goal, desired_goal)
         return (d < self.distance_threshold).astype(np.float32)

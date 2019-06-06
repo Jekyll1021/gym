@@ -47,6 +47,8 @@ class GraspEnv(robot_env.RobotEnv):
         self.use_task_index = use_task_index
         self.random_obj = random_obj
 
+        self.is_done = False
+
         # if self.act_noise:
         #     noise_vector = np.random.uniform(-1.0, 1.0, 3)
         #     norm = np.linalg.norm(noise_vector)
@@ -113,7 +115,8 @@ class GraspEnv(robot_env.RobotEnv):
 
         utils.mocap_set_action(self.sim, action)
 
-        if self.counter >= 5:# or np.linalg.norm(pos_ctrl, aix=-1) < 0.005:
+        if self.counter >= 5 or np.linalg.norm(pos_ctrl, aix=-1) < 0.005:
+            self.is_done = True
             self.sim.step()
             pos_ctrl = np.array([0.0, 0.0, 0.0])
             gripper_ctrl = np.array([-1, -1])
@@ -343,6 +346,9 @@ class GraspEnv(robot_env.RobotEnv):
         goal[2] += 0.1
 
         return goal.copy()# - self.sim.data.get_site_xpos("robot0:cam")
+
+    def _is_done(self):
+        return self.is_done
 
     def _is_success(self, achieved_goal, desired_goal):
         return (achieved_goal[2] > self.distance_threshold + self.height_offset).astype(np.float32)
