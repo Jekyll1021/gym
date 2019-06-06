@@ -11,7 +11,7 @@
 		<joint armature="0.0001" axis="0 0 1" damping="1e+11" name="robot0:slide2" pos="0 0 0" type="slide"></joint>
 		<inertial diaginertia="1.2869 1.2236 0.9868" mass="70.1294" pos="-0.0036 0 0.0014" quat="0.7605 -0.0133 -0.0061 0.6491"></inertial>
 		<geom mesh="robot0:base_link" name="robot0:base_link" material="robot0:base_mat" class="robot0:grey"></geom>
-		<!-- <body name="robot0:torso_lift_link" pos="-0.0869 0 0.3774">
+		<body name="robot0:torso_lift_link" pos="-0.0869 0 0.3774">
 			<inertial diaginertia="0.3365 0.3354 0.0943" mass="10.7796" pos="-0.0013 -0.0009 0.2935" quat="0.9993 -0.0006 0.0336 0.0185"></inertial>
 			<joint axis="0 0 1" damping="1e+07" name="robot0:torso_lift_joint" range="0.0386 0.3861" type="slide"></joint>
 			<geom mesh="robot0:torso_lift_link" name="robot0:torso_lift_link" material="robot0:torso_mat"></geom>
@@ -102,7 +102,7 @@
 					</body>
 				</body>
 			</body>
-		</body> -->
+		</body>
 		<body name="robot0:estop_link" pos="-0.1246 0.2389 0.3113" quat="0.7071 0.7071 0 0">
 			<inertial diaginertia="0 0 0" mass="0.002" pos="0.0024 -0.0033 0.0067" quat="0.3774 -0.1814 0.1375 0.8977"></inertial>
 			<geom mesh="robot0:estop_link" rgba="0.8 0 0 1" name="robot0:estop_link"></geom>
