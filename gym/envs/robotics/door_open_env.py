@@ -80,10 +80,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
 
     def compute_reward(self, achieved_goal, goal, info):
         # Compute distance between goal and the achieved goal.
-        if len(achieved_goal.shape) <= 1:
-            return (achieved_goal[2] > self.distance_threshold + self.height_offset).astype(np.float32)
-        else:
-            return (achieved_goal[: ,2] > self.distance_threshold + self.height_offset).astype(np.float32)
+        return 0
 
     # RobotEnv methods
     # ----------------------------
@@ -322,7 +319,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
         return False
 
     def _is_success(self, achieved_goal, desired_goal):
-        return (achieved_goal[2] > self.distance_threshold + self.height_offset).astype(np.float32)
+        return False
 
     def _env_setup(self, initial_qpos):
         for name, value in initial_qpos.items():
