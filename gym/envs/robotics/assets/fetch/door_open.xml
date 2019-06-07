@@ -24,7 +24,7 @@
 			<body name="handle" pos="0 0 0.15">
 		    <joint name="handle" pos="0 0 0" axis="0 0 1" range="0 3.14" frictionloss="1"></joint>
 		    <geom size="0.02 0.2" type="cylinder" rgba="0 1 0 1" group="1"></geom>
-		    <geom size="0.04 0.025 0.025" pos="0 0 0.05" type="box" rgba="0 0 1 1" group="1"></geom>
+		    <geom size="0.04 0.025 0.025" pos="0 0 0.15" type="box" rgba="0 0 1 1" group="1"></geom>
 			</body>
     </body>
 
