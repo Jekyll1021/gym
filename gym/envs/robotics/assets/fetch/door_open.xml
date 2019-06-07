@@ -25,7 +25,7 @@
 		    <joint name="handle" pos="0 0 0" axis="0 0 1" range="0 3.14" frictionloss="1"></joint>
 		    <geom size="0.02 0.15" type="cylinder" rgba="1 0 0 1" group="1"></geom>
 		    <geom size="0.05 0.025 0.025" pos="0 0 0.15" type="box" rgba="1 0 0 1" group="1"></geom>
-				<site name="handletip" pos="0 0 0" size="0.03 0.03 0.03" rgba="0 1 0 1" type="sphere"></site>
+				<site name="handletip" pos="0.05 0 0.15" size="0.03 0.03 0.03" rgba="0 1 0 1" type="sphere"></site>
 			</body>
     </body>
 
