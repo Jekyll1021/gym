@@ -113,7 +113,7 @@ class PegInsertEnv(robot_env.RobotEnv):
         utils.mocap_set_action(self.sim, action)
 
         # if self.counter >= 5 or np.linalg.norm(pos_ctrl, axis=-1) < 0.01:
-        if np.linalg.norm(pos_ctrl, axis=-1) < 0.01:
+        if np.linalg.norm(pos_ctrl, axis=-1) < 0.025:
             action = np.array([0,0,-0.05,1,0,1,0,1,1])
             utils.mocap_set_action(self.sim, action)
             for _ in range(5):
