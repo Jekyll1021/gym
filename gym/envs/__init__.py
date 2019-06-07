@@ -394,7 +394,7 @@ for reward_type in ['sparse', 'dense']:
         id='Grasp{}-v0'.format(suffix),
         entry_point='gym.envs.robotics:CamGraspEnv',
         kwargs=kwargs,
-        max_episode_steps=10,
+        max_episode_steps=20,
     )
 
     # push
@@ -402,7 +402,7 @@ for reward_type in ['sparse', 'dense']:
         id='Push{}-v0'.format(suffix),
         entry_point='gym.envs.robotics:CamPushEnv',
         kwargs=kwargs,
-        max_episode_steps=10,
+        max_episode_steps=20,
     )
 
     # Peg Insertion
@@ -410,7 +410,7 @@ for reward_type in ['sparse', 'dense']:
         id='PegInsert{}-v0'.format(suffix),
         entry_point='gym.envs.robotics:CamPegInsertEnv',
         kwargs=kwargs,
-        max_episode_steps=10,
+        max_episode_steps=20,
     )
 
     # Door Open
