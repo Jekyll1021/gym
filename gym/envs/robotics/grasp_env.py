@@ -74,7 +74,7 @@ class GraspEnv(robot_env.RobotEnv):
         #     self.obs_noise_vector = np.zeros(7)
 
         super(GraspEnv, self).__init__(
-            model_path=model_path, n_substeps=n_substeps, n_actions=4, action_max=1.,
+            model_path=model_path, n_substeps=n_substeps, n_actions=3, action_max=1.,
             initial_qpos=initial_qpos)
 
     # GoalEnv methods
@@ -97,7 +97,7 @@ class GraspEnv(robot_env.RobotEnv):
             self.sim.forward()
 
     def _set_action(self, action):
-        assert action.shape == (4,)
+        assert action.shape == (3,)
         self.counter += 1
         action = action.copy()  # ensure that we don't change the action outside of this scope
         pos_ctrl = action[:3]
