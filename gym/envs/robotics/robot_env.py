@@ -61,12 +61,11 @@ class RobotEnv(gym.GoalEnv):
 
     def step(self, action):
         action = np.clip(action, self.action_space.low, self.action_space.high)
-        self._set_action(action)
+        done = self._set_action(action)
         self.sim.step()
         self._step_callback()
         obs = self._get_obs()
 
-        done = self._is_done()
         info = {
             'is_success': self._is_success(obs['achieved_goal'], self.goal),
         }

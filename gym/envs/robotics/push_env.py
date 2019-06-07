@@ -111,6 +111,7 @@ class PushEnv(robot_env.RobotEnv):
         # Apply action to simulation.
         utils.ctrl_set_action(self.sim, action)
         utils.mocap_set_action(self.sim, action)
+        return False
 
     def _get_obs(self):
         # images

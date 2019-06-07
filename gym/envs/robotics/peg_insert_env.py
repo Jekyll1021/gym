@@ -114,12 +114,13 @@ class PegInsertEnv(robot_env.RobotEnv):
 
         # if self.counter >= 5 or np.linalg.norm(pos_ctrl, axis=-1) < 0.01:
         if np.linalg.norm(pos_ctrl, axis=-1) < 0.01:
-            self.is_done = True
             action = np.array([0,0,-0.05,1,0,1,0,1,1])
             utils.mocap_set_action(self.sim, action)
             for _ in range(5):
                 utils.ctrl_set_action(self.sim, action)
                 self.sim.step()
+            return True
+        return False
 
     def _get_obs(self):
         # images
