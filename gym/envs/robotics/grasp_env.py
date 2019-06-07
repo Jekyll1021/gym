@@ -115,8 +115,8 @@ class GraspEnv(robot_env.RobotEnv):
 
         utils.mocap_set_action(self.sim, action)
 
-        # if self.counter >= 5 or np.linalg.norm(pos_ctrl, axis=-1) < 0.01:
-        if np.linalg.norm(pos_ctrl, axis=-1) < 0.025:
+        if self.counter >= 5:
+        # if np.linalg.norm(pos_ctrl, axis=-1) < 0.025:
             self.sim.step()
             pos_ctrl = np.array([0.0, 0.0, 0.0])
             gripper_ctrl = np.array([-1, -1])
@@ -138,10 +138,6 @@ class GraspEnv(robot_env.RobotEnv):
             action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
             utils.ctrl_set_action(self.sim, action)
             utils.mocap_set_action(self.sim, action)
-            return True
-        return False
-
-
 
     def _get_obs(self):
         # images
