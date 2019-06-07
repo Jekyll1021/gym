@@ -115,7 +115,7 @@ class GraspEnv(robot_env.RobotEnv):
 
         utils.mocap_set_action(self.sim, action)
 
-        if self.counter >= 5 or np.linalg.norm(pos_ctrl, aix=-1) < 0.01:
+        if self.counter >= 5 or np.linalg.norm(pos_ctrl, axis=-1) < 0.01:
             self.is_done = True
             self.sim.step()
             pos_ctrl = np.array([0.0, 0.0, 0.0])
