@@ -231,18 +231,17 @@ class DoorOpenEnv(robot_env.RobotEnv):
         self.sim.set_state(self.initial_state)
 
         # Randomize start position of object.
-        # if self.goal_type == "fixed":
-        #     offset = np.array([0.02, 0.02])
-        # else:
-        #     offset = self.np_random.uniform(-self.obj_range, self.obj_range, size=2)
-        #     norm = np.linalg.norm(offset, axis=-1)
-        #     if norm < 0.05:
-        #         offset = offset / norm * 0.05
-        # object_xpos = self.initial_gripper_xpos[:2] + offset
-        # object_qpos = self.sim.data.get_joint_qpos('object0:joint')
-        # assert object_qpos.shape == (7,)
-        # object_qpos[:2] = object_xpos
-        # self.sim.data.set_joint_qpos('object0:joint', object_qpos)
+        if self.goal_type == "fixed":
+            offset = np.array([0.02, 0.02])
+        else:
+            offset = self.np_random.uniform(-self.obj_range, self.obj_range, size=2)
+            norm = np.linalg.norm(offset, axis=-1)
+            if norm < 0.05:
+                offset = offset / norm * 0.05
+        self.sim.model.body_pos[-1][0] += offset[0]
+        self.sim.model.body_pos[-1][0] += offset[1]
+        object_qpos = self.sim.data.get_joint_qpos('handle')
+        self.sim.data.set_joint_qpos('handle', 0)
 
         self.sim.forward()
         action = np.array([0,0,0,1,0,1,0,1,1])
