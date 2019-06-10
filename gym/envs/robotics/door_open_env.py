@@ -72,15 +72,8 @@ class DoorOpenEnv(robot_env.RobotEnv):
         #     self.obs_noise_vector = np.zeros(7)
 
         super(DoorOpenEnv, self).__init__(
-            model_path=model_path, n_substeps=n_substeps, n_actions=4, action_max=1.,
+            model_path=model_path, n_substeps=n_substeps, n_actions=3, action_max=1.,
             initial_qpos=initial_qpos)
-
-    # GoalEnv methods
-    # ----------------------------
-
-    def compute_reward(self, achieved_goal, goal, info):
-        # Compute distance between goal and the achieved goal.
-        return 0
 
     # RobotEnv methods
     # ----------------------------
@@ -92,7 +85,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
             self.sim.forward()
 
     def _set_action(self, action):
-        assert action.shape == (4,)
+        assert action.shape == (3,)
         self.counter += 1
         action = action.copy()  # ensure that we don't change the action outside of this scope
         pos_ctrl = action[:3]
@@ -107,13 +100,10 @@ class DoorOpenEnv(robot_env.RobotEnv):
 
         # Apply action to simulation.
         # utils.ctrl_set_action(self.sim, action)
-        if self.counter == 1:
-            for _ in range(10):
-                utils.ctrl_set_action(self.sim, action)
-                self.sim.step()
+
         utils.mocap_set_action(self.sim, action)
 
-        if self.counter >= 5:
+        if self.counter >= 2:
             self.sim.step()
             pos_ctrl = np.array([0.0, 0.0, 0.0])
             gripper_ctrl = np.array([-1, -1])
@@ -130,70 +120,11 @@ class DoorOpenEnv(robot_env.RobotEnv):
                 utils.ctrl_set_action(self.sim, action)
                 self.sim.step()
 
-            pos_ctrl = np.array([0.0, 0.0, 0.2])
+            pos_ctrl = self.sim.data.get_site_xpos('robot0:grip')
+            rot_ctrl = np.array([0.5, 0.5, 0.5, -0.5])
             gripper_ctrl = np.array([-1, -1])
             action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
-            utils.ctrl_set_action(self.sim, action)
             utils.mocap_set_action(self.sim, action)
-
-        # assert action.shape == (2,)
-        # action = action.copy()  # ensure that we don't change the action outside of this scope
-        # rot_ctrl = [1., 0., 1., 0.]  # fixed rotation of the end effector, expressed as a quaternion
-        #
-        # # step 1: go to the command position with gripper open
-        # pos_ctrl, gripper_ctrl = np.array([action[0], action[1], self.height_offset + 0.2]), 1
-        #
-        # gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
-        # assert gripper_ctrl.shape == (2,)
-        # if self.block_gripper:
-        #     gripper_ctrl = np.zeros_like(gripper_ctrl)
-        # a1 = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
-        #
-        # # Apply action to simulation.
-        # utils.ctrl_set_action(self.sim, a1)
-        # utils.mocap_set_action_abs(self.sim, a1)
-        #
-        # # step 2: go down and close the gripper to get the object
-        # pos_ctrl, gripper_ctrl = np.array([action[0], action[1], self.height_offset]), 0
-        #
-        # gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
-        # assert gripper_ctrl.shape == (2,)
-        # if self.block_gripper:
-        #     gripper_ctrl = np.zeros_like(gripper_ctrl)
-        # a2 = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
-        #
-        # # Apply action to simulation.
-        # utils.ctrl_set_action(self.sim, a2)
-        # utils.mocap_set_action_abs(self.sim, a2)
-        #
-        # # close the gripper at the same spot
-        # pos_ctrl, gripper_ctrl = np.array([action[0], action[1], self.height_offset]), -1
-        #
-        # gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
-        # assert gripper_ctrl.shape == (2,)
-        # if self.block_gripper:
-        #     gripper_ctrl = np.zeros_like(gripper_ctrl)
-        # a2_2 = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
-        # utils.ctrl_set_action(self.sim, a2_2)
-        #
-        # for _ in range(20):
-        #     self.sim.step()
-        #
-        # # step 3: lift up object
-        # pos_ctrl, gripper_ctrl = np.array([action[0], action[1], self.height_offset + 0.2]), -1
-        #
-        # gripper_ctrl = np.array([gripper_ctrl, gripper_ctrl])
-        # assert gripper_ctrl.shape == (2,)
-        # if self.block_gripper:
-        #     gripper_ctrl = np.zeros_like(gripper_ctrl)
-        # a3 = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
-        #
-        # # Apply action to simulation.
-        # utils.ctrl_set_action(self.sim, a3)
-        # utils.mocap_set_action_abs(self.sim, a3)
-
-        # self.sim.step()
-
 
     def _get_obs(self):
         # images
@@ -308,6 +239,10 @@ class DoorOpenEnv(robot_env.RobotEnv):
         # self.sim.data.set_joint_qpos('object0:joint', object_qpos)
 
         self.sim.forward()
+        action = np.array([0,0,0,1,0,1,0,1,1])
+        for _ in range(10):
+            utils.ctrl_set_action(self.sim, action)
+            self.sim.step()
         return True
 
     def _sample_goal(self):
