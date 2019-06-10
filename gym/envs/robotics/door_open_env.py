@@ -230,6 +230,12 @@ class DoorOpenEnv(robot_env.RobotEnv):
     def _reset_sim(self):
         self.sim.set_state(self.initial_state)
 
+        self.sim.forward()
+        action = np.array([0,0,0,1,0,1,0,1,1])
+        for _ in range(10):
+            utils.ctrl_set_action(self.sim, action)
+            self.sim.step()
+
         # Randomize start position of object.
         if self.goal_type == "fixed":
             offset = np.array([0.02, 0.02])
@@ -244,10 +250,8 @@ class DoorOpenEnv(robot_env.RobotEnv):
         self.sim.data.set_joint_qpos('handle', 0)
 
         self.sim.forward()
-        action = np.array([0,0,0,1,0,1,0,1,1])
-        for _ in range(10):
-            utils.ctrl_set_action(self.sim, action)
-            self.sim.step()
+        self.sim.step()
+
         return True
 
     def _sample_goal(self):
