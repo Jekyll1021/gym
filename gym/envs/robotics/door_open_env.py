@@ -75,6 +75,12 @@ class DoorOpenEnv(robot_env.RobotEnv):
             model_path=model_path, n_substeps=n_substeps, n_actions=3, action_max=1.,
             initial_qpos=initial_qpos)
 
+    # GoalEnv methods
+    # ----------------------------
+
+    def compute_reward(self, achieved_goal, goal, info):
+        return 0
+
     # RobotEnv methods
     # ----------------------------
 
