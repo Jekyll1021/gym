@@ -245,7 +245,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
             if norm < 0.05:
                 offset = offset / norm * 0.05
         self.sim.model.body_pos[-1][0] += offset[0]
-        self.sim.model.body_pos[-1][0] += offset[1]
+        self.sim.model.body_pos[-1][1] += offset[1]
         object_qpos = self.sim.data.get_joint_qpos('handle')
         self.sim.data.set_joint_qpos('handle', 0)
 
@@ -280,11 +280,11 @@ class DoorOpenEnv(robot_env.RobotEnv):
 
         # Move end effector into position.
         if self.gripper_init_type != "fixed":
-            init_disturbance = np.array([self.np_random.uniform(-0.15, 0.15), self.np_random.uniform(-0.15, 0.15), -0.07])
+            init_disturbance = np.array([self.np_random.uniform(-0.15, 0.15), self.np_random.uniform(-0.15, 0.15), 0.07])
         else:
             init_disturbance = np.array([0, 0, 0])
         # gripper_target = np.array([-0.498, 0.005, -0.431 + self.gripper_extra_height]) + init_disturbance + self.sim.data.get_site_xpos('robot0:grip')
-        gripper_target = np.array([0.0, 0.0, 0.05]) + self.sim.data.get_site_xpos('handlegoal')
+        gripper_target = init_disturbance + self.sim.data.get_site_xpos('handlegoal')
         gripper_rotation = np.array([1., 0., 1., 0.])
         self.sim.data.set_mocap_pos('robot0:mocap', gripper_target)
         self.sim.data.set_mocap_quat('robot0:mocap', gripper_rotation)
