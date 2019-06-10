@@ -136,7 +136,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
         # cam_pos = self.sim.model.cam_pos[4].copy()
         # cam_quat = self.sim.model.cam_quat[4].copy()
         #
-        # object_pos = self.sim.data.get_site_xpos('object0')
+        object_pos = self.sim.data.get_site_xpos('handlegoal')
         #
         # # # rotations
         # # object_rot = rotations.mat2euler(self.sim.data.get_site_xmat('object0'))
@@ -144,7 +144,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
         # # object_velp = self.sim.data.get_site_xvelp('object0') * dt
         # # object_velr = self.sim.data.get_site_xvelr('object0') * dt
         #
-        # achieved_goal = np.squeeze(object_pos.copy())# - self.sim.data.get_site_xpos("robot0:cam")
+        achieved_goal = np.squeeze(object_pos.copy())# - self.sim.data.get_site_xpos("robot0:cam")
         # obs = np.concatenate([
         #     cam_pos, cam_quat
         # ])
@@ -199,7 +199,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
 
         return {
             'observation': obs.copy(),
-            'achieved_goal': holder_pos.copy(),
+            'achieved_goal': achieved_goal.copy(),
             'desired_goal': self.goal.copy(),
             'image':img.copy(),
             'gripper_pose': holder_pos.copy()
