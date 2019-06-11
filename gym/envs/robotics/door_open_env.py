@@ -254,10 +254,11 @@ class DoorOpenEnv(robot_env.RobotEnv):
         self.sim.model.body_pos[-1][1] += offset[1]
         object_qpos = self.sim.data.get_joint_qpos('handle')
         self.sim.data.set_joint_qpos('handle', 0)
-        self.init_tip = self.sim.data.get_site_xpos('handletip').copy()
 
         self.sim.forward()
         self.sim.step()
+
+        self.init_tip = self.sim.data.get_site_xpos('handletip').copy()
 
         return True
 
