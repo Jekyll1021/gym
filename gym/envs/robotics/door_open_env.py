@@ -233,8 +233,8 @@ class DoorOpenEnv(robot_env.RobotEnv):
         else:
             offset = np.array([self.np_random.uniform(-self.obj_range, self.obj_range), self.np_random.uniform(0, self.obj_range)])
             norm = np.linalg.norm(offset, axis=-1)
-            if norm < 0.03:
-                offset = offset / norm * 0.03
+            if norm < 0.05:
+                offset = offset / norm * 0.05
 
         table_qpos = self.sim.data.get_joint_qpos('table:joint')
         assert table_qpos.shape == (7,)
@@ -246,8 +246,6 @@ class DoorOpenEnv(robot_env.RobotEnv):
 
         self.sim.forward()
         self.sim.step()
-
-        self.init_tip = self.sim.data.get_site_xpos('switch').copy()
 
         return True
 
