@@ -231,12 +231,13 @@ class DoorOpenEnv(robot_env.RobotEnv):
         if self.goal_type == "fixed":
             offset = np.array([0.02, 0.02])
         else:
-            offset = self.np_random.uniform(-self.obj_range, self.obj_range, size=2)
+            offset = np.array([self.np_random.uniform(-self.obj_range, self.obj_range), self.np_random.uniform(0, self.obj_range)])
             norm = np.linalg.norm(offset, axis=-1)
-            if norm < 0.05:
-                offset = offset / norm * 0.05
-        self.sim.model.body_pos[-1][0] += offset[0]
-        self.sim.model.body_pos[-1][1] += offset[1]
+            if norm < 0.03:
+                offset = offset / norm * 0.03
+        body_pose = self.initial_gripper_xpos[:2] + offset
+        self.sim.model.body_pos[-1][0] = body_pose[0]
+        self.sim.model.body_pos[-1][1] = body_pose[1]
         object_qpos = self.sim.data.get_joint_qpos('switch')
         self.sim.data.set_joint_qpos('switch', 0)
 
