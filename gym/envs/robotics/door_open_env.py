@@ -134,11 +134,14 @@ class DoorOpenEnv(robot_env.RobotEnv):
             rot_init = np.array([0.7071068, 0.0, 0.7071068, 0])
             rot_target = np.array([0.5, 0.5, 0.5, -0.5])
             gripper_ctrl = np.array([-1, -1])
-            for i in range(20):
-                rot_ctrl = rot_init + (rot_target - rot_init) * (i+1) / 20
-                action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
-                utils.mocap_set_action_abs(self.sim, action)
-                self.sim.step()
+
+            action = np.concatenate([pos_ctrl, rot_target, gripper_ctrl])
+            utils.mocap_set_action_abs(self.sim, action)
+            # for i in range(20):
+            #     rot_ctrl = rot_init + (rot_target - rot_init) * (i+1) / 20
+            #     action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
+            #     utils.mocap_set_action_abs(self.sim, action)
+            #     self.sim.step()
 
     def _get_obs(self):
         # images
