@@ -114,7 +114,6 @@ class DoorOpenEnv(robot_env.RobotEnv):
         utils.mocap_set_action(self.sim, action)
 
         if self.counter >= 2:
-            print(self.init_tip)
             self.sim.step()
             pos_ctrl = np.array([0.0, 0.0, 0.0])
             gripper_ctrl = np.array([-1, -1])
@@ -130,8 +129,6 @@ class DoorOpenEnv(robot_env.RobotEnv):
             for _ in range(10):
                 utils.ctrl_set_action(self.sim, action)
                 self.sim.step()
-
-
 
             rot_init = np.array([0.7071068, 0.0, 0.7071068, 0])
             rot_target = np.array([0.5, 0.5, 0.5, -0.5])

@@ -19,22 +19,15 @@
 			<geom size="0.25 0.35 0.2" type="box" mass="2000" material="table_mat"></geom>
 		</body> -->
 
-		<body name="table" pos="1.3 0.75 0.15">
-			<geom size="0.25 0.35 0.15" type="box" mass="2000" material="table_mat"></geom>
-			<body name="handle" pos="0 0 0.15">
-		    <joint name="handle" pos="0 0 0" axis="0 0 1" range="0 3.14" damping="1" frictionloss="50"></joint>
-		    <geom size="0.02 0.15" type="cylinder" rgba="1 0 0 1" group="1"></geom>
-		    <geom size="0.05 0.025 0.025" pos="0 0 0.15" type="box" rgba="1 0 0 1" group="1"></geom>
-				<site name="handletip" pos="0.05 0 0.15" size="0.03 0.03 0.03" rgba="0 1 0 0" type="sphere"></site>
-				<site name="handlegoal" pos="0 0 0.15" size="0.03 0.03 0.03" rgba="0 1 0 0" type="sphere"></site>
+		<body name="table" pos="1.3 0.75 0.2">
+			<geom size="0.25 0.35 0.2" type="box" mass="2000" material="table_mat"></geom>
+			<body name="switch" pos="0 0 0.2">
+		    <joint name="switch" type="slide" pos="0 0 0" axis="1 0 0" range="0 0.2" damping="1" frictionloss="5"></joint>
+		    <geom size="0.025 0.025 0.025" pos="0 0 0" type="box" material="block2_mat"></geom>
+				<site name="switch" pos="0 0 0" size="0.03 0.03 0.03" rgba="0 1 0 1" type="sphere"></site>
 			</body>
     </body>
 
 		<light directional="true" ambient="0.2 0.2 0.2" diffuse="0.8 0.8 0.8" specular="0.3 0.3 0.3" castshadow="false" pos="0 0 4" dir="0 0 -1" name="light0"></light>
 	</worldbody>
-
-	<actuator>
-		<position ctrllimited="true" ctrlrange="0 0.2" joint="robot0:l_gripper_finger_joint" kp="30000" name="robot0:l_gripper_finger_joint" user="1"></position>
-		<position ctrllimited="true" ctrlrange="0 0.2" joint="robot0:r_gripper_finger_joint" kp="30000" name="robot0:r_gripper_finger_joint" user="1"></position>
-	</actuator>
 </mujoco>
