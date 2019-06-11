@@ -2,6 +2,10 @@ import numpy as np
 
 from gym.envs.robotics import rotations, robot_env, utils
 
+def goal_distance(goal_a, goal_b):
+    assert goal_a.shape == goal_b.shape
+    return np.linalg.norm(goal_a - goal_b, axis=-1)
+
 class DoorOpenEnv(robot_env.RobotEnv):
     """Superclass for all Fetch environments with camera input.
     """
@@ -79,7 +83,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
     # ----------------------------
 
     def compute_reward(self, achieved_goal, goal, info):
-        return 0
+        return (goal_distance(self.sim.data.get_site_xpos('handletip'), self.init_tip) > self.distance_threshold).astype(np.float32)
 
     # RobotEnv methods
     # ----------------------------
@@ -248,6 +252,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
         self.sim.model.body_pos[-1][1] += offset[1]
         object_qpos = self.sim.data.get_joint_qpos('handle')
         self.sim.data.set_joint_qpos('handle', 0)
+        self.init_tip = self.sim.data.get_site_xpos('handletip')
 
         self.sim.forward()
         self.sim.step()
@@ -263,7 +268,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
         return False
 
     def _is_success(self, achieved_goal, desired_goal):
-        return False
+        return (goal_distance(self.sim.data.get_site_xpos('handletip'), self.init_tip) > self.distance_threshold).astype(np.float32)
 
     def _env_setup(self, initial_qpos):
         for name, value in initial_qpos.items():
