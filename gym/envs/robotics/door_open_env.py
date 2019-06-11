@@ -83,7 +83,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
     # ----------------------------
 
     def compute_reward(self, achieved_goal, goal, info):
-        return (goal_distance(self.sim.data.get_site_xpos('handletip'), self.init_tip) > 0.03).astype(np.float32)
+        return (goal_distance(self.sim.data.get_site_xpos('handletip'), self.init_tip) > 0.01).astype(np.float32)
 
     # RobotEnv methods
     # ----------------------------
@@ -114,6 +114,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
         utils.mocap_set_action(self.sim, action)
 
         if self.counter >= 2:
+            print(self.init_tip)
             self.sim.step()
             pos_ctrl = np.array([0.0, 0.0, 0.0])
             gripper_ctrl = np.array([-1, -1])
@@ -135,6 +136,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
             gripper_ctrl = np.array([-1, -1])
             action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
             utils.mocap_set_action_abs(self.sim, action)
+            print(self.sim.data.get_site_xpos('handletip'))
 
     def _get_obs(self):
         # images
@@ -252,7 +254,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
         self.sim.model.body_pos[-1][1] += offset[1]
         object_qpos = self.sim.data.get_joint_qpos('handle')
         self.sim.data.set_joint_qpos('handle', 0)
-        self.init_tip = self.sim.data.get_site_xpos('handletip')
+        self.init_tip = self.sim.data.get_site_xpos('handletip').copy()
 
         self.sim.forward()
         self.sim.step()
@@ -268,7 +270,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
         return False
 
     def _is_success(self, achieved_goal, desired_goal):
-        return (goal_distance(self.sim.data.get_site_xpos('handletip'), self.init_tip) > 0.03).astype(np.float32)
+        return (goal_distance(self.sim.data.get_site_xpos('handletip'), self.init_tip) > 0.01).astype(np.float32)
 
     def _env_setup(self, initial_qpos):
         for name, value in initial_qpos.items():
