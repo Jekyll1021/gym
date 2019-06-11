@@ -235,11 +235,13 @@ class DoorOpenEnv(robot_env.RobotEnv):
             norm = np.linalg.norm(offset, axis=-1)
             if norm < 0.03:
                 offset = offset / norm * 0.03
-        body_pose = self.initial_gripper_xpos[:2] + offset
-        print(body_pose)
-        print(self.initial_gripper_xpos)
-        self.sim.model.body_pos[-1][0] = body_pose[0]
-        self.sim.model.body_pos[-1][1] = body_pose[1]
+
+        table_qpos = self.sim.data.get_joint_qpos('table:joint')
+        assert hole_qpos.shape == (7,)
+        table_qpos[0] = table_qpos[0] + offset[0]
+        table_qpos[1] = table_qpos[1] + offset[1]
+        self.sim.data.set_joint_qpos('table:joint', table_qpos)
+
         object_qpos = self.sim.data.get_joint_qpos('switch')
         self.sim.data.set_joint_qpos('switch', 0)
 
