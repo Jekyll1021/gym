@@ -115,7 +115,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
 
         if self.counter >= 2:
             self.sim.step()
-            pos_ctrl = np.array([0.0, 0.15, 0.0])
+            pos_ctrl = np.array([0.0, 0.2, 0.0])
             gripper_ctrl = np.array([0, 0])
             action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
             utils.ctrl_set_action(self.sim, action)
@@ -248,7 +248,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
 
     def _sample_goal(self):
         goal = self.sim.data.get_site_xpos('switch').copy()
-        goal[0] += 0.15
+        goal[1] += 0.2
 
         return goal.copy()# - self.sim.data.get_site_xpos("robot0:cam")
 
