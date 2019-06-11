@@ -83,7 +83,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
     # ----------------------------
 
     def compute_reward(self, achieved_goal, goal, info):
-        return (goal_distance(self.sim.data.get_site_xpos('handletip'), self.init_tip) > 0.07).astype(np.float32)
+        return (goal_distance(achieved_goal, goal) < 0.03).astype(np.float32)
 
     # RobotEnv methods
     # ----------------------------
@@ -102,7 +102,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
 
         pos_ctrl *= 0.05  # limit maximum change in position
         rot_ctrl = [1., 0., 1., 0.]  # fixed rotation of the end effector, expressed as a quaternion
-        gripper_ctrl = np.array([1, 1])
+        gripper_ctrl = np.array([0, 0])
         assert gripper_ctrl.shape == (2,)
         if self.block_gripper:
             gripper_ctrl = np.zeros_like(gripper_ctrl)
@@ -115,32 +115,12 @@ class DoorOpenEnv(robot_env.RobotEnv):
 
         if self.counter >= 2:
             self.sim.step()
-            pos_ctrl = np.array([0.0, 0.0, 0.0])
-            gripper_ctrl = np.array([-1, -1])
+            pos_ctrl = np.array([0.15, 0.0, 0.0])
+            gripper_ctrl = np.array([0, 0])
             action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
             utils.ctrl_set_action(self.sim, action)
             utils.mocap_set_action(self.sim, action)
-            # logging
-            # grip_pos = self.sim.data.get_site_xpos('robot0:grip')
-            # obs_pos = self.sim.data.get_site_xpos('object0')
-            # offset = obs_pos - grip_pos
-            # print(offset, np.linalg.norm(offset, axis = -1))
-
-            for _ in range(10):
-                utils.ctrl_set_action(self.sim, action)
-                self.sim.step()
-
-            rot_init = np.array([0.7071068, 0.0, 0.7071068, 0])
-            rot_target = np.array([0.5, 0.5, 0.5, -0.5])
-            gripper_ctrl = np.array([-1, -1])
-            action = np.concatenate([pos_ctrl, rot_target - rot_init, gripper_ctrl])
-            utils.mocap_set_action(self.sim, action)
-            # for i in range(20):
-            #     rot_ctrl = rot_init + (rot_target - rot_init) * (i+1) / 20
-            #     action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
-            #     utils.mocap_set_action(self.sim, action)
             self.sim.step()
-            print(self.sim.data.get_site_xpos('handletip'))
 
     def _get_obs(self):
         # images
@@ -152,7 +132,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
         # cam_pos = self.sim.model.cam_pos[4].copy()
         # cam_quat = self.sim.model.cam_quat[4].copy()
         #
-        object_pos = self.sim.data.get_site_xpos('handlegoal')
+        object_pos = self.sim.data.get_site_xpos('switch')
         #
         # # # rotations
         # # object_rot = rotations.mat2euler(self.sim.data.get_site_xmat('object0'))
@@ -256,26 +236,27 @@ class DoorOpenEnv(robot_env.RobotEnv):
                 offset = offset / norm * 0.05
         self.sim.model.body_pos[-1][0] += offset[0]
         self.sim.model.body_pos[-1][1] += offset[1]
-        object_qpos = self.sim.data.get_joint_qpos('handle')
-        self.sim.data.set_joint_qpos('handle', 0)
+        object_qpos = self.sim.data.get_joint_qpos('switch')
+        self.sim.data.set_joint_qpos('switch', 0)
 
         self.sim.forward()
         self.sim.step()
 
-        self.init_tip = self.sim.data.get_site_xpos('handletip').copy()
+        self.init_tip = self.sim.data.get_site_xpos('switch').copy()
 
         return True
 
     def _sample_goal(self):
-        # goal = self.sim.data.get_site_xpos('object0').copy()
+        goal = self.sim.data.get_site_xpos('switch').copy()
+        goal[0] += 0.15
 
-        return np.array([0, 0, 0])# - self.sim.data.get_site_xpos("robot0:cam")
+        return goal.copy()# - self.sim.data.get_site_xpos("robot0:cam")
 
     def _is_done(self):
         return False
 
     def _is_success(self, achieved_goal, desired_goal):
-        return (goal_distance(self.sim.data.get_site_xpos('handletip'), self.init_tip) > 0.07).astype(np.float32)
+        return (goal_distance(achieved_goal, goal) < 0.03) > 0.15).astype(np.float32)
 
     def _env_setup(self, initial_qpos):
         for name, value in initial_qpos.items():
@@ -292,11 +273,10 @@ class DoorOpenEnv(robot_env.RobotEnv):
 
         # Move end effector into position.
         if self.gripper_init_type != "fixed":
-            init_disturbance = np.array([self.np_random.uniform(-0.15, 0.15), self.np_random.uniform(-0.15, 0.15), 0.07])
+            init_disturbance = np.array([self.np_random.uniform(-0.15, 0.15), self.np_random.uniform(-0.15, 0.15), 0.2])
         else:
             init_disturbance = np.array([0, 0, 0])
-        # gripper_target = np.array([-0.498, 0.005, -0.431 + self.gripper_extra_height]) + init_disturbance + self.sim.data.get_site_xpos('robot0:grip')
-        gripper_target = init_disturbance + self.sim.data.get_site_xpos('handlegoal')
+        gripper_target = np.array([-0.498, 0.005, -0.431 + self.gripper_extra_height]) + init_disturbance + self.sim.data.get_site_xpos('robot0:grip')
         gripper_rotation = np.array([1., 0., 1., 0.])
         self.sim.data.set_mocap_pos('robot0:mocap', gripper_target)
         self.sim.data.set_mocap_quat('robot0:mocap', gripper_rotation)
