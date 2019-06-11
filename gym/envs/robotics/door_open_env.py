@@ -256,7 +256,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
         return False
 
     def _is_success(self, achieved_goal, desired_goal):
-        return (goal_distance(achieved_goal, goal) < 0.03) > 0.15).astype(np.float32)
+        return (goal_distance(achieved_goal, goal) < 0.03).astype(np.float32)
 
     def _env_setup(self, initial_qpos):
         for name, value in initial_qpos.items():
