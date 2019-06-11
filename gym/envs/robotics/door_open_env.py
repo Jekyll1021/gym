@@ -114,7 +114,6 @@ class DoorOpenEnv(robot_env.RobotEnv):
         utils.mocap_set_action(self.sim, action)
 
         if self.counter >= 2:
-            print(self.init_tip)
             self.sim.step()
             pos_ctrl = np.array([0.0, 0.0, 0.0])
             gripper_ctrl = np.array([-1, -1])
@@ -140,7 +139,6 @@ class DoorOpenEnv(robot_env.RobotEnv):
                 action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
                 utils.mocap_set_action_abs(self.sim, action)
                 self.sim.step()
-                print(self.sim.data.get_site_xpos('handletip'))
 
     def _get_obs(self):
         # images
