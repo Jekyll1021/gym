@@ -120,7 +120,6 @@ class DoorOpenEnv(robot_env.RobotEnv):
             action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
             utils.ctrl_set_action(self.sim, action)
             utils.mocap_set_action(self.sim, action)
-            print("good1")
             # logging
             # grip_pos = self.sim.data.get_site_xpos('robot0:grip')
             # obs_pos = self.sim.data.get_site_xpos('object0')
@@ -130,14 +129,12 @@ class DoorOpenEnv(robot_env.RobotEnv):
             for _ in range(20):
                 utils.ctrl_set_action(self.sim, action)
                 self.sim.step()
-            print("good2")
 
             pos_ctrl = self.sim.data.get_site_xpos('robot0:grip')
             rot_ctrl = np.array([0.5, 0.5, 0.5, -0.5])
             gripper_ctrl = np.array([-1, -1])
             action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
             utils.mocap_set_action_abs(self.sim, action)
-            print("good3")
 
     def _get_obs(self):
         # images
