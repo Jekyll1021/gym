@@ -132,11 +132,15 @@ class DoorOpenEnv(robot_env.RobotEnv):
                 self.sim.step()
 
             pos_ctrl = self.sim.data.get_site_xpos('robot0:grip')
-            rot_ctrl = np.array([0.5, 0.5, 0.5, -0.5])
+            rot_init = np.array([0.7071068, 0.0, 0.7071068, 0])
+            rot_target = np.array([0.5, 0.5, 0.5, -0.5])
             gripper_ctrl = np.array([-1, -1])
-            action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
-            utils.mocap_set_action_abs(self.sim, action)
-            print(self.sim.data.get_site_xpos('handletip'))
+            for i in range(20):
+                rot_ctrl = rot_init + (rot_target - rot_init) * (i+1) / 20
+                action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
+                utils.mocap_set_action_abs(self.sim, action)
+                self.sim.step()
+                print(self.sim.data.get_site_xpos('handletip'))
 
     def _get_obs(self):
         # images
