@@ -236,6 +236,8 @@ class DoorOpenEnv(robot_env.RobotEnv):
             if norm < 0.03:
                 offset = offset / norm * 0.03
         body_pose = self.initial_gripper_xpos[:2] + offset
+        print(body_pose)
+        print(self.initial_gripper_xpos)
         self.sim.model.body_pos[-1][0] = body_pose[0]
         self.sim.model.body_pos[-1][1] = body_pose[1]
         object_qpos = self.sim.data.get_joint_qpos('switch')
