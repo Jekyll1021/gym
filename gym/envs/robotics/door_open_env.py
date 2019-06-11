@@ -238,8 +238,10 @@ class DoorOpenEnv(robot_env.RobotEnv):
 
         table_qpos = self.sim.data.get_joint_qpos('table:joint')
         assert table_qpos.shape == (7,)
+        print(table_qpos)
         table_qpos[0] = self.initial_gripper_xpos[0] + offset[0]
         table_qpos[1] = self.initial_gripper_xpos[1] + offset[1]
+        print(table_qpos)
         self.sim.data.set_joint_qpos('table:joint', table_qpos)
 
         self.sim.data.set_joint_qpos('switch', 0)
