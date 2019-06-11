@@ -127,7 +127,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
             # offset = obs_pos - grip_pos
             # print(offset, np.linalg.norm(offset, axis = -1))
 
-            for _ in range(20):
+            for _ in range(10):
                 utils.ctrl_set_action(self.sim, action)
                 self.sim.step()
 
