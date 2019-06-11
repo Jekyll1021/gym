@@ -113,7 +113,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
 
         utils.mocap_set_action(self.sim, action)
 
-        if self.counter >= 5:
+        if self.counter >= 2:
             self.sim.step()
             pos_ctrl = np.array([0.0, 0.0, 0.0])
             gripper_ctrl = np.array([-1, -1])
