@@ -115,7 +115,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
 
         if self.counter >= 2:
             self.sim.step()
-            pos_ctrl = np.array([0.15, 0.0, 0.0])
+            pos_ctrl = np.array([0.0, 0.15, 0.0])
             gripper_ctrl = np.array([0, 0])
             action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
             utils.ctrl_set_action(self.sim, action)
