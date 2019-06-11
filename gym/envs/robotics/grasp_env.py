@@ -249,6 +249,11 @@ class GraspEnv(robot_env.RobotEnv):
     def _reset_sim(self):
         self.sim.set_state(self.initial_state)
 
+        action = np.array([0,0,0,1,0,1,0,1,1])
+        for _ in range(10):
+            utils.ctrl_set_action(self.sim, action)
+            self.sim.step()
+
         if self.random_obj:
             self.sim.model.geom_type[-1] = np.random.choice(2) + 5
 
@@ -267,8 +272,8 @@ class GraspEnv(robot_env.RobotEnv):
         else:
             offset = self.np_random.uniform(-self.obj_range, self.obj_range, size=2)
             norm = np.linalg.norm(offset, axis=-1)
-            if norm < 0.03:
-                offset = offset / norm * 0.03
+            if norm < 0.05:
+                offset = offset / norm * 0.05
         object_xpos = self.initial_gripper_xpos[:2] + offset
         object_qpos = self.sim.data.get_joint_qpos('object0:joint')
         assert object_qpos.shape == (7,)
@@ -276,10 +281,6 @@ class GraspEnv(robot_env.RobotEnv):
         self.sim.data.set_joint_qpos('object0:joint', object_qpos)
 
         self.sim.forward()
-        action = np.array([0,0,0,1,0,1,0,1,1])
-        for _ in range(10):
-            utils.ctrl_set_action(self.sim, action)
-            self.sim.step()
         return True
 
     def _sample_goal(self):
@@ -289,7 +290,7 @@ class GraspEnv(robot_env.RobotEnv):
         return goal.copy()# - self.sim.data.get_site_xpos("robot0:cam")
 
     def _is_done(self):
-        return self.is_done
+        return False
 
     def _is_success(self, achieved_goal, desired_goal):
         return (achieved_goal[2] > self.distance_threshold + self.height_offset).astype(np.float32)
@@ -311,7 +312,7 @@ class GraspEnv(robot_env.RobotEnv):
         if self.gripper_init_type != "fixed":
             init_disturbance = np.array([self.np_random.uniform(-0.15, 0.15), self.np_random.uniform(-0.15, 0.15), -0.07])
         else:
-            init_disturbance = np.array([0, 0, 0])
+            init_disturbance = np.array([0, 0, -0.07])
         gripper_target = np.array([-0.498, 0.005, -0.431 + self.gripper_extra_height]) + init_disturbance + self.sim.data.get_site_xpos('robot0:grip')
         gripper_rotation = np.array([1., 0., 1., 0.])
         self.sim.data.set_mocap_pos('robot0:mocap', gripper_target)
