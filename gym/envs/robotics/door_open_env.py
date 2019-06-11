@@ -32,7 +32,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
             goal_type ('random' or 'fixed'): the goal type, i.e. random goal position or fixed goal position
         """
         self.gripper_extra_height = gripper_extra_height
-        self.block_gripper = block_gripper
+        self.block_gripper = True
         self.target_in_the_air = target_in_the_air
         self.target_offset = target_offset
         self.obj_range = obj_range
@@ -114,13 +114,14 @@ class DoorOpenEnv(robot_env.RobotEnv):
         utils.mocap_set_action(self.sim, action)
 
         if self.counter >= 2:
-            self.sim.step()
-            pos_ctrl = np.array([0.0, 0.2, 0.0])
-            gripper_ctrl = np.array([0, 0])
-            action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
-            utils.ctrl_set_action(self.sim, action)
-            utils.mocap_set_action(self.sim, action)
-            self.sim.step()
+            for _ in range(10):
+                self.sim.step()
+                pos_ctrl = np.array([0.0, 0.02, 0.0])
+                gripper_ctrl = np.array([0, 0])
+                action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
+                utils.ctrl_set_action(self.sim, action)
+                utils.mocap_set_action(self.sim, action)
+                self.sim.step()
 
     def _get_obs(self):
         # images
