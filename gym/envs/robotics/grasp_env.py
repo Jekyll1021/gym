@@ -216,7 +216,7 @@ class GraspEnv(robot_env.RobotEnv):
         # ])
         if self.use_task_index:
             obs = np.concatenate([
-                counter, [1, 0]
+                counter, [1, 0, 0]
             ])
         else:
             obs = counter

@@ -200,7 +200,7 @@ class PegInsertEnv(robot_env.RobotEnv):
         # ])
         if self.use_task_index:
             obs = np.concatenate([
-                counter, [0, 1]
+                counter, [0, 1, 0]
             ])
         else:
             obs = counter
