@@ -189,7 +189,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
         # ])
         if self.use_task_index:
             obs = np.concatenate([
-                counter, [1, 0]
+                counter, [0, 0, 1]
             ])
         else:
             obs = counter
