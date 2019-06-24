@@ -241,7 +241,7 @@ class PegInsertEnv(robot_env.RobotEnv):
             self.sim.model.geom_type[-1] = shape
 
             min_color_diff = 0
-            while min_color_diff < 0.2:
+            while min_color_diff < 0.1:
                 rgba = np.random.uniform(0, 0.5, size=3)
                 if self.train_random:
                     rgba[2] = 1

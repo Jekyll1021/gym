@@ -231,7 +231,7 @@ class DoorOpenEnv(robot_env.RobotEnv):
             self.sim.model.geom_type[-1] = np.random.choice(2) + 5
 
             min_color_diff = 0
-            while min_color_diff < 0.2:
+            while min_color_diff < 0.1:
                 rgba = np.random.uniform(0, 0.5, size=3)
                 if self.train_random:
                     rgba[0] = 1
