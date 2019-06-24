@@ -14,7 +14,8 @@ class PushEnv(robot_env.RobotEnv):
         self, model_path, n_substeps, gripper_extra_height, block_gripper,
         target_in_the_air, target_offset, obj_range, target_range,
         distance_threshold, initial_qpos, reward_type, goal_type, cam_type,
-        gripper_init_type, act_noise, obs_noise, depth, two_cam, use_task_index, random_obj
+        gripper_init_type, act_noise, obs_noise, depth, two_cam, use_task_index,
+        random_obj, train_random, test_random
     ):
         """Initializes a new Fetch environment.
 
@@ -51,6 +52,8 @@ class PushEnv(robot_env.RobotEnv):
         self.two_cam = two_cam
         self.use_task_index = use_task_index
         self.random_obj = random_obj
+        self.train_random = train_random
+        self.test_random = test_random
 
         # if self.act_noise:
         #     noise_vector = np.random.uniform(-1.0, 1.0, 3)

@@ -10,7 +10,8 @@ class GraspEnv(robot_env.RobotEnv):
         self, model_path, n_substeps, gripper_extra_height, block_gripper,
         target_in_the_air, target_offset, obj_range, target_range,
         distance_threshold, initial_qpos, reward_type, goal_type, cam_type,
-        gripper_init_type, act_noise, obs_noise, depth, two_cam, use_task_index, random_obj
+        gripper_init_type, act_noise, obs_noise, depth, two_cam, use_task_index,
+        random_obj, train_random, test_random
     ):
         """Initializes a new Fetch environment.
         Args:
@@ -46,6 +47,8 @@ class GraspEnv(robot_env.RobotEnv):
         self.two_cam = two_cam
         self.use_task_index = use_task_index
         self.random_obj = random_obj
+        self.train_random = train_random
+        self.test_random = test_random
 
         self.is_done = False
 
@@ -259,12 +262,21 @@ class GraspEnv(robot_env.RobotEnv):
 
             min_color_diff = 0
             while min_color_diff < 0.2:
-                rgba = np.random.uniform(size=3)
+                rgba = np.random.uniform(0, 0.5, size=3)
+                if self.train_random:
+                    rgba[1] = 1
+                    size = np.random.uniform(0.02, 0.025, size=3)
+                elif self.test_random:
+                    rgba[0] = 1
+                    size = np.random.uniform(0.025, 0.03, size=3)
+                else:
+                    rgba *= 2
+                    size = np.random.uniform(0.02, 0.03, size=3)
                 color_diff = np.abs(self.sim.model.geom_rgba.copy()[:-1, :3] - rgba)
                 min_color_diff = min(np.sum(color_diff, axis=1))
             self.sim.model.geom_rgba[-1][:3] = rgba
 
-            self.sim.model.geom_size[-1] = np.random.uniform(0.02, 0.03, size=3)
+            self.sim.model.geom_size[-1] = size
 
         # Randomize start position of object.
         if self.goal_type == "fixed":

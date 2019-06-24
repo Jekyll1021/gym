@@ -8,7 +8,7 @@ MODEL_XML_PATH = os.path.join('fetch', 'peg_insert.xml')
 
 
 class CamPegInsertEnv(peg_insert_env.PegInsertEnv, utils.EzPickle):
-    def __init__(self, reward_type='sparse', goal_type='fixed', cam_type='fixed', gripper_init_type='fixed', act_noise=False, obs_noise=False, depth=False, two_cam=False, use_task_index=False, random_obj=False):
+    def __init__(self, reward_type='sparse', goal_type='fixed', cam_type='fixed', gripper_init_type='fixed', act_noise=False, obs_noise=False, depth=False, two_cam=False, use_task_index=False, random_obj=False, train_random=False, test_random=False):
         initial_qpos = {
             'robot0:slide0': 0.405,
             'robot0:slide1': 0.48,
@@ -20,5 +20,5 @@ class CamPegInsertEnv(peg_insert_env.PegInsertEnv, utils.EzPickle):
             gripper_extra_height=0.0, target_in_the_air=False, target_offset=0.0,
             obj_range=0.03, target_range=0.15, distance_threshold=0.02,
             initial_qpos=initial_qpos, reward_type=reward_type, goal_type=goal_type,
-            cam_type=cam_type, gripper_init_type=gripper_init_type, act_noise=act_noise, obs_noise=obs_noise, depth=depth, two_cam=two_cam, use_task_index=use_task_index, random_obj=random_obj)
+            cam_type=cam_type, gripper_init_type=gripper_init_type, act_noise=act_noise, obs_noise=obs_noise, depth=depth, two_cam=two_cam, use_task_index=use_task_index, random_obj=random_obj, train_random=train_random, test_random=test_random)
         utils.EzPickle.__init__(self)
