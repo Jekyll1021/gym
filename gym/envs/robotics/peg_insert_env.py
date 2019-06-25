@@ -268,10 +268,10 @@ class PegInsertEnv(robot_env.RobotEnv):
         if self.goal_type == "fixed":
             offset = np.array([0.02, 0.02])
         else:
-            if limit_dir:
-                if train_random:
+            if self.limit_dir:
+                if self.train_random:
                     offset = np.array([self.np_random.uniform(0, self.obj_range), self.np_random.uniform(-self.obj_range, self.obj_range)])
-                elif test_random:
+                elif self.test_random:
                     offset = np.array([self.np_random.uniform(-self.obj_range, 0), self.np_random.uniform(-self.obj_range, self.obj_range)])
             else:
                 offset = self.np_random.uniform(-self.obj_range, self.obj_range, size=2)
