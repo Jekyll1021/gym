@@ -11,7 +11,7 @@ class GraspEnv(robot_env.RobotEnv):
         target_in_the_air, target_offset, obj_range, target_range,
         distance_threshold, initial_qpos, reward_type, goal_type, cam_type,
         gripper_init_type, act_noise, obs_noise, depth, two_cam, use_task_index,
-        random_obj, train_random, test_random
+        random_obj, train_random, test_random, limit_dir
     ):
         """Initializes a new Fetch environment.
         Args:
@@ -49,6 +49,7 @@ class GraspEnv(robot_env.RobotEnv):
         self.random_obj = random_obj
         self.train_random = train_random
         self.test_random = test_random
+        self.limit_dir = limit_dir
 
         self.is_done = False
 
@@ -282,7 +283,13 @@ class GraspEnv(robot_env.RobotEnv):
         if self.goal_type == "fixed":
             offset = np.array([0.02, 0.02])
         else:
-            offset = self.np_random.uniform(-self.obj_range, self.obj_range, size=2)
+            if limit_dir:
+                if train_random:
+                    offset = np.array([self.np_random.uniform(-self.obj_range, 0), self.np_random.uniform(-self.obj_range, self.obj_range)])
+                elif test_random:
+                    offset = np.array([self.np_random.uniform(0, self.obj_range), self.np_random.uniform(-self.obj_range, self.obj_range)])
+            else:
+                offset = self.np_random.uniform(-self.obj_range, self.obj_range, size=2)
             norm = np.linalg.norm(offset, axis=-1)
             if norm < 0.05:
                 offset = offset / norm * 0.05
