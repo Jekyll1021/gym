@@ -413,10 +413,18 @@ for reward_type in ['sparse', 'dense']:
         max_episode_steps=2,
     )
 
-    # Door Open
+    # slide
     register(
         id='Slide{}-v0'.format(suffix),
         entry_point='gym.envs.robotics:CamSlideEnv',
+        kwargs=kwargs,
+        max_episode_steps=2,
+    )
+
+    # Drawer open
+    register(
+        id='Drawer{}-v0'.format(suffix),
+        entry_point='gym.envs.robotics:CamDrawerOpenEnv',
         kwargs=kwargs,
         max_episode_steps=2,
     )
