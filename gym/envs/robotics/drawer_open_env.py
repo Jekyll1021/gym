@@ -320,7 +320,7 @@ class DrawerOpenEnv(robot_env.RobotEnv):
 
         # Extract information for sampling goals.
         self.initial_gripper_xpos = self.sim.data.get_site_xpos('robot0:grip').copy()
-        self.height_offset = self.sim.data.get_site_xpos('object0')[2]
+        self.height_offset = self.sim.data.get_site_xpos('switch')[2]
 
     def render(self, mode='rgd_array', width=500, height=500):
         return super(DrawerOpenEnv, self).render(mode, width, height)
