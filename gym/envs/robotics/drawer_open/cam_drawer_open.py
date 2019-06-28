@@ -17,7 +17,7 @@ class CamDrawerOpenEnv(drawer_open_env.DrawerOpenEnv, utils.EzPickle):
         }
         drawer_open_env.DrawerOpenEnv.__init__(
             self, MODEL_XML_PATH, block_gripper=False, n_substeps=50,
-            gripper_extra_height=0.0, target_in_the_air=False, target_offset=0.0,
+            gripper_extra_height=0.2, target_in_the_air=False, target_offset=0.0,
             obj_range=0.03, target_range=0.15, distance_threshold=0.02,
             initial_qpos=initial_qpos, reward_type=reward_type, goal_type=goal_type,
             cam_type=cam_type, gripper_init_type=gripper_init_type, act_noise=act_noise, obs_noise=obs_noise, depth=depth, two_cam=two_cam, use_task_index=use_task_index, random_obj=random_obj, train_random=train_random, test_random=test_random, limit_dir=limit_dir)
