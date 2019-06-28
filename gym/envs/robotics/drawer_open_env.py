@@ -273,6 +273,7 @@ class DrawerOpenEnv(robot_env.RobotEnv):
             if norm < 0.05:
                 offset = offset / norm * 0.05
         object_xpos = self.initial_gripper_xpos[:2] + offset
+        object_xpos[1] -= 0.2
         object_qpos = self.sim.data.get_joint_qpos('drawer:joint')
         assert object_qpos.shape == (7,)
         object_qpos[:2] = object_xpos
