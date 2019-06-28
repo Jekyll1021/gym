@@ -137,7 +137,7 @@ class DrawerOpenEnv(robot_env.RobotEnv):
                 utils.ctrl_set_action(self.sim, action)
                 self.sim.step()
 
-            pos_ctrl = np.array([0.0, 0.0, 0.2])
+            pos_ctrl = np.array([0.0, 0.2, 0.0])
             gripper_ctrl = np.array([-1, -1])
             action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
             utils.ctrl_set_action(self.sim, action)
@@ -284,7 +284,7 @@ class DrawerOpenEnv(robot_env.RobotEnv):
 
     def _sample_goal(self):
         goal = self.sim.data.get_site_xpos('switch').copy()
-        goal[2] += 0.1
+        goal[1] += 0.2
 
         return goal.copy()# - self.sim.data.get_site_xpos("robot0:cam")
 
