@@ -90,7 +90,7 @@ class DrawerOpenEnv(robot_env.RobotEnv):
 
     def compute_reward(self, achieved_goal, goal, info):
         # Compute distance between goal and the achieved goal.
-        return (goal_distance(achieved_goal, desired_goal) < 0.05).astype(np.float32)
+        return (goal_distance(achieved_goal, goal) < 0.05).astype(np.float32)
 
     # RobotEnv methods
     # ----------------------------
