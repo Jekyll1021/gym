@@ -86,10 +86,7 @@ class DrawerOpenEnv(robot_env.RobotEnv):
 
     def compute_reward(self, achieved_goal, goal, info):
         # Compute distance between goal and the achieved goal.
-        if len(achieved_goal.shape) <= 1:
-            return (achieved_goal[2] > self.distance_threshold + self.height_offset).astype(np.float32)
-        else:
-            return (achieved_goal[: ,2] > self.distance_threshold + self.height_offset).astype(np.float32)
+        return (goal_distance(achieved_goal, desired_goal) < 0.05).astype(np.float32)
 
     # RobotEnv methods
     # ----------------------------
@@ -286,7 +283,7 @@ class DrawerOpenEnv(robot_env.RobotEnv):
 
     def _sample_goal(self):
         goal = self.sim.data.get_site_xpos('switch').copy()
-        goal[1] += 0.2
+        goal[1] += 0.15
 
         return goal.copy()# - self.sim.data.get_site_xpos("robot0:cam")
 
@@ -294,7 +291,7 @@ class DrawerOpenEnv(robot_env.RobotEnv):
         return False
 
     def _is_success(self, achieved_goal, desired_goal):
-        return (achieved_goal[2] > self.distance_threshold + self.height_offset).astype(np.float32)
+        return (goal_distance(achieved_goal, desired_goal) < 0.05).astype(np.float32)
 
     def _env_setup(self, initial_qpos):
         for name, value in initial_qpos.items():
