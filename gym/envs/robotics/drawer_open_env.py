@@ -137,11 +137,12 @@ class DrawerOpenEnv(robot_env.RobotEnv):
                 utils.ctrl_set_action(self.sim, action)
                 self.sim.step()
 
-            pos_ctrl = np.array([0.0, 0.1, 0.0])
-            gripper_ctrl = np.array([-1, -1])
-            action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
-            utils.ctrl_set_action(self.sim, action)
-            utils.mocap_set_action(self.sim, action)
+            for _ in range(10):
+                pos_ctrl = np.array([0.0, 0.02, 0.0])
+                gripper_ctrl = np.array([-1, -1])
+                action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
+                utils.ctrl_set_action(self.sim, action)
+                utils.mocap_set_action(self.sim, action)
 
     def _get_obs(self):
         # images
