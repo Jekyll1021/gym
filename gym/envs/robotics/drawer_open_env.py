@@ -2,6 +2,10 @@ import numpy as np
 
 from gym.envs.robotics import rotations, robot_env, utils
 
+def goal_distance(goal_a, goal_b):
+    assert goal_a.shape == goal_b.shape
+    return np.linalg.norm(goal_a - goal_b, axis=-1)
+
 class DrawerOpenEnv(robot_env.RobotEnv):
     """Superclass for all Fetch environments with camera input.
     """
