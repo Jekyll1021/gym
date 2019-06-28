@@ -143,6 +143,7 @@ class DrawerOpenEnv(robot_env.RobotEnv):
                 action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
                 utils.ctrl_set_action(self.sim, action)
                 utils.mocap_set_action(self.sim, action)
+                self.sim.step()
 
     def _get_obs(self):
         # images
