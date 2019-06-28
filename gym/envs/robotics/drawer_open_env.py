@@ -286,7 +286,7 @@ class DrawerOpenEnv(robot_env.RobotEnv):
 
     def _sample_goal(self):
         goal = self.sim.data.get_site_xpos('switch').copy()
-        goal[1] += 0.1
+        goal[1] += 0.2
 
         return goal.copy()# - self.sim.data.get_site_xpos("robot0:cam")
 
