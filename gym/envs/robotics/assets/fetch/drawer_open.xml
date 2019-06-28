@@ -25,12 +25,12 @@
 
 		<body name="drawer" pos="0 0 0.37">
 			<joint name="drawer:joint" type="free" damping="0.01"></joint>
-			<geom size="0.01 0.16 0.07" pos="0.12 0 0" type="box" mass="2000" material="table_mat"></geom>
-			<geom size="0.01 0.16 0.07" pos="-0.12 0 0" type="box" mass="2000" material="table_mat"></geom>
-			<geom size="0.14 0.01 0.07" pos="0 -0.17 0" type="box" mass="2000" material="table_mat"></geom>
+			<geom size="0.01 0.14 0.07" pos="0.12 0 0" type="box" mass="2000" material="table_mat"></geom>
+			<geom size="0.01 0.14 0.07" pos="-0.12 0 0" type="box" mass="2000" material="table_mat"></geom>
+			<geom size="0.14 0.01 0.07" pos="0 -0.14 0" type="box" mass="2000" material="table_mat"></geom>
 			<body name="drawer_box" pos="0 0 0">
 		    <joint name="drawer" type="slide" pos="0 0 0" axis="0 1 0" range="0 0.2" limited="true" damping="5" frictionloss="50"></joint>
-				<geom size="0.1 0.16 0.07" pos="0 0 0" type="box" mass="2" material="table2_mat"></geom>
+				<geom size="0.1 0.14 0.07" pos="0 0 0" type="box" mass="2" material="table2_mat"></geom>
 		    <geom size="0.1 0.02 0.02" pos="0 0.2 0.03" type="box" mass="2" material="block_mat"></geom>
 				<geom size="0.02 0.05 0.02" pos="0.06 0.15 0.03" type="box" mass="2" material="block_mat"></geom>
 				<geom size="0.02 0.05 0.02" pos="-0.06 0.15 0.03" type="box" mass="2" material="block_mat"></geom>
