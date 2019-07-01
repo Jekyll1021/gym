@@ -326,9 +326,9 @@ class InversePegInsertEnv(robot_env.RobotEnv):
             utils.ctrl_set_action(self.sim, action)
             self.sim.step()
 
-        # pos_ctrl = self.initial_gripper_xpos.copy()
-        # action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
-        # utils.mocap_set_action_abs(self.sim, action)
+        pos_ctrl = self.initial_gripper_xpos.copy()
+        action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
+        utils.mocap_set_action_abs(self.sim, action)
 
         return True
 
