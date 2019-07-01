@@ -321,7 +321,7 @@ class InversePegInsertEnv(robot_env.RobotEnv):
 
         utils.mocap_set_action_abs(self.sim, action)
 
-        action = np.array([0, 0, 0, 1, 0, 1, 0, -1, -1])
+        action = np.array([0, 0, 0, 0.5, 0.5, 0.5, -0.5, -1, -1])
         for _ in range(20):
             utils.ctrl_set_action(self.sim, action)
             self.sim.step()
