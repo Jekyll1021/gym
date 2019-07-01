@@ -429,6 +429,14 @@ for reward_type in ['sparse', 'dense']:
         max_episode_steps=2,
     )
 
+    # inverse peg insertion
+    register(
+        id='InversePegInsert{}-v0'.format(suffix),
+        entry_point='gym.envs.robotics:CamInversePegInsertEnv',
+        kwargs=kwargs,
+        max_episode_steps=2,
+    )
+
     # Hand
     register(
         id='HandReach{}-v0'.format(suffix),

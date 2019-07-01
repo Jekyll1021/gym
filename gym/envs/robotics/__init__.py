@@ -29,6 +29,8 @@ from gym.envs.robotics.slide.cam_slide import CamSlideEnv
 
 from gym.envs.robotics.drawer_open.cam_drawer_open import CamDrawerOpenEnv
 
+from gym.envs.robotics.inverse_peg_insertion.cam_inverse_peg_insertion import CamInversePegInsertEnv
+
 from gym.envs.robotics.hand.manipulate_touch_sensors import HandBlockTouchSensorsEnv
 from gym.envs.robotics.hand.manipulate_touch_sensors import HandEggTouchSensorsEnv
 from gym.envs.robotics.hand.manipulate_touch_sensors import HandPenTouchSensorsEnv
