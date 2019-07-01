@@ -24,7 +24,7 @@
 			<geom size="0.25 0.5 0.2" type="box" mass="2000" material="table_mat"></geom>
 			<body name="switch" pos="0 0 0.2">
 		    <joint name="switch" type="slide" pos="0 0 0" axis="0 1 0" range="0 0.2" damping="5" frictionloss="50"></joint>
-		    <geom size="0.025 0.025 0.025" pos="0 0 0" type="box" mass="2" material="block_mat"></geom>
+		    <geom size="0.025 0.025 0.05" pos="0 0 0" type="box" mass="2" material="block_mat"></geom>
 				<site name="switch" pos="0 0 0" size="0.03 0.03 0.03" rgba="0 1 0 0" type="sphere"></site>
 			</body>
     </body>
