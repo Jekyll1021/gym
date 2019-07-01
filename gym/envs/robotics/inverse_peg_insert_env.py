@@ -296,7 +296,7 @@ class InversePegInsertEnv(robot_env.RobotEnv):
         self.sim.forward()
 
         # move gripper to grasp box
-        rot_ctrl = [1., 0., 1., 0.]  # fixed rotation of the end effector, expressed as a quaternion
+        rot_ctrl = [0.5, 0.5, 0.5, -0.5]  # fixed rotation of the end effector, expressed as a quaternion
         gripper_ctrl = np.array([1, 1])
         pos_ctrl = np.array([0, 0, 0])
         action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
@@ -355,8 +355,6 @@ class InversePegInsertEnv(robot_env.RobotEnv):
             delta_rot = self.np_random.uniform(-0.05, 0.05, size=3)
             utils.cam_init_pos(self.sim, delta_pos, delta_rot)
 
-        self.sim.forward()
-
         # Move end effector into position.
         if self.gripper_init_type != "fixed":
             init_disturbance = np.array([self.np_random.uniform(-0.15, 0.15), self.np_random.uniform(-0.15, 0.15), 0.2])
@@ -366,6 +364,7 @@ class InversePegInsertEnv(robot_env.RobotEnv):
         gripper_rotation = np.array([0.5, 0.5, 0.5, -0.5])
         self.sim.data.set_mocap_pos('robot0:mocap', gripper_target)
         self.sim.data.set_mocap_quat('robot0:mocap', gripper_rotation)
+        self.sim.forward()
         for _ in range(10):
             self.sim.step()
 
