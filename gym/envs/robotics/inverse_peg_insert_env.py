@@ -283,7 +283,7 @@ class InversePegInsertEnv(robot_env.RobotEnv):
                 offset = offset / norm * 0.05
         hole_qpos = self.sim.data.get_joint_qpos('peg:joint')
         assert hole_qpos.shape == (7,)
-        hole_qpos[0] = hole_qpos[0] + offset[0]
+        hole_qpos[0] = hole_qpos[0] + offset[0] + 0.06
         hole_qpos[1] = hole_qpos[1] + offset[1]
         self.sim.data.set_joint_qpos('peg:joint', hole_qpos)
 
