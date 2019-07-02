@@ -314,7 +314,7 @@ class InversePegInsertEnv(robot_env.RobotEnv):
         box_pose = self.sim.data.get_site_xpos('object0').copy()
         pos_ctrl = box_pose.copy()
         pos_ctrl[0] = box_pose[0]-0.06
-        pos_ctrl[2] = box_pose[2] + 0.08
+        pos_ctrl[2] = box_pose[2] + 0.02
 
         action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
 
