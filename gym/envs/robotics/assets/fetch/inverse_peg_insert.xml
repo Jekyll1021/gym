@@ -29,7 +29,6 @@
 		</body>
 
 		<body pos="1.3 0.75 0.39" name="peg_holder">
-			<joint name="peg:joint" type="free" damping="0.01"></joint>
 			<geom pos="0 0 0" size="0.025 0.025 0.05" type="box" mass="2000" material="block_mat"></geom>
 			<site name="peg_holder" pos="0 0 -0.04" size="0.02 0.02 0.02" rgba="1 0 0 0" type="sphere"></site>
 		</body>
