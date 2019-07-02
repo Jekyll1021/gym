@@ -107,7 +107,7 @@ class InversePegInsertEnv(robot_env.RobotEnv):
         pos_ctrl = action[:3]
 
         pos_ctrl *= 0.05  # limit maximum change in position
-        rot_ctrl = [1, 0, 1, 0]  # fixed rotation of the end effector, expressed as a quaternion
+        rot_ctrl = [0.5, 0.5, 0.5, -0.5]  # fixed rotation of the end effector, expressed as a quaternion
         gripper_ctrl = np.array([-1, -1])
         assert gripper_ctrl.shape == (2,)
         action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
@@ -118,7 +118,7 @@ class InversePegInsertEnv(robot_env.RobotEnv):
 
         if self.counter >= 2:
         # if np.linalg.norm(pos_ctrl, axis=-1) < 0.025:
-            action = np.array([0, 0, -0.05, 1, 0, 1, 0, -1, -1])
+            action = np.array([0, 0, -0.05, 0.5, 0.5, 0.5, -0.5, -1, -1])
             utils.mocap_set_action(self.sim, action)
 
     def _get_obs(self):
@@ -293,7 +293,7 @@ class InversePegInsertEnv(robot_env.RobotEnv):
         self.sim.forward()
 
         # move gripper to grasp box
-        rot_ctrl = [1, 0, 1, 0]  # fixed rotation of the end effector, expressed as a quaternion
+        rot_ctrl = [0.5, 0.5, 0.5, -0.5]  # fixed rotation of the end effector, expressed as a quaternion
         gripper_ctrl = np.array([1, 1])
         pos_ctrl = np.array([0, 0, 0])
         action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
@@ -320,7 +320,7 @@ class InversePegInsertEnv(robot_env.RobotEnv):
 
         utils.mocap_set_action_abs(self.sim, action)
 
-        action = np.array([0, 0, 0, 1, 0, 1, 0, -1, -1])
+        action = np.array([0, 0, 0, 0.5, 0.5, 0.5, -0.5, -1, -1])
         for _ in range(20):
             utils.ctrl_set_action(self.sim, action)
             self.sim.step()
@@ -360,7 +360,7 @@ class InversePegInsertEnv(robot_env.RobotEnv):
         else:
             init_disturbance = np.array([0, 0, 0])
         gripper_target = np.array([-0.498, 0.005, -0.431 + self.gripper_extra_height]) + init_disturbance + self.sim.data.get_site_xpos('robot0:grip')
-        gripper_rotation = np.array([1, 0, 1, 0])
+        gripper_rotation = np.array([0.5, 0.5, 0.5, -0.5])
         self.sim.data.set_mocap_pos('robot0:mocap', gripper_target)
         self.sim.data.set_mocap_quat('robot0:mocap', gripper_rotation)
         self.sim.forward()
