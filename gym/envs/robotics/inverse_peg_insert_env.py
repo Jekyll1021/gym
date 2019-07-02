@@ -354,9 +354,9 @@ class InversePegInsertEnv(robot_env.RobotEnv):
 
         # Move end effector into position.
         if self.gripper_init_type != "fixed":
-            init_disturbance = np.array([self.np_random.uniform(-0.15, 0.15), self.np_random.uniform(-0.15, 0.15), 0.2])
+            init_disturbance = np.array([self.np_random.uniform(-0.15, 0.15), self.np_random.uniform(-0.15, 0.15), 0])
         else:
-            init_disturbance = np.array([0, 0, 0.2])
+            init_disturbance = np.array([0, 0, 0])
         gripper_target = np.array([-0.498, 0.005, -0.431 + self.gripper_extra_height]) + init_disturbance + self.sim.data.get_site_xpos('robot0:grip')
         gripper_rotation = np.array([0.5, 0.5, 0.5, -0.5])
         self.sim.data.set_mocap_pos('robot0:mocap', gripper_target)
