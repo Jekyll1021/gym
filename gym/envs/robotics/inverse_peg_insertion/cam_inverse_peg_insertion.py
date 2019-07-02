@@ -13,7 +13,7 @@ class CamInversePegInsertEnv(inverse_peg_insert_env.InversePegInsertEnv, utils.E
             'robot0:slide0': 0.405,
             'robot0:slide1': 0.48,
             'robot0:slide2': 0.0,
-            'object0:joint': [1.25, 0.53, 0.39, 1., 0., 0., 0.],
+            'object0:joint': [1.25, 0.53, 0.42, 1., 0., 0., 0.],
         }
         inverse_peg_insert_env.InversePegInsertEnv.__init__(
             self, MODEL_XML_PATH, block_gripper=False, n_substeps=20,
