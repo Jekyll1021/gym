@@ -107,7 +107,7 @@ class InversePegInsertEnv(robot_env.RobotEnv):
         pos_ctrl = action[:3]
 
         pos_ctrl *= 0.05  # limit maximum change in position
-        rot_ctrl = [1., 0., 1., 0.]  # fixed rotation of the end effector, expressed as a quaternion
+        rot_ctrl = [0.5, 0.5, 0.5, -0.5]  # fixed rotation of the end effector, expressed as a quaternion
         gripper_ctrl = np.array([-1, -1])
         assert gripper_ctrl.shape == (2,)
         action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
@@ -118,11 +118,8 @@ class InversePegInsertEnv(robot_env.RobotEnv):
 
         if self.counter >= 2:
         # if np.linalg.norm(pos_ctrl, axis=-1) < 0.025:
-            action = np.array([0,0,-0.05,1,0,1,0,1,1])
+            action = np.array([0, 0, -0.05, 0.5, 0.5, 0.5, -0.5, -1, -1])
             utils.mocap_set_action(self.sim, action)
-            for _ in range(5):
-                utils.ctrl_set_action(self.sim, action)
-                self.sim.step()
 
     def _get_obs(self):
         # images
