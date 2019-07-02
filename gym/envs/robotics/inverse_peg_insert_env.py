@@ -120,7 +120,9 @@ class InversePegInsertEnv(robot_env.RobotEnv):
         if self.counter >= 2:
         # if np.linalg.norm(pos_ctrl, axis=-1) < 0.025:
             action = np.array([0, 0, -0.05, 0.5, 0.5, 0.5, -0.5, -1, -1])
-            utils.mocap_set_action(self.sim, action)
+            for _ in range(5):
+                utils.mocap_set_action(self.sim, action)
+                self.sim.step()
             for _ in range(5):
                 utils.ctrl_set_action(self.sim, action)
                 self.sim.step()
@@ -330,6 +332,7 @@ class InversePegInsertEnv(robot_env.RobotEnv):
             self.sim.step()
 
         pos_ctrl = self.initial_gripper_xpos.copy()
+        pos_ctrl[0] -= 0.06
         action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
         utils.mocap_set_action_abs(self.sim, action)
 
