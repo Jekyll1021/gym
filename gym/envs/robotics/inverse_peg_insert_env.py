@@ -2,6 +2,10 @@ import numpy as np
 
 from gym.envs.robotics import rotations, robot_env, utils
 
+def goal_distance(goal_a, goal_b):
+    assert goal_a.shape == goal_b.shape
+    return np.linalg.norm(goal_a - goal_b, axis=-1)
+
 class InversePegInsertEnv(robot_env.RobotEnv):
     """Superclass for all Fetch environments with camera input.
     """
@@ -86,10 +90,7 @@ class InversePegInsertEnv(robot_env.RobotEnv):
     # ----------------------------
 
     def compute_reward(self, achieved_goal, goal, info):
-        if len(achieved_goal.shape) <= 1:
-            return (achieved_goal[2] < self.height_offset).astype(np.float32)
-        else:
-            return (achieved_goal[: ,2] < self.height_offset).astype(np.float32)
+        return (goal_distance(achieved_goal, goal) < 0.05).astype(np.float32)
 
     # RobotEnv methods
     # ----------------------------
@@ -120,6 +121,9 @@ class InversePegInsertEnv(robot_env.RobotEnv):
         # if np.linalg.norm(pos_ctrl, axis=-1) < 0.025:
             action = np.array([0, 0, -0.05, 0.5, 0.5, 0.5, -0.5, -1, -1])
             utils.mocap_set_action(self.sim, action)
+            for _ in range(5):
+                utils.ctrl_set_action(self.sim, action)
+                self.sim.step()
 
     def _get_obs(self):
         # images
@@ -275,11 +279,11 @@ class InversePegInsertEnv(robot_env.RobotEnv):
             norm = np.linalg.norm(offset, axis=-1)
             if norm < 0.05:
                 offset = offset / norm * 0.05
-        # hole_qpos = self.sim.data.get_joint_qpos('table_top:joint')
-        # assert hole_qpos.shape == (7,)
-        # hole_qpos[0] = hole_qpos[0] + offset[0]
-        # hole_qpos[1] = hole_qpos[1] + offset[1]
-        # self.sim.data.set_joint_qpos('table_top:joint', hole_qpos)
+        hole_qpos = self.sim.data.get_joint_qpos('peg:joint')
+        assert hole_qpos.shape == (7,)
+        hole_qpos[0] = hole_qpos[0] + offset[0]
+        hole_qpos[1] = hole_qpos[1] + offset[1]
+        self.sim.data.set_joint_qpos('peg:joint', hole_qpos)
 
         # Randomize start position of object.
         offset = np.array([0.1, 0.1])
@@ -332,16 +336,14 @@ class InversePegInsertEnv(robot_env.RobotEnv):
         return True
 
     def _sample_goal(self):
-        # goal = self.sim.data.get_site_xpos("table_top")
-        # goal[2] = 0.45
-        # return goal.copy()
-        return np.array([0,0,0])
+        goal = self.sim.data.get_site_xpos("peg_holder")
+        return goal.copy()
 
     def _is_done(self):
         return self.is_done
 
     def _is_success(self, achieved_goal, desired_goal):
-        return (achieved_goal[2] < self.height_offset).astype(np.float32)
+        return (goal_distance(achieved_goal, desired_goal) < 0.05).astype(np.float32)
 
     def _env_setup(self, initial_qpos):
         for name, value in initial_qpos.items():
