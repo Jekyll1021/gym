@@ -116,7 +116,7 @@ class PegInsertEnv(robot_env.RobotEnv):
         utils.ctrl_set_action(self.sim, action)
         utils.mocap_set_action(self.sim, action)
 
-        if self.counter >= 5:
+        if self.counter >= 2:
         # if np.linalg.norm(pos_ctrl, axis=-1) < 0.025:
             action = np.array([0,0,-0.05,1,0,1,0,1,1])
             utils.mocap_set_action(self.sim, action)
@@ -276,8 +276,8 @@ class PegInsertEnv(robot_env.RobotEnv):
             else:
                 offset = self.np_random.uniform(-self.obj_range, self.obj_range, size=2)
             norm = np.linalg.norm(offset, axis=-1)
-            if norm < 0.1:
-                offset = offset / norm * 0.1
+            if norm < 0.05:
+                offset = offset / norm * 0.05
         hole_qpos = self.sim.data.get_joint_qpos('table_top:joint')
         assert hole_qpos.shape == (7,)
         hole_qpos[0] = hole_qpos[0] + offset[0]
@@ -285,7 +285,7 @@ class PegInsertEnv(robot_env.RobotEnv):
         self.sim.data.set_joint_qpos('table_top:joint', hole_qpos)
 
         # Randomize start position of object.
-        offset = np.array([0, 0])
+        offset = np.array([0.1, 0.1])
 
         object_xpos = self.initial_gripper_xpos[:2] + offset
         object_qpos = self.sim.data.get_joint_qpos('object0:joint')
@@ -358,7 +358,7 @@ class PegInsertEnv(robot_env.RobotEnv):
 
         # Move end effector into position.
         if self.gripper_init_type != "fixed":
-            init_disturbance = np.array([self.np_random.uniform(-0.15, 0.15), self.np_random.uniform(-0.15, 0.15), 0.2])
+            init_disturbance = np.array([self.np_random.uniform(-0.05, 0.05), self.np_random.uniform(-0.05, 0.05), 0.2])
         else:
             init_disturbance = np.array([0, 0, 0.2])
         gripper_target = np.array([-0.498, 0.005, -0.431 + self.gripper_extra_height]) + init_disturbance + self.sim.data.get_site_xpos('robot0:grip')

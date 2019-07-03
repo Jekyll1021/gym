@@ -20,6 +20,7 @@ from gym.envs.robotics.hand.manipulate import HandEggEnv
 from gym.envs.robotics.hand.manipulate import HandPenEnv
 
 from gym.envs.robotics.grasp.cam_grasp import CamGraspEnv
+from gym.envs.robotics.grasp.cam_grasp_open_to_close import CamGraspOpenToCloseEnv
 
 from gym.envs.robotics.push.cam_push import CamPushEnv
 

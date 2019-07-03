@@ -117,7 +117,7 @@ class SlideEnv(robot_env.RobotEnv):
 
         utils.mocap_set_action(self.sim, action)
 
-        if self.counter >= 5:
+        if self.counter >= 2:
             for _ in range(10):
                 self.sim.step()
                 pos_ctrl = np.array([0.0, 0.02, 0.0])
@@ -264,8 +264,8 @@ class SlideEnv(robot_env.RobotEnv):
             else:
                 offset = np.array([self.np_random.uniform(-self.obj_range, self.obj_range), self.np_random.uniform(0.025-self.obj_range, 0.025+self.obj_range)])
             norm = np.linalg.norm(offset, axis=-1)
-            if norm < 0.1:
-                offset = offset / norm * 0.1
+            if norm < 0.05:
+                offset = offset / norm * 0.05
 
         table_qpos = self.sim.data.get_joint_qpos('table:joint')
         assert table_qpos.shape == (7,)
@@ -307,7 +307,7 @@ class SlideEnv(robot_env.RobotEnv):
 
         # Move end effector into position.
         if self.gripper_init_type != "fixed":
-            init_disturbance = np.array([self.np_random.uniform(-0.15, 0.15), self.np_random.uniform(-0.15, 0.15), 0.2])
+            init_disturbance = np.array([self.np_random.uniform(-0.05, 0.05), self.np_random.uniform(-0.05, 0.05), 0])
         else:
             init_disturbance = np.array([0, 0, 0])
         gripper_target = np.array([-0.498, 0.005, -0.431 + self.gripper_extra_height]) + init_disturbance + self.sim.data.get_site_xpos('robot0:grip')
