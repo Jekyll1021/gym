@@ -402,7 +402,7 @@ for reward_type in ['sparse', 'dense']:
         id='GraspOpenToClose{}-v0'.format(suffix),
         entry_point='gym.envs.robotics:CamGraspOpenToCloseEnv',
         kwargs=kwargs,
-        max_episode_steps=1,
+        max_episode_steps=2,
     )
 
     # push
