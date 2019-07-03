@@ -14,7 +14,7 @@ class CamGraspOpenToCloseEnv(grasp_open_to_close.GraspOpenToCloseEnv, utils.EzPi
             'robot0:slide2': 0.0,
             'object0:joint': [1.25, 0.53, 0.4, 1., 0., 0., 0.],
         }
-        grasp_open_to_close.GraspOpenToCloseEnv.GraspEnv.__init__(
+        grasp_open_to_close.GraspOpenToCloseEnv.__init__(
             self, MODEL_XML_PATH, block_gripper=False, n_substeps=20,
             gripper_extra_height=0.4, target_in_the_air=True, target_offset=0.0,
             obj_range=0.03, target_range=0.15, distance_threshold=0.03,
