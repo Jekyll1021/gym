@@ -119,8 +119,10 @@ class GraspOpenToCloseEnv(robot_env.RobotEnv):
 
         if self.counter <= 1:
             action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
-            utils.mocap_set_action_abs(self.sim, action)
             print(action, self.sim.data.get_site_xpos('robot0:grip'))
+            for _ in range(20):
+                utils.mocap_set_action_abs(self.sim, action)
+                self.sim.step()
             if self.use_close_loop:
                 current_height = self.sim.data.get_site_xpos('robot0:grip')[2]
                 fix_height = 0.46470766
