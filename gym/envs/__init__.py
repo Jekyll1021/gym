@@ -437,6 +437,14 @@ for reward_type in ['sparse', 'dense']:
         max_episode_steps=5,
     )
 
+    # slide open to close
+    register(
+        id='SlideOpenToClose{}-v0'.format(suffix),
+        entry_point='gym.envs.robotics:CamSlideOpenToCloseEnv',
+        kwargs=kwargs,
+        max_episode_steps=3,
+    )
+
     # Drawer open
     register(
         id='Drawer{}-v0'.format(suffix),
