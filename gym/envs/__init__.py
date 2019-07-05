@@ -453,6 +453,14 @@ for reward_type in ['sparse', 'dense']:
         max_episode_steps=2,
     )
 
+    # Drawer open to close
+    register(
+        id='DrawerOpenToClose{}-v0'.format(suffix),
+        entry_point='gym.envs.robotics:CamDrawerOpenToCloseEnv',
+        kwargs=kwargs,
+        max_episode_steps=3,
+    )
+
     # inverse peg insertion
     register(
         id='InversePegInsert{}-v0'.format(suffix),
