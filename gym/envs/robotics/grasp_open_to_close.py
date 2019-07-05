@@ -11,7 +11,7 @@ class GraspOpenToCloseEnv(robot_env.RobotEnv):
         target_in_the_air, target_offset, obj_range, target_range,
         distance_threshold, initial_qpos, reward_type, goal_type, cam_type,
         gripper_init_type, act_noise, obs_noise, depth, two_cam, use_task_index,
-        random_obj, train_random, test_random, limit_dir
+        random_obj, train_random, test_random, limit_dir, use_close_loop
     ):
         """Initializes a new Fetch environment.
         Args:
@@ -50,6 +50,7 @@ class GraspOpenToCloseEnv(robot_env.RobotEnv):
         self.train_random = train_random
         self.test_random = test_random
         self.limit_dir = limit_dir
+        self.use_close_loop = use_close_loop
 
         self.is_done = False
 
@@ -117,9 +118,19 @@ class GraspOpenToCloseEnv(robot_env.RobotEnv):
         # Apply action to simulation.
         # utils.ctrl_set_action(self.sim, action)
 
-        utils.mocap_set_action(self.sim, action)
+        if self.counter <= 1:
+            utils.mocap_set_action_abs(self.sim, action)
+            if self.use_close_loop:
+                current_height = self.sim.data.get_site_xpos('robot0:grip')[2]
+                fix_height = 0.46470766
+                close_init_pos = [0, 0, fix_height-current_height]
+                close_init_ctrl = np.concatenate([close_init_pos, rot_ctrl, gripper_ctrl])
+                utils.mocap_set_action(self.sim, close_init_ctrl)
+                self.sim.step()
+        else:
+            utils.mocap_set_action(self.sim, action)
 
-        if self.counter >= 5:
+        if self.counter >= 3:
         # if np.linalg.norm(pos_ctrl, axis=-1) < 0.025:
             self.sim.step()
             pos_ctrl = np.array([0.0, 0.0, 0.0])
