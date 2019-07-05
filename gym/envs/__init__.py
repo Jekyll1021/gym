@@ -421,6 +421,14 @@ for reward_type in ['sparse', 'dense']:
         max_episode_steps=2,
     )
 
+    # grasp open to close
+    register(
+        id='PegInsertOpenToClose{}-v0'.format(suffix),
+        entry_point='gym.envs.robotics:CamPegInsertOpenToCloseEnv',
+        kwargs=kwargs,
+        max_episode_steps=3,
+    )
+
     # slide
     register(
         id='Slide{}-v0'.format(suffix),

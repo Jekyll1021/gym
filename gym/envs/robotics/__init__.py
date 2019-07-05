@@ -25,6 +25,7 @@ from gym.envs.robotics.grasp.cam_grasp_open_to_close import CamGraspOpenToCloseE
 from gym.envs.robotics.push.cam_push import CamPushEnv
 
 from gym.envs.robotics.peg_insert.peg_insert import CamPegInsertEnv
+from gym.envs.robotics.peg_insert.peg_insert_open_to_close import CamPegInsertOpenToCloseEnv
 
 from gym.envs.robotics.slide.cam_slide import CamSlideEnv
 
