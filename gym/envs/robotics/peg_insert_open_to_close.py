@@ -238,11 +238,6 @@ class PegInsertOpenToCloseEnv(robot_env.RobotEnv):
     def _reset_sim(self):
         self.sim.set_state(self.initial_state)
 
-        action = np.array([0,0,0,1,0,1,0,1,1])
-        for _ in range(10):
-            utils.ctrl_set_action(self.sim, action)
-            self.sim.step()
-
         if self.random_obj:
             shape = np.random.choice(2) + 5
             self.sim.model.geom_type[-1] = shape
