@@ -124,12 +124,13 @@ class GraspOpenToCloseEnv(robot_env.RobotEnv):
                 utils.mocap_set_action_abs(self.sim, action)
                 self.sim.step()
             if self.use_close_loop:
-                current_height = self.sim.data.get_site_xpos('robot0:grip')[2]
-                fix_height = 0.46470766
-                close_init_pos = [0, 0, fix_height-current_height]
-                close_init_ctrl = np.concatenate([close_init_pos, rot_ctrl, gripper_ctrl])
-                utils.mocap_set_action(self.sim, close_init_ctrl)
-                self.sim.step()
+                for _ in range(20):
+                    current_height = self.sim.data.get_site_xpos('robot0:grip')[2]
+                    fix_height = 0.46470766
+                    close_init_pos = [0, 0, fix_height-current_height]
+                    close_init_ctrl = np.concatenate([close_init_pos, rot_ctrl, gripper_ctrl])
+                    utils.mocap_set_action(self.sim, close_init_ctrl)
+                    self.sim.step()
         else:
             pos_ctrl *= 0.05  # limit maximum change in position
             action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
