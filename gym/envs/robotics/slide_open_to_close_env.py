@@ -15,7 +15,7 @@ class SlideOpenToCloseEnv(robot_env.RobotEnv):
         target_in_the_air, target_offset, obj_range, target_range,
         distance_threshold, initial_qpos, reward_type, goal_type, cam_type,
         gripper_init_type, act_noise, obs_noise, depth, two_cam, use_task_index,
-        random_obj, train_random, test_random, limit_dir
+        random_obj, train_random, test_random, limit_dir, use_close_loop
     ):
         """Initializes a new Fetch environment.
         Args:
@@ -54,6 +54,7 @@ class SlideOpenToCloseEnv(robot_env.RobotEnv):
         self.train_random = train_random
         self.test_random = test_random
         self.limit_dir = limit_dir
+        self.use_close_loop = use_close_loop
 
         # if self.act_noise:
         #     noise_vector = np.random.uniform(-1.0, 1.0, 3)

@@ -107,17 +107,27 @@ class PegInsertOpenToCloseEnv(robot_env.RobotEnv):
         action = action.copy()  # ensure that we don't change the action outside of this scope
         pos_ctrl = action[:3]
 
-        pos_ctrl *= 0.05  # limit maximum change in position
         rot_ctrl = [1., 0., 1., 0.]  # fixed rotation of the end effector, expressed as a quaternion
         gripper_ctrl = np.array([-1, -1])
         assert gripper_ctrl.shape == (2,)
-        action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
+
+        if self.counter <= 1:
+            action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
+            action[2] = 0.56402952
+
+            for _ in range(20):
+                utils.mocap_set_action_abs(self.sim, action)
+                self.sim.step()
+        else:
+            pos_ctrl *= 0.05  # limit maximum change in position
+            action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
+            utils.mocap_set_action(self.sim, action)
 
         # Apply action to simulation.
         utils.ctrl_set_action(self.sim, action)
         utils.mocap_set_action(self.sim, action)
 
-        if self.counter >= 2:
+        if self.counter >= 3:
         # if np.linalg.norm(pos_ctrl, axis=-1) < 0.025:
             action = np.array([0,0,-0.05,1,0,1,0,1,1])
             utils.mocap_set_action(self.sim, action)
