@@ -116,7 +116,7 @@ class SlideOpenToCloseEnv(robot_env.RobotEnv):
         if self.counter <= 1:
             action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
             if self.use_close_loop:
-                action[2] = 0.46470766
+                action[2] = 0.41644691
             for _ in range(20):
                 utils.mocap_set_action_abs(self.sim, action)
                 self.sim.step()
