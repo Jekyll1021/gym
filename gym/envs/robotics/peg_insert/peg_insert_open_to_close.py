@@ -8,7 +8,7 @@ MODEL_XML_PATH = os.path.join('fetch', 'peg_insert.xml')
 
 
 class CamPegInsertOpenToCloseEnv(peg_insert_open_to_close.PegInsertOpenToCloseEnv, utils.EzPickle):
-    def __init__(self, reward_type='sparse', goal_type='fixed', cam_type='fixed', gripper_init_type='fixed', act_noise=False, obs_noise=False, depth=False, two_cam=False, use_task_index=False, random_obj=False, train_random=False, test_random=False, limit_dir=False, use_close_loop):
+    def __init__(self, reward_type='sparse', goal_type='fixed', cam_type='fixed', gripper_init_type='fixed', act_noise=False, obs_noise=False, depth=False, two_cam=False, use_task_index=False, random_obj=False, train_random=False, test_random=False, limit_dir=False, use_close_loop=False):
         initial_qpos = {
             'robot0:slide0': 0.405,
             'robot0:slide1': 0.48,
