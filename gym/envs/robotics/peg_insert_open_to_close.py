@@ -322,7 +322,9 @@ class PegInsertOpenToCloseEnv(robot_env.RobotEnv):
 
         action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
 
-        utils.mocap_set_action_abs(self.sim, action)
+        for _ in range(10):
+            utils.mocap_set_action_abs(self.sim, action)
+            self.sim.step()
 
         box_pose = self.sim.data.get_site_xpos('object0').copy()
         pos_ctrl = box_pose.copy()
@@ -330,7 +332,9 @@ class PegInsertOpenToCloseEnv(robot_env.RobotEnv):
 
         action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
 
-        utils.mocap_set_action_abs(self.sim, action)
+        for _ in range(10):
+            utils.mocap_set_action_abs(self.sim, action)
+            self.sim.step()
 
         action = np.array([0, 0, 0, 1, 0, 1, 0, -1, -1])
         for _ in range(20):
@@ -352,7 +356,7 @@ class PegInsertOpenToCloseEnv(robot_env.RobotEnv):
         return self.is_done
 
     def _is_success(self, achieved_goal, desired_goal):
-        return (achieved_goal[2] < self.height_offset).astype(np.float32)
+        return (achieved_goal[2] < 0.44).astype(np.float32)
 
     def _env_setup(self, initial_qpos):
         for name, value in initial_qpos.items():
