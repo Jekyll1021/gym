@@ -80,7 +80,7 @@ class PegInsertOpenToCloseEnv(robot_env.RobotEnv):
         #     self.obs_noise_vector = np.zeros(7)
 
         super(PegInsertOpenToCloseEnv, self).__init__(
-            model_path=model_path, n_substeps=n_substeps, n_actions=3, action_max=1.,
+            model_path=model_path, n_substeps=n_substeps, n_actions=3, action_max=2.,
             initial_qpos=initial_qpos)
 
     # GoalEnv methods
