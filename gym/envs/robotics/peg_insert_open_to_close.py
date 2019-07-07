@@ -277,7 +277,7 @@ class PegInsertOpenToCloseEnv(robot_env.RobotEnv):
 
         # Randomize start position of hole.
         if self.goal_type == "fixed":
-            offset = np.array([0.02, 0.02])
+            offset = np.array([0.02002511, 0.04348832])
         else:
             if self.limit_dir:
                 if self.train_random:

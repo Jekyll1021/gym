@@ -256,7 +256,7 @@ class SlideOpenToCloseEnv(robot_env.RobotEnv):
 
         # Randomize start position of object.
         if self.goal_type == "fixed":
-            offset = np.array([0.02, 0.02])
+            offset = np.array([0.04597492,  0.01686719])
         else:
             if self.limit_dir:
                 if self.train_random:
