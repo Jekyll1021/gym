@@ -1,4 +1,5 @@
 import numpy as np
+import cv2
 
 from gym.envs.robotics import rotations, robot_env, utils
 
@@ -118,7 +119,12 @@ class SlideEnv(robot_env.RobotEnv):
         utils.mocap_set_action(self.sim, action)
 
         if self.counter >= 2:
-            for _ in range(10):
+            img = self.sim.render(width=224, height=224, camera_name="external_camera_1")
+            cv2.imwrite("/checkpoint/jdong1021/slide_sample1.png", img)
+            for i in range(10):
+                if i == 5:
+                    img = self.sim.render(width=224, height=224, camera_name="external_camera_1")
+                    cv2.imwrite("/checkpoint/jdong1021/slide_sample2.png", img)
                 self.sim.step()
                 pos_ctrl = np.array([0.0, 0.02, 0.0])
                 gripper_ctrl = np.array([0, 0])

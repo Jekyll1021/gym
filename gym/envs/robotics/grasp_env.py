@@ -1,4 +1,5 @@
 import numpy as np
+import cv2
 
 from gym.envs.robotics import rotations, robot_env, utils
 
@@ -121,6 +122,9 @@ class GraspEnv(robot_env.RobotEnv):
 
         if self.counter >= 2:
         # if np.linalg.norm(pos_ctrl, axis=-1) < 0.025:
+            img = self.sim.render(width=224, height=224, camera_name="external_camera_1")
+            cv2.imwrite("/checkpoint/jdong1021/grasp_sample1.png", img)
+
             self.sim.step()
             pos_ctrl = np.array([0.0, 0.0, 0.0])
             gripper_ctrl = np.array([-1, -1])
@@ -136,6 +140,9 @@ class GraspEnv(robot_env.RobotEnv):
             for _ in range(20):
                 utils.ctrl_set_action(self.sim, action)
                 self.sim.step()
+
+            img = self.sim.render(width=224, height=224, camera_name="external_camera_1")
+            cv2.imwrite("/checkpoint/jdong1021/grasp_sample2.png", img)
 
             pos_ctrl = np.array([0.0, 0.0, 0.2])
             gripper_ctrl = np.array([-1, -1])
