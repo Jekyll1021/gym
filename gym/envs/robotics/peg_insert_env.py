@@ -214,10 +214,10 @@ class PegInsertEnv(robot_env.RobotEnv):
                 counter, [0, 1, 0]
             ])
         else:
-            # obs = np.concatenate([
-            #     counter, self.cam_offset.copy()
-            # ])
-            obs = counter
+            obs = np.concatenate([
+                counter, self.cam_offset.copy()
+            ])
+            # obs = counter
             # obs = np.empty(0)
 
         return {
