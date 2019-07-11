@@ -204,10 +204,10 @@ class SlideEnv(robot_env.RobotEnv):
                 counter, [0, 0, 1]
             ])
         else:
-            # obs = counter
-            obs = np.concatenate([
-                counter, self.cam_offset.copy()
-            ])
+            obs = counter
+            # obs = np.concatenate([
+            #     counter, self.cam_offset.copy()
+            # ])
 
         return {
             'observation': obs.copy(),
