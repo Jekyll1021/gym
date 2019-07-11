@@ -56,6 +56,8 @@ class SlideEnv(robot_env.RobotEnv):
         self.test_random = test_random
         self.limit_dir = limit_dir
 
+        self.cam_offset = np.array([0,0,0])
+
         # if self.act_noise:
         #     noise_vector = np.random.uniform(-1.0, 1.0, 3)
         #     norm = np.linalg.norm(noise_vector)
@@ -202,7 +204,10 @@ class SlideEnv(robot_env.RobotEnv):
                 counter, [0, 0, 1]
             ])
         else:
-            obs = counter
+            # obs = counter
+            obs = np.concatenate([
+                counter, self.cam_offset.copy()
+            ])
 
         return {
             'observation': obs.copy(),
@@ -305,6 +310,7 @@ class SlideEnv(robot_env.RobotEnv):
 
         if self.cam_type != "fixed":
             delta_pos = self.np_random.uniform(-0.05, 0.05, size=3)
+            self.cam_offset = delta_pos
             # delta_rot = self.np_random.uniform(-0.1, 0.1, size=3)
             delta_rot = np.array([0,0,0])
             utils.cam_init_pos(self.sim, delta_pos, delta_rot)
