@@ -5,7 +5,9 @@
 		<flag warmstart="enable"></flag>
 	</option>
 
-	<include file="../shared.xml"></include>
+	<asset>
+		<include file="../shared.xml"></include>
+	</asset>
 
 	<mesh file="random_urdf/000_coll.obj" name="obj0" scale="0.0076 0.0076 0.0076"></mesh>
 
