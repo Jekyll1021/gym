@@ -38,7 +38,7 @@
 			<!-- visual mesh -->
 			<geom type="mesh" mesh="obj0" pos="0 0 0" condim="3" material="block_mat" mass="2"></geom>
 			<!-- collision axis-align box -->
-			<!-- <geom type="box" size="0.03906932 0.08159434 0.02924882" pos="-0.00029084 -0.00016992 -0.00657581" condim="3" material="block_mat" mass="2"></geom> -->
+			<geom type="box" size="0.01953466 0.04079717 0.01462441" pos="-0.00029084 -0.00016992 -0.00657581" condim="3" material="block_mat" mass="2"></geom>
 			<site name="object0" pos="0 0 0" size="0.02 0.02 0.02" rgba="1 0 0 0" type="sphere"></site>
 		</body>
 
