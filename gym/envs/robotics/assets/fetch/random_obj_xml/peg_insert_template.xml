@@ -35,7 +35,7 @@
 
 		<body name="object0" pos="0.025 0.025 0.05">
 			<joint name="object0:joint" type="free" damping="0.01"></joint>
-			<geom mesh="obj0" condim="3" material="block_mat" mass="2"></geom>
+			<geom mesh="obj0" pos="0 0 0" condim="3" material="block_mat" mass="2"></geom>
 			<site name="object0" pos="0 0 0" size="0.02 0.02 0.02" rgba="1 0 0 0" type="sphere"></site>
 		</body>
 
