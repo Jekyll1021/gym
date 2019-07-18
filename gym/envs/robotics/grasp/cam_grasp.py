@@ -3,7 +3,8 @@ from gym import utils
 from gym.envs.robotics import grasp_env
 
 # Ensure we get the path separator correct on windows
-MODEL_XML_PATH = os.path.join('fetch', 'pick_and_place.xml')
+# MODEL_XML_PATH = os.path.join('fetch', 'pick_and_place.xml')
+MODEL_XML_PATH = os.path.join('fetch', 'random_obj_xml/000.xml')
 
 
 class CamGraspEnv(grasp_env.GraspEnv, utils.EzPickle):
