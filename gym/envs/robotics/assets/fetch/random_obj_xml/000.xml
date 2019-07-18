@@ -7,7 +7,7 @@
 	<include file="../shared.xml" />
 
 	<asset>
-		<mesh file="../stls/fetch/random_urdfs/000/000.stl" name="obj0" scale="0.013040120632293095 0.013040120632293095 0.013040120632293095" />
+		<mesh file="../../stls/fetch/random_urdfs/000/000.stl" name="obj0" scale="0.013040120632293095 0.013040120632293095 0.013040120632293095" />
 	</asset>
 
 	<worldbody>
