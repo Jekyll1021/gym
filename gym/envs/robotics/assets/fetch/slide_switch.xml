@@ -7,6 +7,10 @@
 
 	<include file="shared.xml"></include>
 
+	<asset>
+		<mesh file="../../stls/fetch/random_urdfs/000/000.stl" name="obj0" scale="0.0076 0.0076 0.0076"></mesh>
+	</asset>
+
 	<worldbody>
 		<geom name="floor0" pos="0.8 0.75 0" size="0.85 0.7 1" type="plane" condim="3" material="floor_mat"></geom>
 		<body name="floor0" pos="0.8 0.75 0">
@@ -24,7 +28,10 @@
 			<geom size="0.25 0.5 0.2" type="box" mass="2000" material="table_mat"></geom>
 			<body name="switch" pos="0 0 0.2">
 		    <joint name="switch" type="slide" pos="0 0 0" axis="0 1 0" range="0 0.2" damping="5" frictionloss="50"></joint>
-		    <geom size="0.025 0.025 0.05" pos="0 0 0" type="box" mass="2" material="block_mat"></geom>
+				<!-- visual mesh -->
+				<geom type="mesh" mesh="obj0" pos="0 0 0" condim="3" material="block_mat" mass="2"></geom>
+				<!-- collision axis-align box -->
+				<geom type="box" size="0.01953466 0.04079717 0.01462441" pos="-0.00029084 -0.00016992 -0.00657581" rgba="1 0 0 0" condim="3" material="block_mat" mass="2"></geom>
 				<site name="switch" pos="0 0 0" size="0.03 0.03 0.03" rgba="0 1 0 0" type="sphere"></site>
 			</body>
     </body>
