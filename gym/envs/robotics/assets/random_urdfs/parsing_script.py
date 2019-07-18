@@ -17,7 +17,7 @@ def generate_env(model_path, obj_index, out_path):
     convex_com = mesh.center_mass
     half_length = mesh.bounding_box.primitive.extents * 0.5
 
-    scale = 0.07/np.max(half_length)
+    scale = 0.035/np.max(half_length)
     convex_com *= scale
     half_length *= scale
 
