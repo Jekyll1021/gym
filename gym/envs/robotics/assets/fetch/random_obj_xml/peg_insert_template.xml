@@ -33,7 +33,7 @@
 			<site name="table_top" pos="0 0 0" size="0.02 0.02 0.02" rgba="1 0 0 0" type="sphere"></site>
 		</body>
 
-		<body name="object0" pos="0.025 0.025 0.05">
+		<body name="object0" pos="0.01953466 0.04079717 0.01462441">
 			<joint name="object0:joint" type="free" damping="0.01"></joint>
 			<!-- visual mesh -->
 			<geom type="mesh" mesh="obj0" pos="0 0 0" condim="3" material="block_mat" mass="2"></geom>
