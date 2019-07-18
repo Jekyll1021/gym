@@ -232,11 +232,11 @@ class GraspEnv(robot_env.RobotEnv):
                 counter, [1, 0, 0]
             ])
         else:
-            obs = counter
-            # obs = np.concatenate([
-            #     counter, self.cam_offset.copy()
-            # ])
-            # obs = np.empty(0)
+            # obs = counter
+            obs = np.concatenate([
+                counter, self.cam_offset.copy()
+            ])
+            obs = np.empty(0)
 
         return {
             'observation': obs.copy(),
