@@ -4,7 +4,7 @@ import os
 import numpy as np
 import xml.etree.ElementTree as ET
 
-def generate_env(model_path, obj_index, out_path):
+def generate_grasp_env(model_path, obj_index, out_path):
     # step 0: read file
     obj_index = str(obj_index).zfill(3)
     mesh = trimesh.load(os.path.join(model_path, os.path.join(obj_index, obj_index+'.obj')))
@@ -32,7 +32,9 @@ def generate_env(model_path, obj_index, out_path):
     root[4][4][2].attrib["pos"] = str(convex_com[0]) + ' ' + str(convex_com[1]) + ' ' + str(convex_com[2])
     # root[4][4][2].attrib -- {'type': 'box', 'size': bbox size, 'pos': centroid, 'rgba': '1 0 0 0', 'condim': '3', 'material': 'block_mat', 'mass': '2'}
 
-    tree.write(os.path.join(out_path, obj_index+".xml"))
+    tree.write(os.path.join(out_path, obj_index+"_grasp.xml"))
 
-# loop
-# generate_env("../stls/fetch/random_urdfs", 0, "../fetch/random_obj_xml")
+if __name__ == "__main__":
+    # loop
+    for i in range(1000):
+        generate_env("../stls/fetch/random_urdfs", i, "../fetch/random_obj_xml")
