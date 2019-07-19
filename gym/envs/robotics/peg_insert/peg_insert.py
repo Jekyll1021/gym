@@ -4,8 +4,8 @@ from gym.envs.robotics import peg_insert_env
 
 
 # Ensure we get the path separator correct on windows
-MODEL_XML_PATH = os.path.join('fetch', 'peg_insert.xml')
-# MODEL_XML_PATH = os.path.join('fetch', 'random_obj_xml/peg_insert_template.xml')
+# MODEL_XML_PATH = os.path.join('fetch', 'peg_insert.xml')
+MODEL_XML_PATH = os.path.join('fetch', 'random_obj_xml/000_peg.xml')
 
 
 class CamPegInsertEnv(peg_insert_env.PegInsertEnv, utils.EzPickle):

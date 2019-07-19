@@ -51,7 +51,7 @@ def generate_peg_env(model_path, obj_index, out_path):
     scale = 0.03/np.median(half_length)
     convex_com *= scale
     half_length *= scale
-    zaxis = np.zeors(3)
+    zaxis = np.zeros(3)
     zaxis[np.argmax(half_length)] = 1
 
     # step 4: read template, change template and write to xml
