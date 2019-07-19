@@ -4,9 +4,8 @@ from gym.envs.robotics import slide_env
 
 
 # Ensure we get the path separator correct on windows
-# MODEL_XML_PATH = os.path.join('fetch', 'slide_switch.xml')
-MODEL_XML_PATH = os.path.join('fetch', 'random_obj_xml/000_slide.xml')
-
+MODEL_XML_PATH = os.path.join('fetch', 'slide_switch.xml')
+# MODEL_XML_PATH = os.path.join('fetch', 'random_obj_xml/000_slide.xml')
 
 class CamSlideEnv(slide_env.SlideEnv, utils.EzPickle):
     def __init__(self, reward_type='sparse', goal_type='random', cam_type='fixed', gripper_init_type='fixed', act_noise=False, obs_noise=False, depth=False, two_cam=False, use_task_index=False, random_obj=False, train_random=False, test_random=False, limit_dir=False):
@@ -15,6 +14,14 @@ class CamSlideEnv(slide_env.SlideEnv, utils.EzPickle):
             'robot0:slide1': 0.48,
             'robot0:slide2': 0.0,
         }
+        if random_obj:
+            if train_random:
+                ind = str(np.random.randint(600))
+            elif test_random:
+                ind = str(np.random.randint(600, 800))
+            else:
+                ind = str(np.random.randint(800, 1000))
+            MODEL_XML_PATH = os.path.join('fetch', 'random_obj_xml', ind + '_slide.xml')
         slide_env.SlideEnv.__init__(
             self, MODEL_XML_PATH, block_gripper=False, n_substeps=20,
             gripper_extra_height=0.13, target_in_the_air=False, target_offset=0.0,

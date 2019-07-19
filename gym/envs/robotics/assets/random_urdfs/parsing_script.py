@@ -34,7 +34,6 @@ def generate_grasp_env(model_path, obj_index, out_path):
 
     tree.write(os.path.join(out_path, obj_index+"_grasp.xml"))
 
-# TODO: modify
 def generate_peg_env(model_path, obj_index, out_path):
     # step 0: read file
     obj_index = str(obj_index).zfill(3)
@@ -102,7 +101,9 @@ def generate_slide_env(model_path, obj_index, out_path):
 
     tree.write(os.path.join(out_path, obj_index+"_slide.xml"))
 
-# if __name__ == "__main__":
-#     # loop
-#     for i in range(1000):
-#         generate_grasp_env("../stls/fetch/random_urdfs", i, "../fetch/random_obj_xml")
+if __name__ == "__main__":
+    # loop
+    for i in range(1000):
+        generate_grasp_env("../stls/fetch/random_urdfs", i, "../fetch/random_obj_xml")
+        generate_peg_env("../stls/fetch/random_urdfs", i, "../fetch/random_obj_xml")
+        generate_slide_env("../stls/fetch/random_urdfs", i, "../fetch/random_obj_xml")

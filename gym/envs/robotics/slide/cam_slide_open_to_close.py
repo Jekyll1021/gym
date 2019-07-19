@@ -6,7 +6,6 @@ from gym.envs.robotics import slide_open_to_close_env
 # Ensure we get the path separator correct on windows
 MODEL_XML_PATH = os.path.join('fetch', 'slide_switch.xml')
 
-
 class CamSlideOpenToCloseEnv(slide_open_to_close_env.SlideOpenToCloseEnv, utils.EzPickle):
     def __init__(self, reward_type='sparse', goal_type='random', cam_type='fixed', gripper_init_type='fixed', act_noise=False, obs_noise=False, depth=False, two_cam=False, use_task_index=False, random_obj=False, train_random=False, test_random=False, limit_dir=False, use_close_loop=False):
         initial_qpos = {
