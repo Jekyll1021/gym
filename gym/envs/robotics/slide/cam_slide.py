@@ -4,7 +4,8 @@ from gym.envs.robotics import slide_env
 
 
 # Ensure we get the path separator correct on windows
-MODEL_XML_PATH = os.path.join('fetch', 'slide_switch.xml')
+# MODEL_XML_PATH = os.path.join('fetch', 'slide_switch.xml')
+MODEL_XML_PATH = os.path.join('fetch', 'random_obj_xml/000_slide.xml')
 
 
 class CamSlideEnv(slide_env.SlideEnv, utils.EzPickle):
