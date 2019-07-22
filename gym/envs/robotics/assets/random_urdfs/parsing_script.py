@@ -28,8 +28,8 @@ def generate_grasp_env(model_path, obj_index, out_path):
     root[3][0].attrib["scale"] = str(scale) + ' ' + str(scale) + ' ' + str(scale)
     # root[3][0].attrib -- {'file': path, 'name': 'obj0', 'scale': scale}
     root[4][4].attrib["pos"] = str(half_length[0]) + ' ' + str(half_length[1]) + ' ' + str(half_length[2])
-    root[4][4][2].attrib["size"] = str(half_length[0]) + ' ' + str(half_length[1]) + ' ' + str(half_length[2])
-    root[4][4][2].attrib["pos"] = str(convex_com[0]) + ' ' + str(convex_com[1]) + ' ' + str(convex_com[2])
+    # root[4][4][2].attrib["size"] = str(half_length[0]) + ' ' + str(half_length[1]) + ' ' + str(half_length[2])
+    # root[4][4][2].attrib["pos"] = str(convex_com[0]) + ' ' + str(convex_com[1]) + ' ' + str(convex_com[2])
     # root[4][4][2].attrib -- {'type': 'box', 'size': bbox size, 'pos': centroid, 'rgba': '1 0 0 0', 'condim': '3', 'material': 'block_mat', 'mass': '2'}
 
     tree.write(os.path.join(out_path, obj_index+"_grasp.xml"))
@@ -101,9 +101,9 @@ def generate_slide_env(model_path, obj_index, out_path):
 
     tree.write(os.path.join(out_path, obj_index+"_slide.xml"))
 
-if __name__ == "__main__":
-    # loop
-    for i in range(1000):
-        generate_grasp_env("../stls/fetch/random_urdfs", i, "../fetch/random_obj_xml")
-        generate_peg_env("../stls/fetch/random_urdfs", i, "../fetch/random_obj_xml")
-        generate_slide_env("../stls/fetch/random_urdfs", i, "../fetch/random_obj_xml")
+# if __name__ == "__main__":
+#     # loop
+#     for i in range(1000):
+#         generate_grasp_env("../stls/fetch/random_urdfs", i, "../fetch/random_obj_xml")
+#         generate_peg_env("../stls/fetch/random_urdfs", i, "../fetch/random_obj_xml")
+#         generate_slide_env("../stls/fetch/random_urdfs", i, "../fetch/random_obj_xml")
