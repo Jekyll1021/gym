@@ -14,14 +14,14 @@ class CamGraspEnv(grasp_env.GraspEnv, utils.EzPickle):
             'robot0:slide2': 0.0,
             'object0:joint': [1.25, 0.53, 0.4, 1., 0., 0., 0.],
         }
-        if random_obj:
-            if train_random:
-                ind = str(np.random.randint(600))
-            elif test_random:
-                ind = str(np.random.randint(600, 800))
-            else:
-                ind = str(np.random.randint(800, 1000))
-            MODEL_XML_PATH = os.path.join('fetch', 'random_obj_xml', ind + '_grasp.xml')
+        # if random_obj:
+        #     if train_random:
+        #         ind = str(np.random.randint(600))
+        #     elif test_random:
+        #         ind = str(np.random.randint(600, 800))
+        #     else:
+        #         ind = str(np.random.randint(800, 1000))
+        #     MODEL_XML_PATH = os.path.join('fetch', 'random_obj_xml', ind + '_grasp.xml')
         grasp_env.GraspEnv.__init__(
             self, MODEL_XML_PATH, block_gripper=False, n_substeps=20,
             gripper_extra_height=0.2, target_in_the_air=True, target_offset=0.0,
