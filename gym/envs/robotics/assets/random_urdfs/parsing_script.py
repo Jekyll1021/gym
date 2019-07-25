@@ -65,7 +65,7 @@ def generate_peg_env(model_path, obj_index, out_path):
     root[4][5][1].attrib["zaxis"] = str(zaxis[0]) + ' ' + str(zaxis[1]) + ' ' + str(zaxis[2])
 
     max_offset = np.median(half_length)
-    handle_size_x, handle_size_y, handle_size_z = np.random.uniform(0.015, 0.03), np.random.uniform(0.015, 0.03), np.random.uniform(0.025, 0.04)
+    handle_size_x, handle_size_y, handle_size_z = np.random.uniform(0.01, 0.03), np.random.uniform(0.01, 0.03), np.random.uniform(0.03, 0.05)
     offset_x, offset_y = np.random.uniform(-max_offset + handle_size_x, max_offset - handle_size_x), np.random.uniform(-max_offset + handle_size_y, max_offset - handle_size_y)
     root[4][5][2].attrib["zaxis"] = str(zaxis[0]) + ' ' + str(zaxis[1]) + ' ' + str(zaxis[2])
     root[4][5][2].attrib["size"] = str(handle_size_x) + ' ' + str(handle_size_y) + ' ' + str(handle_size_z)

@@ -39,9 +39,9 @@
 			
 			
 			
-			<geom condim="3" mass="2" material="block_mat" pos="9.612321228513304e-05 -0.010575939051775996 0.010211325443622039" size="0.0158397724681753 0.01752255509904978 0.03820451491989816" type="box" zaxis="0.0 0.0 1.0" />
+			<geom condim="3" mass="2" material="block_mat" pos="-0.017272054059276246 -0.01615025284937318 0.015427357393033008" size="0.01602699710519158 0.02018555892577953 0.04342054686930913" type="box" zaxis="0.0 0.0 1.0" />
 			<site name="object0" pos="0 0 0" rgba="1 0 0 0" size="0.02 0.02 0.02" type="sphere" />
-			<site name="handle0" pos="9.612321228513304e-05 -0.010575939051775996 0.00021132544362203673" rgba="1 0 0 0" size="0.02 0.02 0.02" type="sphere" />
+			<site name="handle0" pos="-0.017272054059276246 -0.01615025284937318 0.005427357393033006" rgba="1 0 0 0" size="0.02 0.02 0.02" type="sphere" />
 		</body>
 
 		<light ambient="0.2 0.2 0.2" castshadow="false" diffuse="0.8 0.8 0.8" dir="0 0 -1" directional="true" name="light0" pos="0 0 4" specular="0.3 0.3 0.3" />
