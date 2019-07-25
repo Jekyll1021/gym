@@ -35,13 +35,13 @@
 		<body name="object0" pos="0.035 0.07309576419553758 0.026202368354504253" zaxis="0.0 0.0 1.0">
 			<joint damping="0.01" name="object0:joint" type="free" />
 			
-			<geom condim="3" mass="2" material="block_mat" mesh="obj0" pos="0 0 0" type="mesh" zaxis="0.0 0.0 1.0" />
+			<geom condim="3" mass="0.1" material="block_mat" mesh="obj0" pos="0 0 0" type="mesh" zaxis="0.0 0.0 1.0" />
 			
 			
 			
-			<geom condim="3" mass="2" material="block_mat" pos="-0.017272054059276246 -0.01615025284937318 0.015427357393033008" size="0.01602699710519158 0.02018555892577953 0.04342054686930913" type="box" zaxis="0.0 0.0 1.0" />
+			<geom condim="3" mass="2" material="block_mat" pos="-0.005333838659532354 0.006938040835819793 0.015742438095171427" size="0.027547793217004783 0.024115147770811883 0.04373562757144755" type="box" zaxis="0.0 0.0 1.0" />
 			<site name="object0" pos="0 0 0" rgba="1 0 0 0" size="0.02 0.02 0.02" type="sphere" />
-			<site name="handle0" pos="-0.017272054059276246 -0.01615025284937318 0.005427357393033006" rgba="1 0 0 0" size="0.02 0.02 0.02" type="sphere" />
+			<site name="handle0" pos="-0.005333838659532354 0.006938040835819793 0.005742438095171425" rgba="1 0 0 0" size="0.02 0.02 0.02" type="sphere" />
 		</body>
 
 		<light ambient="0.2 0.2 0.2" castshadow="false" diffuse="0.8 0.8 0.8" dir="0 0 -1" directional="true" name="light0" pos="0 0 4" specular="0.3 0.3 0.3" />

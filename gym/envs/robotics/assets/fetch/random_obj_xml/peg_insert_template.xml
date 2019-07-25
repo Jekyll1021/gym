@@ -36,7 +36,7 @@
 		<body name="object0" pos="0.01953466 0.04079717 0.01462441" zaxis="0 1 0">
 			<joint name="object0:joint" type="free" damping="0.01"></joint>
 			<!-- visual mesh -->
-			<geom type="mesh" mesh="obj0" pos="0 0 0" zaxis="0 1 0" condim="3" material="block_mat" mass="2"></geom>
+			<geom type="mesh" mesh="obj0" pos="0 0 0" zaxis="0 1 0" condim="3" material="block_mat" mass="0.1"></geom>
 			<!-- collision axis-align box -->
 			<!-- <geom type="box" size="0.01953466 0.04079717 0.01462441" pos="-0.00029084 -0.00016992 -0.00657581" zaxis="0 1 0" rgba="1 0 0 0" condim="3" material="block_mat" mass="2"></geom> -->
 			<!-- peg handle -->
