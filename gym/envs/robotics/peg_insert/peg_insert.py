@@ -5,8 +5,8 @@ import numpy as np
 
 
 # Ensure we get the path separator correct on windows
-# MODEL_XML_PATH = os.path.join('fetch', 'peg_insert.xml')
-MODEL_XML_PATH = os.path.join('fetch', 'random_obj_xml/000_peg.xml')
+MODEL_XML_PATH = os.path.join('fetch', 'peg_insert.xml')
+# MODEL_XML_PATH = os.path.join('fetch', 'random_obj_xml/000_peg.xml')
 
 class CamPegInsertEnv(peg_insert_env.PegInsertEnv, utils.EzPickle):
     def __init__(self, reward_type='sparse', goal_type='fixed', cam_type='fixed', gripper_init_type='fixed', act_noise=False, obs_noise=False, depth=False, two_cam=False, use_task_index=False, random_obj=False, train_random=False, test_random=False, limit_dir=False):
