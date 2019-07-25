@@ -67,11 +67,10 @@ def generate_peg_env(model_path, obj_index, out_path):
     max_offset = np.median(half_length)
     handle_size_x, handle_size_y, handle_size_z = np.random.uniform(0.015, 0.03), np.random.uniform(0.015, 0.03), np.random.uniform(0.025, 0.04)
     offset_x, offset_y = np.random.uniform(-max_offset + handle_size_x, max_offset - handle_size_x), np.random.uniform(-max_offset + handle_size_y, max_offset - handle_size_y)
-    # root[4][5][2].attrib["zaxis"] = str(zaxis[0]) + ' ' + str(zaxis[1]) + ' ' + str(zaxis[2])
-    # root[4][5][2].attrib["size"] = str(handle_size_x) + ' ' + str(handle_size_y) + ' ' + str(handle_size_z)
-    # root[4][5][2].attrib["pos"] = str(convex_com[0] + offset_x) + ' ' + str(convex_com[1] + offset_y) + ' ' + str(convex_com[2] + handle_size_z)
+    root[4][5][2].attrib["zaxis"] = str(zaxis[0]) + ' ' + str(zaxis[1]) + ' ' + str(zaxis[2])
+    root[4][5][2].attrib["size"] = str(handle_size_x) + ' ' + str(handle_size_y) + ' ' + str(handle_size_z)
+    root[4][5][2].attrib["pos"] = str(convex_com[0] + offset_x) + ' ' + str(convex_com[1] + offset_y) + ' ' + str(convex_com[2] + handle_size_z - 0.01 - np.min(half_length))
     # root[4][4][2].attrib -- {'type': 'box', 'size': bbox size, 'pos': centroid, 'rgba': '1 0 0 0', 'condim': '3', 'material': 'block_mat', 'mass': '2'}
-    root[4][5][4].attrib["size"] = str(handle_size_x) + ' ' + str(handle_size_y) + ' ' + str(handle_size_z)
     root[4][5][4].attrib["pos"] = str(convex_com[0] + offset_x) + ' ' + str(convex_com[1] + offset_y) + ' ' + str(convex_com[2] + handle_size_z - 0.01 - np.min(half_length))
 
     tree.write(os.path.join(out_path, obj_index+"_peg.xml"))
