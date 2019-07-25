@@ -38,8 +38,11 @@
 			<!-- visual mesh -->
 			<geom type="mesh" mesh="obj0" pos="0 0 0" zaxis="0 1 0" condim="3" material="block_mat" mass="2"></geom>
 			<!-- collision axis-align box -->
-			<geom type="box" size="0.01953466 0.04079717 0.01462441" pos="-0.00029084 -0.00016992 -0.00657581" zaxis="0 1 0" rgba="1 0 0 0" condim="3" material="block_mat" mass="2"></geom>
+			<!-- <geom type="box" size="0.01953466 0.04079717 0.01462441" pos="-0.00029084 -0.00016992 -0.00657581" zaxis="0 1 0" rgba="1 0 0 0" condim="3" material="block_mat" mass="2"></geom> -->
+			<!-- peg handle -->
+			<geom type="box" size="0.01953466 0.04079717 0.01462441" pos="-0.00029084 -0.00016992 -0.00657581" condim="3" material="block_mat" mass="2"></geom>
 			<site name="object0" pos="0 0 0" size="0.02 0.02 0.02" rgba="1 0 0 0" type="sphere"></site>
+			<site name="handle0" pos="0 0 0" size="0.02 0.02 0.02" rgba="1 0 0 0" type="sphere"></site>
 		</body>
 
 		<light directional="true" ambient="0.2 0.2 0.2" diffuse="0.8 0.8 0.8" specular="0.3 0.3 0.3" castshadow="false" pos="0 0 4" dir="0 0 -1" name="light0"></light>

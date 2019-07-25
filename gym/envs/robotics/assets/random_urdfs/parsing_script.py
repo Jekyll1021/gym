@@ -17,7 +17,7 @@ def generate_grasp_env(model_path, obj_index, out_path):
     convex_com = mesh.center_mass
     half_length = mesh.bounding_box.primitive.extents * 0.5
 
-    scale = 0.035/np.max(half_length)
+    scale = 0.035/np.median(half_length)
     convex_com *= scale
     half_length *= scale
 
@@ -47,11 +47,11 @@ def generate_peg_env(model_path, obj_index, out_path):
     convex_com = mesh.center_mass
     half_length = mesh.bounding_box.primitive.extents * 0.5
 
-    scale = 0.03/np.median(half_length)
+    scale = 0.035/np.median(half_length)
     convex_com *= scale
     half_length *= scale
     zaxis = np.zeros(3)
-    zaxis[np.argmax(half_length)] = 1
+    zaxis[np.argmin(half_length)] = 1
 
     # step 4: read template, change template and write to xml
     tree = ET.parse(os.path.join(out_path, "peg_insert_template.xml"))
@@ -64,10 +64,14 @@ def generate_peg_env(model_path, obj_index, out_path):
 
     root[4][5][1].attrib["zaxis"] = str(zaxis[0]) + ' ' + str(zaxis[1]) + ' ' + str(zaxis[2])
 
-    root[4][5][2].attrib["zaxis"] = str(zaxis[0]) + ' ' + str(zaxis[1]) + ' ' + str(zaxis[2])
-    root[4][5][2].attrib["size"] = str(half_length[0]) + ' ' + str(half_length[1]) + ' ' + str(half_length[2])
-    root[4][5][2].attrib["pos"] = str(convex_com[0]) + ' ' + str(convex_com[1]) + ' ' + str(convex_com[2])
+    max_offset = np.median(half_length)
+    handle_size_x, handle_size_y, handle_size_z = np.random.uniform(0.015, 0.03), np.random.uniform(0.015, 0.03), np.random.uniform(0.025, 0.04)
+    offset_x, offset_y = np.random.uniform(-max_offset + handle_size_x, max_offset - handle_size_x), np.random.uniform(-max_offset + handle_size_y, max_offset - handle_size_y)
+    # root[4][5][2].attrib["zaxis"] = str(zaxis[0]) + ' ' + str(zaxis[1]) + ' ' + str(zaxis[2])
+    root[4][5][2].attrib["size"] = str(handle_size_x) + ' ' + str(handle_size_y) + ' ' + str(handle_size_z)
+    root[4][5][2].attrib["pos"] = str(convex_com[0] + offset_x) + ' ' + str(convex_com[1] + offset_y) + ' ' + str(convex_com[2] + handle_size_z)
     # root[4][4][2].attrib -- {'type': 'box', 'size': bbox size, 'pos': centroid, 'rgba': '1 0 0 0', 'condim': '3', 'material': 'block_mat', 'mass': '2'}
+    root[4][5][4].attrib["pos"] = str(convex_com[0] + offset_x) + ' ' + str(convex_com[1] + offset_y) + ' ' + str(convex_com[2] + handle_size_z - 0.01)
 
     tree.write(os.path.join(out_path, obj_index+"_peg.xml"))
 
@@ -84,7 +88,7 @@ def generate_slide_env(model_path, obj_index, out_path):
     convex_com = mesh.center_mass
     half_length = mesh.bounding_box.primitive.extents * 0.5
 
-    scale = 0.035/np.max(half_length)
+    scale = 0.035/np.median(half_length)
     convex_com *= scale
     half_length *= scale
 
