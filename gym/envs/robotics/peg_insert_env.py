@@ -120,13 +120,9 @@ class PegInsertEnv(robot_env.RobotEnv):
 
         if self.counter >= 2:
         # if np.linalg.norm(pos_ctrl, axis=-1) < 0.025:
-            img = self.sim.render(width=500, height=500, camera_name="external_camera_1")
-            cv2.imwrite("/checkpoint/jdong1021/peg_sample1.png", img)
             action = np.array([0,0,-0.08,1,0,1,0,1,1])
             utils.mocap_set_action(self.sim, action)
             self.sim.step()
-            img = self.sim.render(width=500, height=500, camera_name="external_camera_1")
-            cv2.imwrite("/checkpoint/jdong1021/peg_sample2.png", img)
             for _ in range(5):
                 utils.ctrl_set_action(self.sim, action)
                 self.sim.step()
@@ -214,10 +210,10 @@ class PegInsertEnv(robot_env.RobotEnv):
                 counter, [0, 1, 0]
             ])
         else:
-            obs = np.concatenate([
-                counter, self.cam_offset.copy()
-            ])
-            # obs = counter
+            # obs = np.concatenate([
+            #     counter, self.cam_offset.copy()
+            # ])
+            obs = counter
             # obs = np.empty(0)
 
         return {
