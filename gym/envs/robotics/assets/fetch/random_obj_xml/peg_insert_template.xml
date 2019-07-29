@@ -41,7 +41,7 @@
 			<!-- <geom type="box" size="0.01953466 0.04079717 0.01462441" pos="-0.00029084 -0.00016992 -0.00657581" zaxis="0 1 0" rgba="1 0 0 0" condim="3" material="block_mat" mass="2"></geom> -->
 			<!-- peg handle -->
 			<geom type="box" size="0.01953466 0.04079717 0.01462441" pos="-0.00029084 -0.00016992 -0.00657581" condim="3" material="block_mat" mass="2"></geom>
-			<site name="object0" pos="0 0 0" size="0.02 0.02 0.02" rgba="1 0 0 0" type="sphere"></site>
+			<site name="object0" pos="0 0 0" size="0.02 0.02 0.02" rgba="1 0 0 0" type="ellipsoid"></site>
 			<site name="handle0" pos="0 0 0" size="0.02 0.02 0.02" rgba="1 0 0 0" type="sphere"></site>
 		</body>
 

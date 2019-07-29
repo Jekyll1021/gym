@@ -28,7 +28,8 @@ def generate_grasp_env(model_path, obj_index, out_path):
     root[3][0].attrib["scale"] = str(scale) + ' ' + str(scale) + ' ' + str(scale)
     # root[3][0].attrib -- {'file': path, 'name': 'obj0', 'scale': scale}
     root[4][4].attrib["pos"] = str(half_length[0]) + ' ' + str(half_length[1]) + ' ' + str(half_length[2])
-    # root[4][4][2].attrib["size"] = str(half_length[0]) + ' ' + str(half_length[1]) + ' ' + str(half_length[2])
+    root[4][4][2].attrib["pos"] = str(convex_com[0]) + ' ' + str(convex_com[1]) + ' ' + str(convex_com[2])
+    root[4][4][2].attrib["size"] = str(half_length[0]/2) + ' ' + str(half_length[1]/2) + ' ' + str(half_length[2]/2)
     # root[4][4][2].attrib["pos"] = str(convex_com[0]) + ' ' + str(convex_com[1]) + ' ' + str(convex_com[2])
     # root[4][4][2].attrib -- {'type': 'box', 'size': bbox size, 'pos': centroid, 'rgba': '1 0 0 0', 'condim': '3', 'material': 'block_mat', 'mass': '2'}
 
@@ -71,6 +72,8 @@ def generate_peg_env(model_path, obj_index, out_path):
     root[4][5][2].attrib["size"] = str(handle_size_x) + ' ' + str(handle_size_y) + ' ' + str(handle_size_z)
     root[4][5][2].attrib["pos"] = str(convex_com[0] + offset_x) + ' ' + str(convex_com[1] + offset_y) + ' ' + str(convex_com[2] + handle_size_z - np.min(half_length))
     # root[4][4][2].attrib -- {'type': 'box', 'size': bbox size, 'pos': centroid, 'rgba': '1 0 0 0', 'condim': '3', 'material': 'block_mat', 'mass': '2'}
+    root[4][5][3].attrib["pos"] = str(convex_com[0]) + ' ' + str(convex_com[1]) + ' ' + str(convex_com[2])
+    root[4][5][3].attrib["size"] = str(half_length[0]/2) + ' ' + str(half_length[1]/2) + ' ' + str(half_length[2]/2)
     root[4][5][4].attrib["pos"] = str(convex_com[0] + offset_x) + ' ' + str(convex_com[1] + offset_y) + ' ' + str(convex_com[2] + handle_size_z - 0.01 - np.min(half_length))
 
     tree.write(os.path.join(out_path, obj_index+"_peg.xml"))

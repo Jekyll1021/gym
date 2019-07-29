@@ -405,6 +405,14 @@ for reward_type in ['sparse', 'dense']:
         max_episode_steps=3,
     )
 
+    # grasp rotation
+    register(
+        id='GraspRot{}-v0'.format(suffix),
+        entry_point='gym.envs.robotics:CamGraspRotationEnv',
+        kwargs=kwargs,
+        max_episode_steps=2,
+    )
+
     # push
     register(
         id='Push{}-v0'.format(suffix),
