@@ -248,7 +248,8 @@ class GraspRotationEnv(robot_env.RobotEnv):
         counter = np.array([self.counter])
 
         # achieved_goal = np.squeeze(object_pos.copy())# - self.sim.data.get_site_xpos("robot0:cam")
-        achieved_goal = np.concatenate([np.squeeze(object_pos.copy()), [obj_radius, grip_radius]])
+        achieved_goal = np.concatenate([np.squeeze(object_pos.copy()), [obj_radius]])
+        holder_pos = np.concatenate([np.squeeze(holder_pos), [grip_radius]])
         # obs = np.concatenate([
         #     grip_pos, object_pos.ravel(), object_rel_pos.ravel(), gripper_state, object_rot.ravel(),
         #     object_velp.ravel(), object_velr.ravel(), grip_velp, gripper_vel, counter
