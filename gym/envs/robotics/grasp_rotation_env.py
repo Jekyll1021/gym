@@ -116,7 +116,7 @@ class GraspRotationEnv(robot_env.RobotEnv):
         axis_mat = np.array([[0, 0, 1],
                              [0, 1, 0],
                              [-1, 0, 0]])
-        rot_ctrl = rotations.mat2quat(np.linalg.matmul(rot_mat, axis_mat))
+        rot_ctrl = rotations.mat2quat(np.matmul(rot_mat, axis_mat))
 
         pos_ctrl *= 0.05  # limit maximum change in position
         gripper_ctrl = np.array([1, 1])
