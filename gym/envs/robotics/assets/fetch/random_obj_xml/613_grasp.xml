@@ -1,0 +1,41 @@
+<mujoco>
+	<compiler angle="radian" coordinate="local" meshdir="../../stls/fetch" texturedir="../../textures" />
+	<option timestep="0.002">
+		<flag warmstart="enable" />
+	</option>
+
+	<include file="../shared.xml" />
+
+	<asset>
+		<mesh file="../../stls/fetch/random_urdfs/061/061.stl" name="obj0" scale="0.004846578854130437 0.004846578854130437 0.004846578854130437" />
+	</asset>
+
+	<worldbody>
+		<geom condim="3" material="floor_mat" name="floor0" pos="0.8 0.75 0" size="0.85 0.70 1" type="plane" />
+		<body name="floor0" pos="0.8 0.75 0">
+			<site name="target0" pos="0 0 0.5" rgba="1 0 0 0" size="0.02 0.02 0.02" type="sphere" />
+		</body>
+
+		<include file="../robot.xml" />
+
+		<body name="table0" pos="1.3 0.75 0.2">
+			<geom mass="2000" material="table_mat" size="0.25 0.35 0.2" type="box" />
+		</body>
+
+		<body name="object0" pos="0.042567649896482686 0.033474479264047736 0.026388257548792794">
+			<joint damping="0.01" name="object0:joint" type="free" />
+			
+			<geom condim="3" mass="2" material="block_mat" mesh="obj0" pos="0 0 0" type="mesh" />
+			
+			
+			<site name="object0" pos="0.01060619037251191 -0.02024012360310318 -0.009528452237492121" rgba="1 0 0 0" size="0.021283824948241343 0.016737239632023868 0.013194128774396397" type="ellipsoid" />
+		</body>
+
+		<light ambient="0.2 0.2 0.2" castshadow="false" diffuse="0.8 0.8 0.8" dir="0 0 -1" directional="true" name="light0" pos="0 0 4" specular="0.3 0.3 0.3" />
+	</worldbody>
+
+	<actuator>
+		<position ctrllimited="true" ctrlrange="0 0.2" joint="robot0:l_gripper_finger_joint" kp="30000" name="robot0:l_gripper_finger_joint" user="1" />
+		<position ctrllimited="true" ctrlrange="0 0.2" joint="robot0:r_gripper_finger_joint" kp="30000" name="robot0:r_gripper_finger_joint" user="1" />
+	</actuator>
+</mujoco>

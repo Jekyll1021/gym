@@ -1,0 +1,38 @@
+<mujoco>
+	<compiler angle="radian" coordinate="local" meshdir="../../stls/fetch" texturedir="../../textures" />
+	<option timestep="0.002">
+		<flag warmstart="enable" />
+	</option>
+
+	<include file="../shared.xml" />
+
+	<asset>
+		<mesh file="../../stls/fetch/random_urdfs/557/557.stl" name="obj0" scale="0.007373272274822076 0.007373272274822076 0.007373272274822076" />
+	</asset>
+
+	<worldbody>
+		<geom condim="3" material="floor_mat" name="floor0" pos="0.8 0.75 0" size="0.85 0.7 1" type="plane" />
+		<body name="floor0" pos="0.8 0.75 0">
+			<site name="target0" pos="0 0 0.5" rgba="1 0 0 0" size="0.02 0.02 0.02" type="sphere" />
+		</body>
+
+		<include file="../robot.xml" />
+
+		
+
+		<body name="table" pos="1.3 0.75 0.2">
+			<joint damping="0.01" name="table:joint" type="free" />
+			<geom mass="2000" material="table_mat" size="0.25 0.5 0.2" type="box" />
+			<body name="switch" pos="0.016499414687354427 0.048533893781239304 0.2255613248384647">
+		    <joint axis="0 1 0" damping="5" frictionloss="50" name="switch" pos="0 0 0" range="0 0.2" type="slide" />
+				
+				<geom condim="3" mass="2" material="block_mat" mesh="obj0" pos="0 0 0" type="mesh" />
+				
+				
+				<site name="switch" pos="0 0 0" rgba="0 1 0 0" size="0.03 0.03 0.03" type="sphere" />
+			</body>
+    </body>
+
+		<light ambient="0.2 0.2 0.2" castshadow="false" diffuse="0.8 0.8 0.8" dir="0 0 -1" directional="true" name="light0" pos="0 0 4" specular="0.3 0.3 0.3" />
+	</worldbody>
+</mujoco>

@@ -298,25 +298,18 @@ class GraspRotationEnv(robot_env.RobotEnv):
             self.sim.step()
 
         if self.random_obj:
-            self.sim.model.geom_type[-1] = np.random.choice(2) + 5
-
             min_color_diff = 0
             while min_color_diff < 0.1:
                 rgba = np.random.uniform(0, 0.5, size=3)
                 if self.train_random:
                     rgba[1] = 1
-                    size = np.random.uniform(0.02, 0.025, size=3)
                 elif self.test_random:
                     rgba[0] = 1
-                    size = np.random.uniform(0.025, 0.03, size=3)
                 else:
                     rgba *= 2
-                    size = np.random.uniform(0.02, 0.03, size=3)
                 color_diff = np.abs(self.sim.model.geom_rgba.copy()[:-1, :3] - rgba)
                 min_color_diff = min(np.sum(color_diff, axis=1))
             self.sim.model.geom_rgba[-1][:3] = rgba
-
-            self.sim.model.geom_size[-1] = size
 
         # Randomize start position of object.
         if self.goal_type == "fixed":

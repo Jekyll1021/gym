@@ -232,10 +232,6 @@ class SlideEnv(robot_env.RobotEnv):
         self.sim.set_state(self.initial_state)
 
         self.sim.forward()
-        action = np.array([0,0,0,1,0,1,0,1,1])
-        for _ in range(10):
-            utils.ctrl_set_action(self.sim, action)
-            self.sim.step()
 
         if self.random_obj:
             self.sim.model.geom_type[-1] = np.random.choice(2) + 5

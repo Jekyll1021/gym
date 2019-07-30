@@ -26,9 +26,11 @@ from gym.envs.robotics.grasp.cam_rotation_grasp import CamGraspRotationEnv
 from gym.envs.robotics.push.cam_push import CamPushEnv
 
 from gym.envs.robotics.peg_insert.peg_insert import CamPegInsertEnv
+from gym.envs.robotics.peg_insert.cam_rotation_peg_insert import CamPegInsertRotationEnv
 from gym.envs.robotics.peg_insert.peg_insert_open_to_close import CamPegInsertOpenToCloseEnv
 
 from gym.envs.robotics.slide.cam_slide import CamSlideEnv
+from gym.envs.robotics.slide.cam_rotation_slide import CamSlideRotationEnv
 from gym.envs.robotics.slide.cam_slide_open_to_close import CamSlideOpenToCloseEnv
 
 from gym.envs.robotics.drawer_open.cam_drawer_open import CamDrawerOpenEnv

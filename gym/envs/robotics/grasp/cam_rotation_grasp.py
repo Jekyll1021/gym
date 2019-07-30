@@ -4,7 +4,7 @@ from gym.envs.robotics import grasp_rotation_env
 
 # Ensure we get the path separator correct on windows
 # MODEL_XML_PATH = os.path.join('fetch', 'pick_and_place.xml')
-MODEL_XML_PATH = os.path.join('fetch', 'random_obj_xml/000_grasp.xml')
+# MODEL_XML_PATH = os.path.join('fetch', 'random_obj_xml/000_grasp.xml')
 
 class CamGraspRotationEnv(grasp_rotation_env.GraspRotationEnv, utils.EzPickle):
     def __init__(self, reward_type='sparse', goal_type='random', cam_type='fixed', gripper_init_type='fixed', act_noise=False, obs_noise=False, depth=False, two_cam=False, use_task_index=False, random_obj=False, train_random=False, test_random=False, limit_dir=False):
@@ -14,14 +14,15 @@ class CamGraspRotationEnv(grasp_rotation_env.GraspRotationEnv, utils.EzPickle):
             'robot0:slide2': 0.0,
             'object0:joint': [1.25, 0.53, 0.4, 1., 0., 0., 0.],
         }
-        # if random_obj:
-        #     if train_random:
-        #         ind = str(np.random.randint(600))
-        #     elif test_random:
-        #         ind = str(np.random.randint(600, 800))
-        #     else:
-        #         ind = str(np.random.randint(800, 1000))
-        #     MODEL_XML_PATH = os.path.join('fetch', 'random_obj_xml', ind + '_grasp.xml')
+        MODEL_XML_PATH = os.path.join('fetch', 'pick_and_place.xml')
+        if random_obj:
+            if train_random:
+                ind = str(np.random.randint(8000))
+            elif test_random:
+                ind = str(np.random.randint(8000, 10000))
+            else:
+                ind = str(np.random.randint(0, 10000))
+            MODEL_XML_PATH = os.path.join('fetch', 'random_obj_xml', ind + '_grasp.xml')
         grasp_rotation_env.GraspRotationEnv.__init__(
             self, MODEL_XML_PATH, block_gripper=False, n_substeps=20,
             gripper_extra_height=0.2, target_in_the_air=True, target_offset=0.0,
