@@ -83,7 +83,7 @@ class SlideRotationEnv(robot_env.RobotEnv):
         # else:
         #     self.obs_noise_vector = np.zeros(7)
 
-        super(SlideEnv, self).__init__(
+        super(SlideRotationEnv, self).__init__(
             model_path=model_path, n_substeps=n_substeps, n_actions=4, action_max=math.pi/2,
             initial_qpos=initial_qpos)
 
@@ -334,4 +334,4 @@ class SlideRotationEnv(robot_env.RobotEnv):
         # self.height_offset = self.sim.data.get_site_xpos('object0')[2]
 
     def render(self, mode='rgd_array', width=500, height=500):
-        return super(SlideEnv, self).render(mode, width, height)
+        return super(SlideRotationEnv, self).render(mode, width, height)
