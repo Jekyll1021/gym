@@ -1,5 +1,6 @@
 import os
 from gym import utils
+import numpy as np
 from gym.envs.robotics import slide_rotation_env
 
 

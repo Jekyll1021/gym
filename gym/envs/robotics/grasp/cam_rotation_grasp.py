@@ -1,5 +1,6 @@
 import os
 from gym import utils
+import numpy as np
 from gym.envs.robotics import grasp_rotation_env
 
 # Ensure we get the path separator correct on windows
