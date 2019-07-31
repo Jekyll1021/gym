@@ -7,7 +7,7 @@
 	<include file="../shared.xml" />
 
 	<asset>
-		<mesh file="../../stls/fetch/random_urdfs/624/624.stl" name="obj0" scale="0.007930127703231095 0.007930127703231095 0.007930127703231095" />
+		<mesh file="../../stls/fetch/random_urdfs/624/624.stl" name="obj0" scale="0.009435922888179616 0.009435922888179616 0.009435922888179616" />
 	</asset>
 
 	<worldbody>
@@ -23,7 +23,7 @@
 		<body name="table" pos="1.3 0.75 0.2">
 			<joint damping="0.01" name="table:joint" type="free" />
 			<geom mass="2000" material="table_mat" size="0.25 0.5 0.2" type="box" />
-			<body name="switch" pos="0.018657175761817135 0.06979983814038698 0.22179979417413903">
+			<body name="switch" pos="0.02219985331736719 0.08305362977089964 0.22593920104483955">
 		    <joint axis="0 1 0" damping="5" frictionloss="50" name="switch" pos="0 0 0" range="0 0.2" type="slide" />
 				
 				<geom condim="3" mass="2" material="block_mat" mesh="obj0" pos="0 0 0" type="mesh" />

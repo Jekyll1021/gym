@@ -7,7 +7,7 @@
 	<include file="../shared.xml" />
 
 	<asset>
-		<mesh file="../../stls/fetch/random_urdfs/370/370.stl" name="obj0" scale="0.0035881658968290454 0.0035881658968290454 0.0035881658968290454" />
+		<mesh file="../../stls/fetch/random_urdfs/370/370.stl" name="obj0" scale="0.005559014523581827 0.005559014523581827 0.005559014523581827" />
 	</asset>
 
 	<worldbody>
@@ -22,13 +22,13 @@
 			<geom mass="2000" material="table_mat" size="0.25 0.35 0.2" type="box" />
 		</body>
 
-		<body name="object0" pos="0.021979163086224548 0.02417885948394842 0.013826010537809099">
+		<body name="object0" pos="0.03405151554460502 0.037459424926170666 0.021420133737628588">
 			<joint damping="0.01" name="object0:joint" type="free" />
 			
 			<geom condim="3" mass="2" material="block_mat" mesh="obj0" pos="0 0 0" type="mesh" />
 			
 			
-			<site name="object0" pos="-0.00024612539550373125 -0.0009066976567413435 8.377980227451219e-05" rgba="1 0 0 0" size="0.010989581543112274 0.01208942974197421 0.0069130052689045495" type="ellipsoid" />
+			<site name="object0" pos="-0.0003813130963194009 -0.0014047136022269822 0.00012979699128136952" rgba="1 0 0 0" size="0.01702575777230251 0.018729712463085333 0.010710066868814294" type="ellipsoid" />
 		</body>
 
 		<light ambient="0.2 0.2 0.2" castshadow="false" diffuse="0.8 0.8 0.8" dir="0 0 -1" directional="true" name="light0" pos="0 0 4" specular="0.3 0.3 0.3" />
