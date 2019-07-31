@@ -199,10 +199,25 @@ class SlideRotationEnv(robot_env.RobotEnv):
         grip_velp = self.sim.data.get_site_xvelp('robot0:grip') * dt
         robot_qpos, robot_qvel = utils.robot_get_obs(self.sim)
 
-        gripper_state = robot_qpos[-2:]
-        gripper_vel = robot_qvel[-2:] * dt  # change to a scalar if the gripper is made symmetric
-
+        # obj rotations
+        rot_mat = np.reshape(self.sim.data.site_xmat[3], (3, 3))
+        v = np.zeros(3)
+        v[np.argmax(self.sim.model.site_size[-1])] = 1
+        v = np.matmul(rot_mat, v)
+        v[2] = 0
+        obj_radius = (math.atan2(v[1], v[0]) + math.pi) % math.pi
+        if obj_radius > math.pi / 2:
+            obj_radius = (obj_radius - math.pi)
+        # gripper rotations
+        grip_mat = rotations.quat2mat(self.sim.data.mocap_quat)
+        grip_v = np.squeeze(np.matmul(grip_mat, np.array([0, 1, 0])))
+        grip_radius = (math.atan2(grip_v[0], grip_v[1]) + math.pi) % math.pi
+        if grip_radius > math.pi / 2:
+            grip_radius = (grip_radius - math.pi)
         counter = np.array([self.counter])
+
+        achieved_goal = np.concatenate([np.squeeze(object_pos.copy()), [obj_radius]])
+        holder_pos = np.concatenate([np.squeeze(holder_pos), [grip_radius]])
 
         # obs = np.concatenate([
         #     grip_pos, object_pos.ravel(), object_rel_pos.ravel(), gripper_state, object_rot.ravel(),
