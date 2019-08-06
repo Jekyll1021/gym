@@ -54,8 +54,9 @@ def mocap_set_action(sim, action):
         quat_delta = action[:, 3:]
 
         reset_mocap2body_xpos(sim)
-        sim.data.mocap_pos[:] = sim.data.mocap_pos + pos_delta
         sim.data.mocap_quat[:] = quat_delta
+        sim.step()
+        sim.data.mocap_pos[:] = sim.data.mocap_pos + pos_delta
 
 def mocap_set_action_abs(sim, action):
     """The action controls the robot using mocaps. Specifically, bodies

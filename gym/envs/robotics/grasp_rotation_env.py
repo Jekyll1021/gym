@@ -115,6 +115,7 @@ class GraspRotationEnv(robot_env.RobotEnv):
         if grip_radius > math.pi / 2:
             grip_radius = (grip_radius - math.pi)
         angle_ctrl = grip_radius + action[3]
+        print(angle_ctrl)
         rot_mat = np.array([[1, 0, 0],
                             [0, math.cos(angle_ctrl), -math.sin(angle_ctrl)],
                             [0, math.sin(angle_ctrl), math.cos(angle_ctrl)]])
