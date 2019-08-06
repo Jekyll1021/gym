@@ -110,7 +110,7 @@ class GraspRotationEnv(robot_env.RobotEnv):
         action = action.copy()  # ensure that we don't change the action outside of this scope
         pos_ctrl = action[:3]
         grip_mat = rotations.quat2mat(self.sim.data.mocap_quat)
-        grip_v = np.squeeze(np.matmul(grip_mat, np.array([0, 1, 0])))
+        grip_v = np.squeeze(np.matmul(grip_mat, np.array([1, 0, 0])))
         grip_radius = (math.atan2(grip_v[1], grip_v[0]) + 2 * math.pi) % (2 * math.pi)
         if grip_radius > math.pi:
             grip_radius = (grip_radius - 2 * math.pi)
@@ -233,7 +233,7 @@ class GraspRotationEnv(robot_env.RobotEnv):
             obj_radius = (obj_radius - 2 * math.pi)
         # gripper rotations
         grip_mat = rotations.quat2mat(self.sim.data.mocap_quat)
-        grip_v = np.squeeze(np.matmul(grip_mat, np.array([0, 1, 0])))
+        grip_v = np.squeeze(np.matmul(grip_mat, np.array([1, 0, 0])))
         grip_radius = (math.atan2(grip_v[1], grip_v[0]) + 2 * math.pi) % (2 * math.pi)
         if grip_radius > math.pi:
             grip_radius = (grip_radius - 2 * math.pi)
