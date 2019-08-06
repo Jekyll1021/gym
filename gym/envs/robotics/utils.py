@@ -55,7 +55,6 @@ def mocap_set_action(sim, action):
 
         reset_mocap2body_xpos(sim)
         sim.data.mocap_quat[:] = quat_delta
-        sim.step()
         sim.data.mocap_pos[:] = sim.data.mocap_pos + pos_delta
 
 def mocap_set_action_abs(sim, action):
