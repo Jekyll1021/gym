@@ -110,10 +110,6 @@ class GraspRotationEnv(robot_env.RobotEnv):
         action = action.copy()  # ensure that we don't change the action outside of this scope
         pos_ctrl = action[:3]
         grip_mat = rotations.quat2mat(self.sim.data.mocap_quat)
-        inverse_axis_mat = axis_mat = np.array([[0, 0, -1],
-                                                 [0, 1, 0],
-                                                 [1, 0, 0]])
-        print(np.matmul(grip_mat, inverse_axis_mat))
         grip_v = np.squeeze(np.matmul(grip_mat, np.array([0, 1, 0])))
         grip_radius = (math.atan2(grip_v[0], grip_v[1]) + 2 * math.pi) % (2 * math.pi)
         if grip_radius > math.pi:
@@ -142,10 +138,10 @@ class GraspRotationEnv(robot_env.RobotEnv):
 
         if self.counter >= 2:
         # if np.linalg.norm(pos_ctrl, axis=-1) < 0.025:
-            img = self.sim.render(width=500, height=500, camera_name="external_camera_1")
-            cv2.imwrite("/checkpoint/jdong1021/grasp_sample1.png", img)
 
             self.sim.step()
+            img = self.sim.render(width=500, height=500, camera_name="external_camera_1")
+            cv2.imwrite("/checkpoint/jdong1021/grasp_sample1.png", img)
             pos_ctrl = np.array([0.0, 0.0, 0.0])
             gripper_ctrl = np.array([-1, -1])
             action = np.concatenate([pos_ctrl, rot_ctrl, gripper_ctrl])
@@ -232,15 +228,11 @@ class GraspRotationEnv(robot_env.RobotEnv):
         v[np.argmax(self.sim.model.site_size[-1])] = 1
         v = np.matmul(rot_mat, v)
         v[2] = 0
-        obj_radius = (math.atan2(v[1], v[0]) + 2 * math.pi) % (2 * math.pi)
-        if obj_radius > math.pi:
-            obj_radius = (obj_radius - 2 * math.pi)
+        obj_radius = (math.atan2(v[1], v[0]) + math.pi) % (math.pi) - math.pi/2
+        if obj_radius > math.pi/2:
+            obj_radius = (obj_radius - math.pi)
         # gripper rotations
         grip_mat = rotations.quat2mat(self.sim.data.mocap_quat)
-        inverse_axis_mat = axis_mat = np.array([[0, 0, -1],
-                                                 [0, 1, 0],
-                                                 [1, 0, 0]])
-        print(np.matmul(grip_mat, inverse_axis_mat))
         grip_v = np.squeeze(np.matmul(grip_mat, np.array([0, 1, 0])))
         grip_radius = (math.atan2(grip_v[0], grip_v[1]) + 2 * math.pi) % (2 * math.pi)
         if grip_radius > math.pi:
