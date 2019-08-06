@@ -228,7 +228,7 @@ class GraspRotationEnv(robot_env.RobotEnv):
         v[np.argmax(self.sim.model.site_size[-1])] = 1
         v = np.matmul(rot_mat, v)
         v[2] = 0
-        obj_radius = (math.atan2(v[1], v[0]) + math.pi) % (math.pi) - math.pi/2
+        obj_radius = (math.atan2(v[0], v[1]) + math.pi) % (math.pi) - math.pi/2
         if obj_radius > math.pi/2:
             obj_radius = (obj_radius - math.pi)
         # gripper rotations
