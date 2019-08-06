@@ -111,7 +111,7 @@ class GraspRotationEnv(robot_env.RobotEnv):
         pos_ctrl = action[:3]
         grip_mat = rotations.quat2mat(self.sim.data.mocap_quat)
         grip_v = np.squeeze(np.matmul(grip_mat, np.array([0, 1, 0])))
-        grip_radius = (math.atan2(grip_v[0], grip_v[1]) + math.pi) % math.pi
+        grip_radius = (math.atan2(grip_v[1], grip_v[0]) + math.pi) % math.pi
         if grip_radius > math.pi / 2:
             grip_radius = (grip_radius - math.pi)
         angle_ctrl = grip_radius + action[3]
