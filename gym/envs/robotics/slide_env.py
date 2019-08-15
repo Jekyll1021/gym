@@ -1,5 +1,4 @@
 import numpy as np
-import cv2
 
 from gym.envs.robotics import rotations, robot_env, utils
 
@@ -56,8 +55,6 @@ class SlideEnv(robot_env.RobotEnv):
         self.test_random = test_random
         self.limit_dir = limit_dir
 
-        self.cam_offset = np.array([0,0,0])
-
         # if self.act_noise:
         #     noise_vector = np.random.uniform(-1.0, 1.0, 3)
         #     norm = np.linalg.norm(noise_vector)
@@ -90,7 +87,7 @@ class SlideEnv(robot_env.RobotEnv):
     # ----------------------------
 
     def compute_reward(self, achieved_goal, goal, info):
-        return (goal_distance(achieved_goal, goal) < 0.1).astype(np.float32)
+        return (goal_distance(achieved_goal, goal) < 0.03).astype(np.float32)
 
     # RobotEnv methods
     # ----------------------------
@@ -121,7 +118,7 @@ class SlideEnv(robot_env.RobotEnv):
         utils.mocap_set_action(self.sim, action)
 
         if self.counter >= 2:
-            for i in range(10):
+            for _ in range(10):
                 self.sim.step()
                 pos_ctrl = np.array([0.0, 0.02, 0.0])
                 gripper_ctrl = np.array([0, 0])
@@ -199,10 +196,7 @@ class SlideEnv(robot_env.RobotEnv):
                 counter, [0, 0, 1]
             ])
         else:
-            # obs = counter
-            obs = np.concatenate([
-                counter, self.cam_offset.copy()
-            ])
+            obs = counter
 
         return {
             'observation': obs.copy(),
@@ -232,6 +226,10 @@ class SlideEnv(robot_env.RobotEnv):
         self.sim.set_state(self.initial_state)
 
         self.sim.forward()
+        action = np.array([0,0,0,1,0,1,0,1,1])
+        for _ in range(10):
+            utils.ctrl_set_action(self.sim, action)
+            self.sim.step()
 
         if self.random_obj:
             self.sim.model.geom_type[-1] = np.random.choice(2) + 5
@@ -292,7 +290,7 @@ class SlideEnv(robot_env.RobotEnv):
         return False
 
     def _is_success(self, achieved_goal, desired_goal):
-        return (goal_distance(achieved_goal, desired_goal) < 0.1).astype(np.float32)
+        return (goal_distance(achieved_goal, desired_goal) < 0.03).astype(np.float32)
 
     def _env_setup(self, initial_qpos):
         for name, value in initial_qpos.items():
@@ -301,7 +299,6 @@ class SlideEnv(robot_env.RobotEnv):
 
         if self.cam_type != "fixed":
             delta_pos = self.np_random.uniform(-0.05, 0.05, size=3)
-            self.cam_offset = delta_pos
             # delta_rot = self.np_random.uniform(-0.1, 0.1, size=3)
             delta_rot = np.array([0,0,0])
             utils.cam_init_pos(self.sim, delta_pos, delta_rot)

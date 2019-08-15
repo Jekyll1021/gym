@@ -1,5 +1,4 @@
 import numpy as np
-import cv2
 
 from gym.envs.robotics import rotations, robot_env, utils
 
@@ -51,8 +50,6 @@ class GraspEnv(robot_env.RobotEnv):
         self.train_random = train_random
         self.test_random = test_random
         self.limit_dir = limit_dir
-
-        self.cam_offset = np.array([0,0,0])
 
         self.is_done = False
 
@@ -124,7 +121,6 @@ class GraspEnv(robot_env.RobotEnv):
 
         if self.counter >= 2:
         # if np.linalg.norm(pos_ctrl, axis=-1) < 0.025:
-
             self.sim.step()
             pos_ctrl = np.array([0.0, 0.0, 0.0])
             gripper_ctrl = np.array([-1, -1])
@@ -227,10 +223,7 @@ class GraspEnv(robot_env.RobotEnv):
                 counter, [1, 0, 0]
             ])
         else:
-            # obs = counter
-            obs = np.concatenate([
-                counter, self.cam_offset.copy()
-            ])
+            obs = counter
             # obs = np.empty(0)
 
         return {
@@ -288,7 +281,7 @@ class GraspEnv(robot_env.RobotEnv):
 
         # Randomize start position of object.
         if self.goal_type == "fixed":
-            offset = np.array([0.04387432, -0.02397519])
+            offset = np.array([0.02, 0.02])
         else:
             if self.limit_dir:
                 if self.train_random:
@@ -328,7 +321,6 @@ class GraspEnv(robot_env.RobotEnv):
 
         if self.cam_type != "fixed":
             delta_pos = self.np_random.uniform(-0.05, 0.05, size=3)
-            self.cam_offset = delta_pos
             # delta_rot = self.np_random.uniform(-0.1, 0.1, size=3)
             delta_rot = np.array([0,0,0])
             utils.cam_init_pos(self.sim, delta_pos, delta_rot)

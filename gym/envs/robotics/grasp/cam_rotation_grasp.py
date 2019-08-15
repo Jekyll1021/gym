@@ -22,7 +22,7 @@ class CamGraspRotationEnv(grasp_rotation_env.GraspRotationEnv, utils.EzPickle):
             elif test_random:
                 ind = str(np.random.randint(8000, 10000))
             else:
-                ind = str(np.random.randint(0, 10000))
+                ind = str(np.random.randint(9000, 10000))
             MODEL_XML_PATH = os.path.join('fetch', 'random_obj_xml', ind + '_grasp.xml')
         grasp_rotation_env.GraspRotationEnv.__init__(
             self, MODEL_XML_PATH, block_gripper=False, n_substeps=20,
