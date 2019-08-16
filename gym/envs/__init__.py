@@ -394,7 +394,7 @@ for reward_type in ['sparse', 'dense']:
         id='Grasp{}-v0'.format(suffix),
         entry_point='gym.envs.robotics:CamGraspEnv',
         kwargs=kwargs,
-        max_episode_steps=3,
+        max_episode_steps=5,
     )
 
     # grasp open to close
@@ -426,7 +426,7 @@ for reward_type in ['sparse', 'dense']:
         id='PegInsert{}-v0'.format(suffix),
         entry_point='gym.envs.robotics:CamPegInsertEnv',
         kwargs=kwargs,
-        max_episode_steps=3,
+        max_episode_steps=5,
     )
 
     # peg rotation
@@ -450,7 +450,7 @@ for reward_type in ['sparse', 'dense']:
         id='Slide{}-v0'.format(suffix),
         entry_point='gym.envs.robotics:CamSlideEnv',
         kwargs=kwargs,
-        max_episode_steps=3,
+        max_episode_steps=5,
     )
 
     # slide rotation

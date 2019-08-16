@@ -117,7 +117,7 @@ class SlideEnv(robot_env.RobotEnv):
 
         utils.mocap_set_action(self.sim, action)
 
-        if self.counter >= 3:
+        if self.counter >= 5:
             for _ in range(10):
                 self.sim.step()
                 pos_ctrl = np.array([0.0, 0.02, 0.0])
@@ -264,8 +264,8 @@ class SlideEnv(robot_env.RobotEnv):
             else:
                 offset = np.array([self.np_random.uniform(-self.obj_range, self.obj_range), self.np_random.uniform(0.025-self.obj_range, 0.025+self.obj_range)])
             norm = np.linalg.norm(offset, axis=-1)
-            if norm < 0.075: #0.05:
-                offset = offset / norm * 0.075 #0.05
+            if norm < 0.125: #0.05:
+                offset = offset / norm * 0.125 #0.05
 
         table_qpos = self.sim.data.get_joint_qpos('table:joint')
         assert table_qpos.shape == (7,)
