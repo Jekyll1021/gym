@@ -109,9 +109,9 @@ class SlideRotationEnv(robot_env.RobotEnv):
         # rotation
         grip_mat = rotations.quat2mat(self.sim.data.mocap_quat)
         grip_v = np.squeeze(np.matmul(grip_mat, np.array([0, 1, 0])))
-        grip_radius = (math.atan2(grip_v[0], grip_v[1]) + math.pi) % math.pi
-        if grip_radius > math.pi / 2:
-            grip_radius = (grip_radius - math.pi)
+        grip_radius = (math.atan2(grip_v[0], grip_v[1]) + 2 * math.pi) % (2 * math.pi)
+        if grip_radius > math.pi:
+            grip_radius = (grip_radius - 2 * math.pi)
         angle_ctrl = grip_radius + action[3]
         rot_mat = np.array([[1, 0, 0],
                             [0, math.cos(angle_ctrl), -math.sin(angle_ctrl)],
@@ -204,15 +204,16 @@ class SlideRotationEnv(robot_env.RobotEnv):
         v[np.argmax(self.sim.model.site_size[-1])] = 1
         v = np.matmul(rot_mat, v)
         v[2] = 0
-        obj_radius = (math.atan2(v[1], v[0]) + math.pi) % math.pi
-        if obj_radius > math.pi / 2:
+        obj_radius = (math.atan2(v[0], v[1]) + math.pi) % (math.pi) - math.pi/2
+        if obj_radius > math.pi/2:
             obj_radius = (obj_radius - math.pi)
         # gripper rotations
         grip_mat = rotations.quat2mat(self.sim.data.mocap_quat)
         grip_v = np.squeeze(np.matmul(grip_mat, np.array([0, 1, 0])))
-        grip_radius = (math.atan2(grip_v[0], grip_v[1]) + math.pi) % math.pi
-        if grip_radius > math.pi / 2:
-            grip_radius = (grip_radius - math.pi)
+        grip_radius = (math.atan2(grip_v[0], grip_v[1]) + 2 * math.pi) % (2 * math.pi)
+        if grip_radius > math.pi:
+            grip_radius = (grip_radius - 2 * math.pi)
+
         counter = np.array([self.counter])
 
         achieved_goal = np.concatenate([np.squeeze(object_pos.copy()), [obj_radius]])
