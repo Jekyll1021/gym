@@ -1,5 +1,5 @@
 import numpy as np
-
+import cv2
 from gym.envs.robotics import rotations, robot_env, utils
 
 class PegInsertEnv(robot_env.RobotEnv):
@@ -14,6 +14,7 @@ class PegInsertEnv(robot_env.RobotEnv):
         random_obj, train_random, test_random, limit_dir
     ):
         """Initializes a new Fetch environment.
+
         Args:
             model_path (string): path to the environments XML file
             n_substeps (int): number of substeps the simulation runs on every call to step
@@ -50,6 +51,8 @@ class PegInsertEnv(robot_env.RobotEnv):
         self.train_random = train_random
         self.test_random = test_random
         self.limit_dir = limit_dir
+
+        self.cam_offset = np.array([0,0,0])
 
         self.is_done = False
 
@@ -117,8 +120,9 @@ class PegInsertEnv(robot_env.RobotEnv):
 
         if self.counter >= 2:
         # if np.linalg.norm(pos_ctrl, axis=-1) < 0.025:
-            action = np.array([0,0,-0.05,1,0,1,0,1,1])
+            action = np.array([0,0,-0.08,1,0,1,0,1,1])
             utils.mocap_set_action(self.sim, action)
+            self.sim.step()
             for _ in range(5):
                 utils.ctrl_set_action(self.sim, action)
                 self.sim.step()
@@ -206,6 +210,9 @@ class PegInsertEnv(robot_env.RobotEnv):
                 counter, [0, 1, 0]
             ])
         else:
+            # obs = np.concatenate([
+            #     counter, self.cam_offset.copy()
+            # ])
             obs = counter
             # obs = np.empty(0)
 
@@ -304,7 +311,7 @@ class PegInsertEnv(robot_env.RobotEnv):
             utils.ctrl_set_action(self.sim, action)
             self.sim.step()
 
-        box_pose = self.sim.data.get_site_xpos('object0').copy()
+        box_pose = self.sim.data.get_site_xpos('handle0').copy()
         pos_ctrl = box_pose.copy()
         pos_ctrl[2] = box_pose[2]+0.2
 
@@ -312,7 +319,7 @@ class PegInsertEnv(robot_env.RobotEnv):
 
         utils.mocap_set_action_abs(self.sim, action)
 
-        box_pose = self.sim.data.get_site_xpos('object0').copy()
+        box_pose = self.sim.data.get_site_xpos('handle0').copy()
         pos_ctrl = box_pose.copy()
         pos_ctrl[2] = box_pose[2]
 
@@ -349,6 +356,7 @@ class PegInsertEnv(robot_env.RobotEnv):
 
         if self.cam_type != "fixed":
             delta_pos = self.np_random.uniform(-0.05, 0.05, size=3)
+            self.cam_offset = delta_pos.copy()
             # delta_rot = self.np_random.uniform(-0.1, 0.1, size=3)
             delta_rot = np.array([0,0,0])
             utils.cam_init_pos(self.sim, delta_pos, delta_rot)
