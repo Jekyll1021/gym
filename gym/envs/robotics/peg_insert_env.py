@@ -311,7 +311,7 @@ class PegInsertEnv(robot_env.RobotEnv):
             utils.ctrl_set_action(self.sim, action)
             self.sim.step()
 
-        box_pose = self.sim.data.get_site_xpos('handle0').copy()
+        box_pose = self.sim.data.get_site_xpos('object0').copy()
         pos_ctrl = box_pose.copy()
         pos_ctrl[2] = box_pose[2]+0.2
 
@@ -319,7 +319,7 @@ class PegInsertEnv(robot_env.RobotEnv):
 
         utils.mocap_set_action_abs(self.sim, action)
 
-        box_pose = self.sim.data.get_site_xpos('handle0').copy()
+        box_pose = self.sim.data.get_site_xpos('object0').copy()
         pos_ctrl = box_pose.copy()
         pos_ctrl[2] = box_pose[2]
 
