@@ -1,6 +1,7 @@
 import numpy as np
 import math
 import cv2
+import os
 
 from gym import error
 try:
@@ -8,6 +9,7 @@ try:
 except ImportError as e:
     raise error.DependencyNotInstalled("{}. (HINT: you need to install mujoco_py, and also perform the setup instructions here: https://github.com/openai/mujoco-py/.)".format(e))
 
+TMP_IMG_DIR = "/checkpoint/jdong1021/video_vis"
 
 def robot_get_obs(sim):
     """Returns all joint positions and velocities associated with
@@ -26,6 +28,7 @@ def ctrl_set_action(sim, action):
     """For torque actuators it copies the action into mujoco ctrl field.
     For position actuators it sets the target relative to the current qpos.
     """
+
     if sim.model.nmocap > 0:
         _, action = np.split(action, (sim.model.nmocap * 7, ))
     if sim.data.ctrl is not None:
@@ -35,6 +38,11 @@ def ctrl_set_action(sim, action):
             else:
                 idx = sim.model.jnt_qposadr[sim.model.actuator_trnid[i, 0]]
                 sim.data.ctrl[i] = sim.data.qpos[idx] + action[i]
+
+    sim.step()
+    file_ind = len([name for name in os.listdir(TMP_IMG_DIR) if os.path.isfile(os.path.join(TMP_IMG_DIR, name))])
+    img = sim.render(width=224, height=224, camera_name="external_camera_1")
+    cv2.imwrite(os.path.join(TMP_IMG_DIR, str(file_ind)+".png"), img)
 
 
 def mocap_set_action(sim, action):
@@ -56,7 +64,14 @@ def mocap_set_action(sim, action):
         reset_mocap2body_xpos(sim)
         sim.data.mocap_quat[:] = quat_delta
         sim.step()
+        file_ind = len([name for name in os.listdir(TMP_IMG_DIR) if os.path.isfile(os.path.join(TMP_IMG_DIR, name))])
+        img = sim.render(width=224, height=224, camera_name="external_camera_1")
+        cv2.imwrite(os.path.join(TMP_IMG_DIR, str(file_ind)+".png"), img)
         sim.data.mocap_pos[:] = sim.data.mocap_pos + pos_delta
+        sim.step()
+        file_ind = len([name for name in os.listdir(TMP_IMG_DIR) if os.path.isfile(os.path.join(TMP_IMG_DIR, name))])
+        img = sim.render(width=224, height=224, camera_name="external_camera_1")
+        cv2.imwrite(os.path.join(TMP_IMG_DIR, str(file_ind)+".png"), img)
 
 def mocap_set_action_abs(sim, action):
     """The action controls the robot using mocaps. Specifically, bodies
@@ -81,6 +96,9 @@ def mocap_set_action_abs(sim, action):
             sim.data.mocap_pos[:] = sim.data.mocap_pos + offset
             sim.data.mocap_quat[:] = quat_abs
             sim.step()
+            file_ind = len([name for name in os.listdir(TMP_IMG_DIR) if os.path.isfile(os.path.join(TMP_IMG_DIR, name))])
+            img = sim.render(width=224, height=224, camera_name="external_camera_1")
+            cv2.imwrite(os.path.join(TMP_IMG_DIR, str(file_ind)+".png"), img)
 
 
 def reset_mocap_welds(sim):
