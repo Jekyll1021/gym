@@ -41,7 +41,7 @@ def ctrl_set_action(sim, action):
 
     sim.step()
     file_ind = len([name for name in os.listdir(TMP_IMG_DIR) if os.path.isfile(os.path.join(TMP_IMG_DIR, name))])
-    img = sim.render(width=224, height=224, camera_name="external_camera_1")
+    img = sim.render(width=500, height=500, camera_name="external_camera_1")
     cv2.imwrite(os.path.join(TMP_IMG_DIR, str(file_ind)+".png"), img)
 
 
@@ -54,6 +54,9 @@ def mocap_set_action(sim, action):
     the target body according to the delta, and the MuJoCo equality
     constraint optimizer tries to center the welded body on the mocap.
     """
+    file_ind = len([name for name in os.listdir(TMP_IMG_DIR) if os.path.isfile(os.path.join(TMP_IMG_DIR, name))])
+    img = sim.render(width=500, height=500, camera_name="external_camera_1")
+    cv2.imwrite(os.path.join(TMP_IMG_DIR, str(file_ind)+".png"), img)
     if sim.model.nmocap > 0:
         action, _ = np.split(action, (sim.model.nmocap * 7, ))
         action = action.reshape(sim.model.nmocap, 7)
@@ -65,12 +68,12 @@ def mocap_set_action(sim, action):
         sim.data.mocap_quat[:] = quat_delta
         sim.step()
         file_ind = len([name for name in os.listdir(TMP_IMG_DIR) if os.path.isfile(os.path.join(TMP_IMG_DIR, name))])
-        img = sim.render(width=224, height=224, camera_name="external_camera_1")
+        img = sim.render(width=500, height=500, camera_name="external_camera_1")
         cv2.imwrite(os.path.join(TMP_IMG_DIR, str(file_ind)+".png"), img)
         sim.data.mocap_pos[:] = sim.data.mocap_pos + pos_delta
         sim.step()
         file_ind = len([name for name in os.listdir(TMP_IMG_DIR) if os.path.isfile(os.path.join(TMP_IMG_DIR, name))])
-        img = sim.render(width=224, height=224, camera_name="external_camera_1")
+        img = sim.render(width=500, height=500, camera_name="external_camera_1")
         cv2.imwrite(os.path.join(TMP_IMG_DIR, str(file_ind)+".png"), img)
 
 def mocap_set_action_abs(sim, action):
@@ -96,10 +99,6 @@ def mocap_set_action_abs(sim, action):
             sim.data.mocap_pos[:] = sim.data.mocap_pos + offset
             sim.data.mocap_quat[:] = quat_abs
             sim.step()
-            file_ind = len([name for name in os.listdir(TMP_IMG_DIR) if os.path.isfile(os.path.join(TMP_IMG_DIR, name))])
-            img = sim.render(width=224, height=224, camera_name="external_camera_1")
-            cv2.imwrite(os.path.join(TMP_IMG_DIR, str(file_ind)+".png"), img)
-
 
 def reset_mocap_welds(sim):
     """Resets the mocap welds that we use for actuation.
